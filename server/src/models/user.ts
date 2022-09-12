@@ -24,6 +24,7 @@ interface UserDoc extends mongoose.Document {
   avatar: string;
   role: string;
   type: string;
+  activated: boolean;
   rf_token: string;
 }
 const userSchema = new mongoose.Schema(
@@ -57,6 +58,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "register", // login
     },
+    activated:{
+      type : Boolean,
+      default : false
+    } ,
     rf_token: { type: String, select: false },
   },
   {

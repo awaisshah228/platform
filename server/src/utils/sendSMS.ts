@@ -1,11 +1,13 @@
 import { Twilio } from 'twilio'
 
-const accountSid = `${process.env.TWILIO_ACCOUNT_SID}`;
+const accountSid = process.env.production ?`${process.env.TWILIO_ACCOUNT_SID}`:'ACec47f34621d5ae50e14d59bf62f7a330';
 const authToken = `${process.env.TWILIO_AUTH_TOKEN}`;
 const from = `${process.env.TWILIO_PHONE_NUMBER}`;
 const serviceID = `${process.env.TWILIO_SERVICE_ID}`;
 
+
 const client = new Twilio(accountSid, authToken)
+// const client = require('twilio')(accountSid, authToken);
 
 
 export const sendSms = (to: string, body: string, txt: string) => {
@@ -16,7 +18,7 @@ export const sendSms = (to: string, body: string, txt: string) => {
       from,
       to
     })
-    .then(message => console.log(message.sid));
+    .then((message: any) => console.log(message.sid));
 
   } catch (err) {
     console.log(err)
