@@ -219,7 +219,7 @@ const HeaderContainer: FC<HeaderContainerProps> = ({ className = "" }) => {
     <>
       <div ref={anchorRef} className="h-1 absolute invisible"></div>
       {renderHeader()}
-      {/* {renderControlSelections()} */}
+      {renderControlSelections()}
     </>
   );
 };
