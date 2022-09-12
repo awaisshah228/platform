@@ -1,11 +1,11 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-// import { IParams } from '../utils/types'
+import { IParams } from '../utils/types'
 // import NotFound from './components/global/NotFound'
 
 
 const generatePage = (name: string) => {
-  const component = () => require(`./pages/${name}`).default
+  const component = () => require(`../pages/${name}`).default
 
   try {
     return React.createElement(component())
