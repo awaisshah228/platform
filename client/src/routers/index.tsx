@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import App from '../App'
 import PageRender from './PageRender'
+import HeaderContainer from '../containers/HeaderContainer/HeaderContainer'
 
 // interface Props{
 //     children : React.ReactNode
@@ -10,6 +11,7 @@ import PageRender from './PageRender'
 const index = () => {
   return (
     <BrowserRouter>
+    <HeaderContainer />
       <Routes>
         {/* <Route path="/" element={<App />} /> */}
           <Route path="/" element={<App/>} />
