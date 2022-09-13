@@ -5,12 +5,15 @@ import Select from './Select'
 import RadioButtons from './RadioButtons'
 import CheckboxGroup from './CheckboxGroup'
 import DatePicker from './DatePicker'
+import Password from './Password'
 
 function FormikControl (props) {
   const { control, ...rest } = props
   switch (control) {
     case 'input':
       return <Input {...rest} />
+    case 'password':
+      return <Password {...rest} />
     case 'textarea':
       return <Textarea {...rest} />
     case 'select':

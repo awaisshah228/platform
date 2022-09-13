@@ -44,7 +44,7 @@ function RegistrationForm () {
     >
       {formik => {
         return (
-          <Form>
+          <Form className='grid grid-cols-1 gap-6'>
             <FormikControl
               control='input'
               type='email'
