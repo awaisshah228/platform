@@ -2,6 +2,7 @@ import React from 'react'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import FormikControl from './FormikControl'
+import ButtonPrimary from '../Button/ButtonPrimary'
 
 function RegistrationForm () {
   const options = [
@@ -12,8 +13,8 @@ function RegistrationForm () {
     email: '',
     password: '',
     confirmPassword: '',
-    modeOfContact: '',
-    phone: ''
+    // modeOfContact: '',
+    // phone: ''
   }
 
   const validationSchema = Yup.object({
@@ -62,21 +63,9 @@ function RegistrationForm () {
               label='Confirm Password'
               name='confirmPassword'
             />
-            <FormikControl
-              control='radio'
-              label='Mode of contact'
-              name='modeOfContact'
-              options={options}
-            />
-            <FormikControl
-              control='input'
-              type='text'
-              label='Phone number'
-              name='phone'
-            />
-            <button type='submit' disabled={!formik.isValid}>
-              Submit
-            </button>
+           
+           <ButtonPrimary type='submit' disabled={!formik.isValid}>Continue</ButtonPrimary>
+
           </Form>
         )
       }}

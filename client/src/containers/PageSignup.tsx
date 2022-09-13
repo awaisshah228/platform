@@ -7,6 +7,7 @@ import Input from "../components/Input/Input";
 import ButtonPrimary from "../components/Button/ButtonPrimary";
 import NcLink from "../components/NcLink/NcLink";
 import { Helmet } from "react-helmet";
+import RegistrationForm from './../components/Form/RegistrationForm';
 
 export interface PageSignUpProps {
   className?: string;
@@ -68,7 +69,7 @@ const PageSignUp: FC<PageSignUpProps> = ({ className = "" }) => {
             <div className="absolute left-0 w-full top-1/2 transform -translate-y-1/2 border border-neutral-100 dark:border-neutral-800"></div>
           </div>
           {/* FORM */}
-          <form className="grid grid-cols-1 gap-6" action="#" method="post">
+          {/* <form className="grid grid-cols-1 gap-6" action="#" method="post">
             <label className="block">
               <span className="text-neutral-800 dark:text-neutral-200">
                 Email address
@@ -86,7 +87,8 @@ const PageSignUp: FC<PageSignUpProps> = ({ className = "" }) => {
               <Input type="password" className="mt-1" />
             </label>
             <ButtonPrimary type="submit">Continue</ButtonPrimary>
-          </form>
+          </form> */}
+          <RegistrationForm />
 
           {/* ==== */}
           <span className="block text-center text-neutral-700 dark:text-neutral-300">
