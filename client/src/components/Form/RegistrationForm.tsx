@@ -52,14 +52,14 @@ function RegistrationForm () {
               name='email'
             />
             <FormikControl
-              control='input'
-              type='password'
+              control='password'
+              // type='password'
               label='Password'
               name='password'
             />
             <FormikControl
-              control='input'
-              type='password'
+              control='password'
+              // type='password'
               label='Confirm Password'
               name='confirmPassword'
             />

@@ -41,7 +41,7 @@ function LoginForm() {
             />
             <FormikControl
               control="password"
-              type='password'
+              // type='password'
               // type={typePass ? "text" : "password"}
               label="Password"
               name="password"
