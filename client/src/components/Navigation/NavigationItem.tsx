@@ -65,7 +65,7 @@ const NavigationItem: FC<NavigationItemProps> = ({ menuItem }) => {
       >
         {() => (
           <>
-            <Popover.Button as={Fragment}>
+            <Popover.Button >
               {renderMainItem(menu)}
             </Popover.Button>
             <Transition
@@ -346,6 +346,7 @@ const NavigationItem: FC<NavigationItemProps> = ({ menuItem }) => {
   switch (menuItem.type) {
     case "megaMenu":
       return renderMegaMenu(menuItem);
+      // return <div>Hello</div>
     case "dropdown":
       return renderDropdownMenu(menuItem);
     // return <div>Hello</div>

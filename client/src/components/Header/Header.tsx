@@ -163,9 +163,11 @@ const Header: FC<HeaderProps> = ({ mainNavStyle = "style1", isTopOfPage }) => {
       case "style1":
         return <MainNav1 />;
       case "style2":
+        // return <MainNav1 />;
         return <MainNav2 />;
       case "style2Logedin":
         return <MainNav2Logged />;
+        // return <MainNav1/>;
 
       default:
         return <MainNav1 />;

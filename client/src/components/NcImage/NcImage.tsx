@@ -19,7 +19,7 @@ const NcImage: FC<NcImageProps> = ({
   className = "object-cover w-full h-full",
   ...args
 }) => {
-  let isMounted = false;
+  const[isMounted,setIsMounted]  = useState(false);
   const _containerRef = useRef(null);
   let _imageEl: HTMLImageElement | null = null;
   // const darkmodeState = useAppSelector(selectDarkmodeState);
@@ -61,10 +61,10 @@ const NcImage: FC<NcImageProps> = ({
   };
 
   useEffect(() => {
-    isMounted = true;
+    setIsMounted(true);
     _initActions();
     return () => {
-      isMounted = false;
+      setIsMounted(false)
     };
   }, [src]);
 
