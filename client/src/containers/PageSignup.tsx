@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import LayoutPage from "../components/LayoutPage/LayoutPage";
 import facebookSvg from "../images/Facebook.svg";
 import twitterSvg from "../images/Twitter.svg";
+import mobSvg from "../images/Mobile.svg";
 import googleSvg from "../images/Google.svg";
 import Input from "../components/Input/Input";
 import ButtonPrimary from "../components/Button/ButtonPrimary";
@@ -20,14 +21,14 @@ const loginSocials = [
     icon: facebookSvg,
   },
   {
-    name: "Continue with Twitter",
-    href: "#",
-    icon: twitterSvg,
-  },
-  {
     name: "Continue with Google",
     href: "#",
     icon: googleSvg,
+  },
+  {
+    name: "Continue with Mobile",
+    href: "#",
+    icon: mobSvg,
   },
 ];
 
