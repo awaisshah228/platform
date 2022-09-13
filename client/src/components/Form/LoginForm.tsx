@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import FormikControl from "./FormikControl";
 import ButtonPrimary from "../Button/ButtonPrimary";
 import {EyeIcon,EyeOffIcon} from '@heroicons/react/outline'
+import NcLink from "../NcLink/NcLink";
 
 function LoginForm() {
 
@@ -46,6 +47,9 @@ function LoginForm() {
               label="Password"
               name="password"
             />
+            <NcLink to="/forgot-pass" className="text-sm">
+                  Forgot password?
+                </NcLink>
             {/* <small onClick={() => setTypePass(!typePass)} className=' flex mr-3 text-neutral-800 dark:text-neutral-200'>
               {typePass ? <EyeOffIcon className="h-6 w-6 "/> : <EyeIcon className="h-6 w-6"/>}
             </small> */}
