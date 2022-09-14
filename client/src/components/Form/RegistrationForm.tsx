@@ -3,8 +3,12 @@ import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import FormikControl from './FormikControl'
 import ButtonPrimary from '../Button/ButtonPrimary'
+import { useAppDispatch } from "../../app/hook";
+import { register} from "../../app/auth/authActions";
 
 function RegistrationForm () {
+
+  const dispatch= useAppDispatch()
   const options = [
     { key: 'Email', value: 'emailmoc' },
     { key: 'Telephone', value: 'telephonemoc' }
@@ -25,15 +29,13 @@ function RegistrationForm () {
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), ''], 'Passwords must match')
       .required('Required'),
-    modeOfContact: Yup.string().required('Required'),
-    phone: Yup.string().when('modeOfContact', {
-      is: 'telephonemoc',
-      then: Yup.string().required('Required')
-    })
+   
   })
 
   const onSubmit = values => {
     console.log('Form data', values)
+    dispatch(register(values))
+    
   }
 
   return (

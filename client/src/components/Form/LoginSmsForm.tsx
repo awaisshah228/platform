@@ -5,28 +5,24 @@ import FormikControl from "./FormikControl";
 import ButtonPrimary from "../Button/ButtonPrimary";
 import {EyeIcon,EyeOffIcon} from '@heroicons/react/outline'
 import NcLink from "../NcLink/NcLink";
-import { useAppDispatch } from "../../app/hook";
-import { login } from "../../app/auth/authActions";
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
+
 
 function LoginForm() {
 
-  const dispatch= useAppDispatch()
-
   const initialValues = {
-    email: "",
+    phone: "",
     password: "",
   };
 
   const validationSchema = Yup.object({
-    email: Yup.string().email("Invalid email format").required("Required"),
-    password: Yup.string().required("Required"),
+    phone: Yup.string().required("Required"),
+    // password: Yup.string().required("Required"),
   });
 
   const onSubmit = (values) => {
-    // console.log("Form data", values);
-    dispatch(login(values))
-    // console.log("done")
-
+    console.log("Form data", values);
   };
 
   return (
@@ -35,19 +31,26 @@ function LoginForm() {
       validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
-      {(formik) => {
+      {({ values,setFieldValue,isSubmitting,isValid }) => {
         return (
           <Form className="grid grid-cols-1 gap-6">
-            <FormikControl
+
+<PhoneInput
+      placeholder="Enter phone number"
+      value={values.phone}
+      onChange={(value)=>{
+        // console.log(typeof e.target.files[0])
+        setFieldValue("phone",value)}}/>
+            {/* <FormikControl
               control="input"
               // control='chakraInput'
-              type="email"
-              label="Email"
-              name="email"
+              type="tel"
+              label="Phone No."
+              name="phone"
               placeholder="example@example.com"
               className="mt-1"
-            />
-            <FormikControl
+            /> */}
+            {/* <FormikControl
               control="password"
               // type='password'
               // type={typePass ? "text" : "password"}
@@ -56,13 +59,13 @@ function LoginForm() {
             />
             <NcLink to="/forgot-pass" className="text-sm">
                   Forgot password?
-                </NcLink>
+                </NcLink> */}
             {/* <small onClick={() => setTypePass(!typePass)} className=' flex mr-3 text-neutral-800 dark:text-neutral-200'>
               {typePass ? <EyeOffIcon className="h-6 w-6 "/> : <EyeIcon className="h-6 w-6"/>}
             </small> */}
             
-            <ButtonPrimary type="submit" disabled={!formik.isValid}>
-              Continue
+            <ButtonPrimary type="submit" disabled={!isValid}>
+              Login
             </ButtonPrimary>
           </Form>
         );

@@ -29,7 +29,7 @@ const loginSocials = [
   },
   {
     name: "Continue with Mobile",
-    href: "#",
+    href: "/login-sms",
     icon: mobSvg,
   },
 ];
