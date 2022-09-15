@@ -3,7 +3,7 @@ import 'express-async-errors';
 import {NotFoundError} from './errors';
 import {errorHandler} from './middlewares';
 import routes from './routes';
-// import cors from 'cors';
+import cors from 'cors';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import currentUser from './middlewares/current-user';
@@ -21,9 +21,9 @@ const app = express();
 //   )
 // app.use(helmet());
 
-// app.use(cors({
-//   origin: 'http://localhost:3000',
-// }));
+app.use(cors({
+  origin: 'http://localhost:3000',
+}));
 app.use(morgan('combined'));
 app.use(express.json());
 app.use(cookieParser());
