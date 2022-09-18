@@ -20,7 +20,8 @@ import {
 } from "../utils/interface";
 
 import { OAuth2Client } from "google-auth-library";
-import fetch from "node-fetch";
+// import fetch from "node-fetch";
+import axios from 'axios'
 
 const client = new OAuth2Client(`${process.env.MAIL_CLIENT_ID}`)
 const CLIENT_URL = `${process.env.BASE_URL}`;
@@ -172,42 +173,40 @@ const authCtrl = {
 
      
     },
-  //   facebookLogin: async(req: Request, res: Response) => {
-  //     try {
-  //       const { accessToken, userID } = req.body
+    facebookLogin: async(req: Request, res: Response) => {
+        const { accessToken, userID } = req.body
+        console.log(accessToken)
 
-  //       const URL = `
-  //         https://graph.facebook.com/v3.0/${userID}/?fields=id,name,email,picture&access_token=${accessToken}
-  //       `
+        const URL = `
+          https://graph.facebook.com/v3.0/${userID}/?fields=id,name,email,picture&access_token=${accessToken}
+        `
 
-  //       const data = await fetch(URL)
-  //       .then(res => res.json())
-  //       .then(res => { return res })
+        const resp:any = await axios(URL)
+        // .then(res => res.json())
+        // .then(res => { return res })
+        // console.log(resp.data)
 
-  //       const { email, name, picture } = data
+        const { email, name, picture } = resp.data
 
-  //       const password = email + 'your facebook secrect password'
-  //       const passwordHash = await bcrypt.hash(password, 12)
+        const password = email + 'your facebook secrect password'
+        const passwordHash = await bcrypt.hash(password, 12)
 
-  //       const user = await Users.findOne({account: email})
+        const user = await User.findOne({account: email})
 
-  //       if(user){
-  //         loginUser(user, password, res)
-  //       }else{
-  //         const user = {
-  //           name,
-  //           account: email,
-  //           password: passwordHash,
-  //           avatar: picture.data.url,
-  //           type: 'facebook'
-  //         }
-  //         registerUser(user, res)
-  //       }
+        if(user){
+          loginUser(user, password, res,'facebook')
+        }else{
+          const user = {
+            name,
+            account: email,
+            password: password,
+            avatar: picture.data.url,
+            type: 'facebook'
+          }
+          registerUser(user, res)
+        }
 
-  //     } catch (err: any) {
-  //       return res.status(500).json({msg: err.message})
-  //     }
-  //   },
+    },
   //   loginSMS: async(req: Request, res: Response) => {
   //     try {
   //       const { phone } = req.body
