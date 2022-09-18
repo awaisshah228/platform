@@ -1,10 +1,16 @@
 import React, { useEffect } from 'react'
 import { GoogleLogin } from 'react-google-login';
 import {gapi} from 'gapi-script'
+import { useAppDispatch } from '../../app/hook';
+import { googleLogin } from '../../app/auth/authActions';
 
 
 const GoogleLoginForm = ({item}) => {
+  const dispatch=useAppDispatch()
   const onSuccess = (googleUser) => {
+    const id_token = googleUser.getAuthResponse().id_token
+    dispatch(googleLogin(id_token))
+    // dispatch(googleUser.)
     
     console.log(googleUser);
     

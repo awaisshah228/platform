@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { login, register , logout } from './authActions'
+import { login, register , logout, googleLogin } from './authActions'
 import { IUser } from '../../utils/types'
 
 
@@ -36,6 +36,11 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(login.fulfilled, (state, action) => {
+        state.access_token=action.payload.access_token
+        state.user= action.payload.user;
+       
+      })
+      .addCase(googleLogin.fulfilled, (state, action) => {
         state.access_token=action.payload.access_token
         state.user= action.payload.user;
        
