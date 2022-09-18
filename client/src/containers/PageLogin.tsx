@@ -11,6 +11,7 @@ import { Helmet } from "react-helmet";
 import * as Yup from 'yup'
 import LoginForm from './../components/Form/LoginForm';
 import GoogleLoginForm from "../components/Oauth/GoogleLoginForm";
+import FacebookLoginForm from "../components/Oauth/FacebookLoginForm";
 
 export interface PageLoginProps {
   className?: string;
@@ -18,12 +19,12 @@ export interface PageLoginProps {
 }
 
 const loginSocials = [
-  // {
-  //   name: "Continue with Facebook",
-  //   href: "#",
-  //   icon: facebookSvg,
-  //   component :({item})=> <GoogleLoginForm item={item}/>
-  // },
+  {
+    name: "Continue with Facebook",
+    href: "#",
+    icon: facebookSvg,
+    component :({item})=> <FacebookLoginForm item={item}/>
+  },
   {
     name: "Continue with Google",
     href: "#",
