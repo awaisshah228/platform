@@ -90,7 +90,7 @@ const authCtrl = {
     }
 
     // if user exists
-    loginUser(user, password, res);
+    loginUser(user, password, res,'');
   },
   logout: async (req: IReqAuth, res: Response) => {
     res.clearCookie("refreshtoken", { path: `/v1/auth/refresh_token` });
@@ -137,42 +137,41 @@ const authCtrl = {
 
     res.json({ access_token, user });
   },
-  //   googleLogin: async(req: Request, res: Response) => {
-  //     try {
-  //       const { id_token } = req.body
-  //       const verify = await client.verifyIdToken({
-  //         idToken: id_token, audience: `${process.env.MAIL_CLIENT_ID}`
-  //       })
+    googleLogin: async(req: Request, res: Response) => {
+      
+        const { id_token } = req.body
+        const verify = await client.verifyIdToken({
+          idToken: id_token, audience: `${process.env.MAIL_CLIENT_ID}`
+        })
 
-  //       const {
-  //         email, email_verified, name, picture
-  //       } = <IGgPayload>verify.getPayload()
+        const {
+          email, email_verified, name, picture
+        } = <IGgPayload>verify.getPayload()
 
-  //       if(!email_verified)
-  //         return res.status(500).json({msg: "Email verification failed."})
+        if(!email_verified)
+        throw new BadRequestError('Email verification failed.')
 
-  //       const password = email + 'your google secrect password'
-  //       const passwordHash = await bcrypt.hash(password, 12)
+        const password = email + 'your google secrect password'
+        // const passwordHash = await bcrypt.hash(password, 12)
 
-  //       const user = await Users.findOne({account: email})
+        const user = await User.findOne({account: email})
 
-  //       if(user){
-  //         loginUser(user, password, res)
-  //       }else{
-  //         const user = {
-  //           name,
-  //           account: email,
-  //           password: passwordHash,
-  //           avatar: picture,
-  //           type: 'google'
-  //         }
-  //         registerUser(user, res)
-  //       }
+        if(user){
+          loginUser(user, password, res,'other')
+        }else{
+          const user = {
+            name,
+            account: email,
+            password: password,
+            avatar: picture,
+            type: 'google'
+          }
+          registerUser(user, res)
+        }
+        
 
-  //     } catch (err: any) {
-  //       return res.status(500).json({msg: err.message})
-  //     }
-  //   },
+     
+    },
   //   facebookLogin: async(req: Request, res: Response) => {
   //     try {
   //       const { accessToken, userID } = req.body
@@ -278,18 +277,21 @@ const authCtrl = {
   //   },
 };
 
-const loginUser = async (user: IUser, password: string, res: Response) => {
+const loginUser = async (user: IUser, password: string, res: Response,type:string) => {
   console.log(password, user.password);
   const isMatch = await bcrypt.compare(password, user.password);
+  
+    if (!type && !isMatch) {
+      let msgError =
+        user.type === "register"
+          ? "Password is incorrect."
+          : `Password is incorrect. This account login with ${user.type}`;
+  
+      return res.status(400).json({errors:[{message: msgError}]});
+    }
+  
 
-  if (!isMatch) {
-    let msgError =
-      user.type === "register"
-        ? "Password is incorrect."
-        : `Password is incorrect. This account login with ${user.type}`;
-
-    return res.status(400).json({errors:[{message: msgError}]});
-  }
+ 
 
   const access_token = generateAccessToken({ id: user._id });
   const refresh_token = generateRefreshToken({ id: user._id }, res);
@@ -308,20 +310,20 @@ const loginUser = async (user: IUser, password: string, res: Response) => {
   });
 };
 
-// const registerUser = async (user: IUserParams, res: Response) => {
-//   const newUser = new Users(user)
+const registerUser = async (user: IUserParams, res: Response) => {
+  const newUser = new User(user)
 
-//   const access_token = generateAccessToken({id: newUser._id})
-//   const refresh_token = generateRefreshToken({id: newUser._id}, res)
+  const access_token = generateAccessToken({id: newUser._id})
+  const refresh_token = generateRefreshToken({id: newUser._id}, res)
 
-//   newUser.rf_token = refresh_token
-//   await newUser.save()
+  newUser.rf_token = refresh_token
+  await newUser.save()
 
-//   res.json({
-//     msg: 'Login Success!',
-//     access_token,
-//     user: { ...newUser._doc, password: '' }
-//   })
-// };
+  res.json({
+    msg: 'Login Success!',
+    access_token,
+    user: { ...newUser }
+  })
+};
 
 export default authCtrl;
