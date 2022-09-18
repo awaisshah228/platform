@@ -23,6 +23,7 @@ const app = express();
 
 app.use(cors({
   origin: 'http://localhost:3000',
+  credentials: true
 }));
 app.use(morgan('combined'));
 app.use(express.json());

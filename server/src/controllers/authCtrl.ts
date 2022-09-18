@@ -22,7 +22,7 @@ import {
 import { OAuth2Client } from "google-auth-library";
 import fetch from "node-fetch";
 
-// const client = new OAuth2Client(`${process.env.MAIL_CLIENT_ID}`)
+const client = new OAuth2Client(`${process.env.MAIL_CLIENT_ID}`)
 const CLIENT_URL = `${process.env.BASE_URL}`;
 
 const authCtrl = {
@@ -70,6 +70,9 @@ const authCtrl = {
     const { newUser } = decoded;
 
     const user = await User.findOne({ account: newUser!.account });
+    if(user!.activated==true){
+      throw new BadRequestError("Account is already activated")
+    }
 
     user!.activated = true;
     await user?.save();
@@ -285,7 +288,7 @@ const loginUser = async (user: IUser, password: string, res: Response) => {
         ? "Password is incorrect."
         : `Password is incorrect. This account login with ${user.type}`;
 
-    return res.status(400).json({ msg: msgError });
+    return res.status(400).json({errors:[{message: msgError}]});
   }
 
   const access_token = generateAccessToken({ id: user._id });
