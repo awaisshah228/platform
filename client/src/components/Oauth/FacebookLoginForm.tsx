@@ -2,14 +2,16 @@ import React, { useEffect } from "react";
 import { GoogleLogin } from "react-google-login";
 import { gapi } from "gapi-script";
 import { useAppDispatch } from "../../app/hook";
-import { googleLogin } from "../../app/auth/authActions";
+import { googleLogin,facebookLogin } from "../../app/auth/authActions";
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 
 
 const FacebookLoginForm = ({ item }) => {
   const dispatch = useAppDispatch();
   const responseFacebook = (response) => {
-    console.log(response);
+    const { accessToken, userID } = response
+    console.log(response)
+    dispatch(facebookLogin({accessToken, userID}))
   };
 
  
@@ -18,6 +20,7 @@ const FacebookLoginForm = ({ item }) => {
    
     <FacebookLogin
       appId="622252749605587"
+      // appId={`${process.env.REACT_APP_APP_ID}`}
       autoLoad={true}
       fields="name,email,picture"
       callback={responseFacebook}
