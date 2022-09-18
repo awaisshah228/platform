@@ -10,6 +10,7 @@ import NcLink from "../components/NcLink/NcLink";
 import { Helmet } from "react-helmet";
 import * as Yup from 'yup'
 import LoginForm from './../components/Form/LoginForm';
+import GoogleLoginForm from "../components/Oauth/GoogleLoginForm";
 
 export interface PageLoginProps {
   className?: string;
@@ -17,21 +18,26 @@ export interface PageLoginProps {
 }
 
 const loginSocials = [
-  {
-    name: "Continue with Facebook",
-    href: "#",
-    icon: facebookSvg,
-  },
+  // {
+  //   name: "Continue with Facebook",
+  //   href: "#",
+  //   icon: facebookSvg,
+  //   component :({item})=> <GoogleLoginForm item={item}/>
+  // },
   {
     name: "Continue with Google",
     href: "#",
     icon: googleSvg,
+    component :({item})=> <GoogleLoginForm item={item}/>
+
   },
-  {
-    name: "Continue with Mobile",
-    href: "/login-sms",
-    icon: mobSvg,
-  },
+  // {
+  //   name: "Continue with Mobile",
+  //   href: "/login-sms",
+  //   icon: mobSvg,
+  //   component :({item})=> <GoogleLoginForm item={item}/>
+
+  // },
 ];
 
 const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
@@ -51,24 +57,18 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
         heading="Login"
       >
         <div className="max-w-md mx-auto space-y-6">
-          <div className="grid gap-3">
+        <div className="grid gap-3">
+        
             {loginSocials.map((item, index) => (
-              <a
-                key={index}
-                href={item.href}
-                className="flex w-full rounded-lg bg-primary-50 dark:bg-neutral-800 px-4 py-3 transform transition-transform sm:px-6 hover:translate-y-[-2px]"
-              >
-                <img
-                  className="flex-shrink-0"
-                  src={item.icon}
-                  alt={item.name}
-                />
-                <h3 className="flex-grow text-center text-sm font-medium text-neutral-700 dark:text-neutral-300 sm:text-sm">
-                  {item.name}
-                </h3>
-              </a>
+            
+            // <GoogleLoginForm item={item}  />
+            <item.component item={item} key={index}/>
+            
+
+             
             ))}
           </div>
+           
           {/* OR */}
           <div className="relative text-center">
             <span className="relative z-10 inline-block px-4 font-medium text-sm bg-white dark:text-neutral-400 dark:bg-neutral-900">

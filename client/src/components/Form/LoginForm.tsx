@@ -5,12 +5,15 @@ import FormikControl from "./FormikControl";
 import ButtonPrimary from "../Button/ButtonPrimary";
 import {EyeIcon,EyeOffIcon} from '@heroicons/react/outline'
 import NcLink from "../NcLink/NcLink";
-import { useAppDispatch } from "../../app/hook";
+import { useAppDispatch,useAppSelector } from "../../app/hook";
 import { login } from "../../app/auth/authActions";
+import { useNavigate } from "react-router-dom";
+import  PrivatePage from '../../routers/PrivatePage'
 
 function LoginForm() {
 
   const dispatch= useAppDispatch()
+  const navigate= useNavigate()
 
   const initialValues = {
     email: "",
@@ -24,13 +27,17 @@ function LoginForm() {
 
   const onSubmit = (values) => {
     // console.log("Form data", values);
-    dispatch(login(values))
+    dispatch(login(values)).then(res=>{
+      navigate('/')
+    })
+    
     // console.log("done")
 
   };
 
   return (
-    <Formik
+    <PrivatePage>
+      <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
@@ -68,6 +75,8 @@ function LoginForm() {
         );
       }}
     </Formik>
+    </PrivatePage>
+    
   );
 }
 

@@ -1,60 +1,133 @@
 import axios from 'axios'
 import { createAsyncThunk } from '@reduxjs/toolkit'
+import { getAPI, postAPI } from '../../utils/fetchData'
+import { toast } from 'react-toastify'
+
 
 export const login = createAsyncThunk(
   'auth/login',
-  async ({ email, password }:any, { rejectWithValue }) => {
+  async ({ email:account, password }:any, { rejectWithValue }) => {
     try {
+
+      const res= await postAPI('auth/login',{account,password},'')
+      // localStorage.setItem('access_token',res.data.access_token)
+      console.log(res.data)
 //    
 
-      return {email,password}
+      return res.data;
     } catch (error) {
+      console.log(error)
 //       // return custom error message from API if any
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message)
-      } else {
-        return rejectWithValue(error.message)
-      }
+if (error.response && error.response.data.errors) {
+  console.log(error.response.data.errors)
+   toast.error(error.response.data.errors[0].message, {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    });
+  return rejectWithValue(error.response.data.errors)
+} else {
+  toast.error(error.message, {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    });
+  return rejectWithValue(error.message)
+}
     }
   }
 )
 
 export const register = createAsyncThunk(
   'auth/register',
-  async ({ firstName, email, password }: any, { rejectWithValue }) => {
+  async ({ name, account, password }: any, { rejectWithValue }) => {
     try {
+      const res= await postAPI('auth/register',{name,account,password},'')
+
+      toast('Please Check Your Email for Account activation', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+    
+      
+//    
+
+      return res.data;
      
     } catch (error) {
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message)
+
+
+      console.log(error)
+      // return custom error message from API if any
+       // console.log(error.response.data.errors)
+       if (error.response && error.response.data.errors) {
+        console.log(error.response.data.errors)
+         toast.error(error.response.data.errors[0].message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
+        return rejectWithValue(error.response.data.errors)
       } else {
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
         return rejectWithValue(error.message)
       }
     }
   }
 )
-export const refreshToken = createAsyncThunk(
-  'auth/refreshToken',
-  async ({ firstName, email, password }: any, { rejectWithValue }) => {
-    try {
+// export const refreshToken = createAsyncThunk(
+//   'auth/refreshToken',
+//   async ({ firstName, email, password }: any, { rejectWithValue }) => {
+//     try {
      
-    } catch (error) {
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message)
-      } else {
-        return rejectWithValue(error.message)
-      }
-    }
-  }
-)
+//     } catch (error) {
+//         // return custom error message from API if any
+//        // console.log(error.response.data.errors)
+//        if (error.response && error.response.data.errors) {
+//         return rejectWithValue(error.response.data.errors)
+//       } else {
+//         return rejectWithValue(error.message)
+//       }
+//     }
+//   }
+// )
 export const logout= createAsyncThunk(
   'auth/logout',
-  async ({ firstName, email, password }: any, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
+      await getAPI('auth/logout')
+      return {msg: "Logged out",user:{},access_token:""}
      
     } catch (error) {
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message)
+       // return custom error message from API if any
+       // console.log(error.response.data.errors)
+       if (error.response && error.response.data.errors) {
+        return rejectWithValue(error.response.data.errors)
       } else {
         return rejectWithValue(error.message)
       }

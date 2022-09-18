@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { PathName } from "../../routers/types";
 import { Popover, Transition } from "@headlessui/react";
 import { CogIcon, ShoppingCartIcon } from "@heroicons/react/solid";
+import { useAppSelector } from "../../app/hook";
 
 export type SiteHeaders = "Header 1" | "Header 2" | "Header 3";
 
@@ -25,6 +26,8 @@ export interface HeaderContainerProps {
 
 const HeaderContainer: FC<HeaderContainerProps> = ({ className = "" }) => {
   const anchorRef = React.useRef<HTMLDivElement>(null);
+  const LoggedIn = useAppSelector((state) => state.auth.access_token);
+  // console.log(LoggedIn)
 
   let [headers] = React.useState<SiteHeaders[]>([
     "Header 1",
@@ -74,16 +77,22 @@ const HeaderContainer: FC<HeaderContainerProps> = ({ className = "" }) => {
   }, []);
 
   useEffect(() => {
-    if (location.pathname.includes("home-header-style1")) {
-      setHeaderSelected("Header 1");
-    }
-    if (location.pathname.includes("home-header-style2")) {
+    if(LoggedIn){
+      setHeaderSelected("Header 3");
+    }else{
       setHeaderSelected("Header 2");
     }
-    if (location.pathname.includes("home-header-style2-logedin")) {
-      setHeaderSelected("Header 3");
-    }
-  }, [location]);
+    // if (location.pathname.includes("home-header-style1")) {
+    //   setHeaderSelected("Header 1");
+    // }
+    // if (location.pathname.includes("home-header-style2")) {
+    //   setHeaderSelected("Header 2");
+    // }
+    // if (location.pathname.includes("home-header-style2-logedin")) {
+    //   setHeaderSelected("Header 3");
+    // }
+
+  }, [LoggedIn]);
 
   const renderRadioHeaders = () => {
     return (

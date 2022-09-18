@@ -6,7 +6,10 @@ import reportWebVitals from "./reportWebVitals";
 import { persistor, store } from "./app/store";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import Router from './routers'
+import Router from "./routers";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -18,6 +21,17 @@ root.render(
         <Router />
       </PersistGate>
     </Provider>
+    <ToastContainer
+      position="top-right"
+      autoClose={5000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+    />
   </React.StrictMode>
 );
 

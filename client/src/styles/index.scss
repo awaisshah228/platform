@@ -5,3 +5,11 @@
 @import "./_theme_custom";
 //
 @import "./header";
+.google-button{
+    // border: 0px;
+    box-shadow: none !important;
+ @apply flex w-full rounded-lg bg-primary-50 dark:bg-neutral-800  transform transition-transform  hover:translate-y-[-2px] ;
+    span{
+        display: contents;
+    }
+}

@@ -1,17 +1,31 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { login, register , refreshToken, logout } from './authActions'
+import { login, register , logout } from './authActions'
+import { IUser } from '../../utils/types'
+
 
 // initialize userToken from local storage
 const userToken = localStorage.getItem('userToken')
   ? localStorage.getItem('userToken')
   : null
 
-const initialState = {
-//   loading: false,
-//   userInfo: null,
-//   userToken,
-//   error: null,
-//   success: false,
+
+export const AUTH = 'AUTH'
+
+ interface IAuth {
+  msg?: string
+  access_token?: string
+  user?:Partial<IUser>
+}
+//  interface IAuthType{
+//   type: typeof AUTH
+//   payload: IAuth
+// }
+
+
+const initialState: IAuth = {
+  msg :'',
+  access_token: '',
+  
 }
 
 const authSlice = createSlice({
@@ -22,16 +36,27 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(login.fulfilled, (state, action) => {
+        state.access_token=action.payload.access_token
+        state.user= action.payload.user;
        
       })
       .addCase(register.fulfilled, (state, action) => {
        
       })
-      .addCase(refreshToken.fulfilled, (state, action) => {
+      .addCase(register.rejected, (state, action) => {
+        
        
       })
-      .addCase(logout.fulfilled, (state, action) => {
+      // .addCase(refreshToken.fulfilled, (state, action) => {
        
+      // })
+      .addCase(logout.fulfilled, (state, action) => {
+          state.access_token=action.payload.access_token
+          state.user=action.payload.user     
+      })
+      .addCase(logout.rejected, (state, action) => {
+          state.access_token=''
+          state.user={}    
       })
       // You can chain calls, or have separate `builder.addCase()` lines each time
       // .addCase(decrement, (state, action) => {})
