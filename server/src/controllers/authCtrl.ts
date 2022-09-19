@@ -10,7 +10,7 @@ import {
 import sendMail from "../utils/sendMail";
 import { BadRequestError } from "../errors";
 import { validateEmail, validPhone } from "../utils/valid";
-import { sendSms } from "../utils/sendSMS";
+import { sendSms, smsOTP, smsVerify } from "../utils/sendSMS";
 import {
   IDecodedToken,
   IUser,
@@ -21,9 +21,9 @@ import {
 
 import { OAuth2Client } from "google-auth-library";
 // import fetch from "node-fetch";
-import axios from 'axios'
+import axios from "axios";
 
-const client = new OAuth2Client(`${process.env.MAIL_CLIENT_ID}`)
+const client = new OAuth2Client(`${process.env.MAIL_CLIENT_ID}`);
 const CLIENT_URL = `${process.env.BASE_URL}`;
 
 const authCtrl = {
@@ -71,8 +71,8 @@ const authCtrl = {
     const { newUser } = decoded;
 
     const user = await User.findOne({ account: newUser!.account });
-    if(user!.activated==true){
-      throw new BadRequestError("Account is already activated")
+    if (user!.activated == true) {
+      throw new BadRequestError("Account is already activated");
     }
 
     user!.activated = true;
@@ -91,7 +91,7 @@ const authCtrl = {
     }
 
     // if user exists
-    loginUser(user, password, res,'');
+    loginUser(user, password, res, "");
   },
   logout: async (req: IReqAuth, res: Response) => {
     res.clearCookie("refreshtoken", { path: `/v1/auth/refresh_token` });
@@ -107,21 +107,17 @@ const authCtrl = {
   },
   refreshToken: async (req: Request, res: Response) => {
     const rf_token = req.cookies.refreshtoken;
-    console.log(rf_token)
+    console.log(rf_token);
     if (!rf_token) throw new BadRequestError("Please Login before");
-
 
     const decoded = <IDecodedToken>(
       jwt.verify(rf_token, `${process.env.REFRESH_TOKEN_SECRET}`)
     );
-    
 
-
-    const user = await User.findById(decoded.id).select("+rf_token"); 
+    const user = await User.findById(decoded.id).select("+rf_token");
     // const user = await Users.findById(decoded.id).select("-password +rf_token")
 
     if (!user) throw new BadRequestError("Account not exists");
-   
 
     if (rf_token !== user.rf_token)
       throw new BadRequestError("Please Login before");
@@ -138,159 +134,153 @@ const authCtrl = {
 
     res.json({ access_token, user });
   },
-    googleLogin: async(req: Request, res: Response) => {
-      
-        const { id_token } = req.body
-        const verify = await client.verifyIdToken({
-          idToken: id_token, audience: `${process.env.MAIL_CLIENT_ID}`
-        })
+  googleLogin: async (req: Request, res: Response) => {
+    const { id_token } = req.body;
+    const verify = await client.verifyIdToken({
+      idToken: id_token,
+      audience: `${process.env.MAIL_CLIENT_ID}`,
+    });
 
-        const {
-          email, email_verified, name, picture
-        } = <IGgPayload>verify.getPayload()
+    const { email, email_verified, name, picture } = <IGgPayload>(
+      verify.getPayload()
+    );
 
-        if(!email_verified)
-        throw new BadRequestError('Email verification failed.')
+    if (!email_verified)
+      throw new BadRequestError("Email verification failed.");
 
-        const password = email + 'your google secrect password'
-        // const passwordHash = await bcrypt.hash(password, 12)
+    const password = email + "your google secrect password";
+    // const passwordHash = await bcrypt.hash(password, 12)
 
-        const user = await User.findOne({account: email})
+    const user = await User.findOne({ account: email });
+
+    if (user) {
+      loginUser(user, password, res, "other");
+    } else {
+      const user = {
+        name,
+        account: email,
+        password: password,
+        avatar: picture,
+        type: "google",
+      };
+      registerUser(user, res);
+    }
+  },
+  facebookLogin: async (req: Request, res: Response) => {
+    const { accessToken, userID } = req.body;
+    console.log(accessToken);
+
+    const URL = `
+          https://graph.facebook.com/v3.0/${userID}/?fields=id,name,email,picture&access_token=${accessToken}
+        `;
+
+    const resp: any = await axios(URL);
+    // .then(res => res.json())
+    // .then(res => { return res })
+    // console.log(resp.data)
+
+    const { email, name, picture } = resp.data;
+
+    const password = email + "your facebook secrect password";
+    const passwordHash = await bcrypt.hash(password, 12);
+
+    const user = await User.findOne({ account: email });
+
+    if (user) {
+      loginUser(user, password, res, "facebook");
+    } else {
+      const user = {
+        name,
+        account: email,
+        password: password,
+        avatar: picture.data.url,
+        type: "facebook",
+      };
+      registerUser(user, res);
+    }
+  },
+    loginSMS: async(req: Request, res: Response) => {
+     
+        const { phone } = req.body
+        console.log(phone)
+        // res.json({phone})
+
+        const data = await smsOTP(phone, 'sms')
+        res.json(data)
+     
+    },
+    smsVerify: async(req: Request, res: Response) => {
+     
+        const { phone, code } = req.body
+
+        const data = await smsVerify(phone, code)
+        if(!data?.valid) throw new BadRequestError("Invalid authentication")
+
+        const password = phone + 'your phone secrect password'
+        const passwordHash = await bcrypt.hash(password, 12)
+
+        const user = await User.findOne({account: phone})
 
         if(user){
-          loginUser(user, password, res,'other')
+          loginUser(user, password, res,"mobile")
         }else{
           const user = {
-            name,
-            account: email,
+            name: phone,
+            account: phone,
             password: password,
-            avatar: picture,
-            type: 'google'
+            type: 'sms'
           }
           registerUser(user, res)
         }
-        
+
+    
+    },
+    forgotPassword: async(req: Request, res: Response) => {
+      
+        const { account } = req.body
+
+        const user = await User.findOne({account})
+        if(!user)
+          return res.status(400).json({msg: 'This account does not exist.'})
+
+        if(user.type !== 'register')
+        throw new BadRequestError("Quick login account with ${user.type} can't use this function")
+         
+
+        const access_token = generateAccessToken({id: user._id})
+
+        const url = `${CLIENT_URL}/reset_password/${access_token}`
+
+        if(validPhone(account)){
+          sendSms(account, url, "Forgot password?")
+          return res.json({msg: "Success! Please check your phone."})
+
+        }else if(validateEmail(account)){
+          sendMail(account, url, "Forgot password?")
+          return res.json({msg: "Success! Please check your email."})
+        }
 
      
     },
-    facebookLogin: async(req: Request, res: Response) => {
-        const { accessToken, userID } = req.body
-        console.log(accessToken)
-
-        const URL = `
-          https://graph.facebook.com/v3.0/${userID}/?fields=id,name,email,picture&access_token=${accessToken}
-        `
-
-        const resp:any = await axios(URL)
-        // .then(res => res.json())
-        // .then(res => { return res })
-        // console.log(resp.data)
-
-        const { email, name, picture } = resp.data
-
-        const password = email + 'your facebook secrect password'
-        const passwordHash = await bcrypt.hash(password, 12)
-
-        const user = await User.findOne({account: email})
-
-        if(user){
-          loginUser(user, password, res,'facebook')
-        }else{
-          const user = {
-            name,
-            account: email,
-            password: password,
-            avatar: picture.data.url,
-            type: 'facebook'
-          }
-          registerUser(user, res)
-        }
-
-    },
-  //   loginSMS: async(req: Request, res: Response) => {
-  //     try {
-  //       const { phone } = req.body
-  //       const data = await smsOTP(phone, 'sms')
-  //       res.json(data)
-  //     } catch (err: any) {
-  //       return res.status(500).json({msg: err.message})
-  //     }
-  //   },
-  //   smsVerify: async(req: Request, res: Response) => {
-  //     try {
-  //       const { phone, code } = req.body
-
-  //       const data = await smsVerify(phone, code)
-  //       if(!data?.valid) return res.status(400).json({msg: "Invalid Authentication."})
-
-  //       const password = phone + 'your phone secrect password'
-  //       const passwordHash = await bcrypt.hash(password, 12)
-
-  //       const user = await Users.findOne({account: phone})
-
-  //       if(user){
-  //         loginUser(user, password, res)
-  //       }else{
-  //         const user = {
-  //           name: phone,
-  //           account: phone,
-  //           password: passwordHash,
-  //           type: 'sms'
-  //         }
-  //         registerUser(user, res)
-  //       }
-
-  //     } catch (err: any) {
-  //       return res.status(500).json({msg: err.message})
-  //     }
-  //   },
-  //   forgotPassword: async(req: Request, res: Response) => {
-  //     try {
-  //       const { account } = req.body
-
-  //       const user = await Users.findOne({account})
-  //       if(!user)
-  //         return res.status(400).json({msg: 'This account does not exist.'})
-
-  //       if(user.type !== 'register')
-  //         return res.status(400).json({
-  //           msg: `Quick login account with ${user.type} can't use this function.`
-  //         })
-
-  //       const access_token = generateAccessToken({id: user._id})
-
-  //       const url = `${CLIENT_URL}/reset_password/${access_token}`
-
-  //       if(validPhone(account)){
-  //         sendSms(account, url, "Forgot password?")
-  //         return res.json({msg: "Success! Please check your phone."})
-
-  //       }else if(validateEmail(account)){
-  //         sendMail(account, url, "Forgot password?")
-  //         return res.json({msg: "Success! Please check your email."})
-  //       }
-
-  //     } catch (err: any) {
-  //       return res.status(500).json({msg: err.message})
-  //     }
-  //   },
 };
 
-const loginUser = async (user: IUser, password: string, res: Response,type:string) => {
+const loginUser = async (
+  user: IUser,
+  password: string,
+  res: Response,
+  type: string
+) => {
   console.log(password, user.password);
   const isMatch = await bcrypt.compare(password, user.password);
-  
-    if (!type && !isMatch) {
-      let msgError =
-        user.type === "register"
-          ? "Password is incorrect."
-          : `Password is incorrect. This account login with ${user.type}`;
-  
-      return res.status(400).json({errors:[{message: msgError}]});
-    }
-  
 
- 
+  if (!type && !isMatch) {
+    let msgError =
+      user.type === "register"
+        ? "Password is incorrect."
+        : `Password is incorrect. This account login with ${user.type}`;
+
+    return res.status(400).json({ errors: [{ message: msgError }] });
+  }
 
   const access_token = generateAccessToken({ id: user._id });
   const refresh_token = generateRefreshToken({ id: user._id }, res);
@@ -310,19 +300,19 @@ const loginUser = async (user: IUser, password: string, res: Response,type:strin
 };
 
 const registerUser = async (user: IUserParams, res: Response) => {
-  const newUser = new User(user)
+  const newUser = new User(user);
 
-  const access_token = generateAccessToken({id: newUser._id})
-  const refresh_token = generateRefreshToken({id: newUser._id}, res)
+  const access_token = generateAccessToken({ id: newUser._id });
+  const refresh_token = generateRefreshToken({ id: newUser._id }, res);
 
-  newUser.rf_token = refresh_token
-  await newUser.save()
+  newUser.rf_token = refresh_token;
+  await newUser.save();
 
   res.json({
-    msg: 'Login Success!',
+    msg: "Login Success!",
     access_token,
-    user: { ...newUser }
-  })
+    user: { ...newUser },
+  });
 };
 
 export default authCtrl;
