@@ -20,6 +20,7 @@
     "@types/react-google-login-component": "^0.9.1",
     "formik": "^2.2.9",
     "gapi-script": "^1.2.0",
+    "ncmaz_react": "file:..",
     "react": "^18.2.0",
     "react-datepicker": "^4.8.0",
     "react-dom": "^18.2.0",
@@ -41,7 +42,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "BUILD_PATH=../backend/public && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

@@ -8,7 +8,8 @@
     "dev": "ts-node-dev --poll --respawn --transpile-only src/index.ts",
     "build": "tsc",
     "test": "jest --watch-all --no-cache",
-    "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix"
+    "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix",
+    "cluster": "pm2 start dist/index.js -i max"
   },
   "jest": {
     "preset": "ts-jest",
@@ -41,8 +42,10 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.4.0",
     "morgan": "^1.10.0",
+    "ncmaz_react": "file:..",
     "node-fetch": "^3.2.10",
     "nodemailer": "^6.7.8",
+    "pm2": "^5.2.0",
     "swagger-jsdoc": "^6.2.5",
     "swagger-ui-express": "^4.5.0",
     "twilio": "^3.82.0",

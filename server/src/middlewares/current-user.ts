@@ -1,5 +1,5 @@
 import { Response, NextFunction} from 'express'
-import {User} from '../models/user'
+import {User} from '../models/userModel'
 import jwt from 'jsonwebtoken'
 import { IDecodedToken, IReqAuth } from '../utils/interface'
 

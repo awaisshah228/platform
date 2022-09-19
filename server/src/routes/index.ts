@@ -3,6 +3,7 @@ import swaggerUI from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
 import testRouter from './testRouter';
 import authRouter from './authRouter'
+import userRouter from './userRouter';
 const options= {
   definition: {
     openapi: '3.0.0',
@@ -27,6 +28,7 @@ const specs = swaggerJsDoc(options);
 api.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
 api.use('/test', testRouter);
 api.use('/auth', authRouter);
+api.use('/user', userRouter);
 
 
 export default api;
