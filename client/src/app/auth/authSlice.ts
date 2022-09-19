@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { login, register , logout, googleLogin, facebookLogin, smsLogin } from './authActions'
+import { login, register , logout, googleLogin, facebookLogin, smsLogin, smsVerify } from './authActions'
 import { IUser } from '../../utils/types'
 
 
@@ -15,6 +15,7 @@ export const AUTH = 'AUTH'
   msg?: string
   access_token?: string
   user?:Partial<IUser>
+  phone?: string
 }
 //  interface IAuthType{
 //   type: typeof AUTH
@@ -50,9 +51,14 @@ const authSlice = createSlice({
         state.user= action.payload.user;
        
       })
-      .addCase(smsLogin.fulfilled, (state, action) => {
+      .addCase(smsVerify.fulfilled, (state, action) => {
         state.access_token=action.payload.access_token
         state.user= action.payload.user;
+       
+      })
+      .addCase(smsLogin.fulfilled, (state, action) => {
+        state.phone=action.payload.to
+        // state.user= action.payload.user;
        
       })
       .addCase(register.fulfilled, (state, action) => {

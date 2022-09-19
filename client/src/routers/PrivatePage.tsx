@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 const PrivatePage = ({ children }) => {
   let navigate = useNavigate();
   const LoggedIn = useAppSelector((state) => state.auth.access_token);
-  console.log(LoggedIn)
+  
   useEffect(() => {
     if (LoggedIn) {
       return navigate("/");

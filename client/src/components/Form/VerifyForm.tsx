@@ -8,29 +8,25 @@ import NcLink from "../NcLink/NcLink";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { useAppSelector, useAppDispatch } from "../../app/hook";
-import { smsLogin } from './../../app/auth/authActions';
-import { useNavigate } from "react-router-dom";
+import { smsLogin, smsVerify } from './../../app/auth/authActions';
 
-function LoginForm() {
+function VerifyForm() {
 
+const phone= useAppSelector(state=>state.auth?.phone)
   const dispatch=useAppDispatch()
-  const navigate=useNavigate()
   const initialValues = {
-    phone: "",
-    // password: "",
+    code: "",
   };
 
   const validationSchema = Yup.object({
-    phone: Yup.string().required("Required"),
+    code: Yup.number().test('len', 'Must be exactly 5 characters', val => val?.toString()?.length === 6).required("Required"),
     // password: Yup.string().required("Required"),
   });
 
   const onSubmit = (values) => {
     // console.log("Form data", values);
-    const {phone}=values
-    dispatch(smsLogin(phone))
-    navigate('/verify')
-    
+    const {code}=values
+    dispatch(smsVerify({phone,code}))
   };
 
   return (
@@ -42,17 +38,26 @@ function LoginForm() {
       {({ values, setFieldValue, isSubmitting, isValid }) => {
         return (
           <Form className="grid grid-cols-1 gap-6">
-            <PhoneInput
+            {/* <PhoneInput
               placeholder="Enter phone number"
               value={values.phone}
               onChange={(value) => {
                 // console.log(typeof e.target.files[0])
                 setFieldValue("phone", value);
               }}
+            /> */}
+             <FormikControl
+              control="input"
+              // control='chakraInput'
+              type="number"
+              label="Verify OTP"
+              name="code"
+              placeholder="000000"
+              className="mt-1"
             />
 
             <ButtonPrimary type="submit" disabled={!isValid}>
-              Login
+              Verify
             </ButtonPrimary>
           </Form>
         );
@@ -61,4 +66,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default VerifyForm;

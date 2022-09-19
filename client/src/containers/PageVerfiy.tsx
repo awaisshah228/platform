@@ -4,15 +4,15 @@ import Input from "../components/Input/Input";
 import ButtonPrimary from "../components/Button/ButtonPrimary";
 import NcLink from "../components/NcLink/NcLink";
 import { Helmet } from "react-helmet";
-import { response } from "express";
+import VerifyForm from "../components/Form/VerifyForm";
 
 export interface PageForgotPassProps {
   className?: string;
   [x: string]: any
 }
 
-const PageActive: FC<PageForgotPassProps> = (props) => {
-  console.log(props)
+const PageVerify: FC<PageForgotPassProps> = (props) => {
+  
   return (
     <div
       className={`nc-PageForgotPass ${props.className}`}
@@ -22,14 +22,12 @@ const PageActive: FC<PageForgotPassProps> = (props) => {
         <title>Page Active || Blog Magazine React Template</title>
       </Helmet>
       <LayoutPage
-        subHeading= {
-          props?.resp.err ? "Token is expired or  not valid": "Your Account is Activated"
-        }
-        headingEmoji={ props?.resp.err ? "❌": "✔"}
-        heading="Account Activation"
+        subHeading="We have sent OTP to Your number Please  Verify"
+        headingEmoji="🔐"
+        heading="Phone Verification"
       >
         <div className="max-w-md mx-auto space-y-6">
-          
+          <VerifyForm />
 
        
 
@@ -45,4 +43,4 @@ const PageActive: FC<PageForgotPassProps> = (props) => {
   );
 };
 
-export default PageActive;
+export default PageVerify;
