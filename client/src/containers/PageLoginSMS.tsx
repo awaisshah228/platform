@@ -5,6 +5,7 @@ import ButtonPrimary from "../components/Button/ButtonPrimary";
 import NcLink from "../components/NcLink/NcLink";
 import { Helmet } from "react-helmet";
 import LoginForm from "../components/Form/LoginSmsForm";
+import PrivatePage from "../routers/PrivatePage";
 
 export interface PageForgotPassProps {
   className?: string;
@@ -13,8 +14,8 @@ export interface PageForgotPassProps {
 const PageLoginSMS: FC<PageForgotPassProps> = ({ className = "" }) => {
   return (
 
-
-    <div
+    <PrivatePage>
+      <div
       className={`nc-PageForgotPass ${className}`}
       data-nc-id="PageForgotPass"
     >
@@ -27,20 +28,7 @@ const PageLoginSMS: FC<PageForgotPassProps> = ({ className = "" }) => {
         heading="Forgot password"
       >
         <div className="max-w-md mx-auto space-y-6">
-          {/* FORM */}
-          {/* <form className="grid grid-cols-1 gap-6" action="#" method="post">
-            <label className="block">
-              <span className="text-neutral-800 dark:text-neutral-200">
-                Email address
-              </span>
-              <Input
-                type="email"
-                placeholder="example@example.com"
-                className="mt-1"
-              />
-            </label>
-            <ButtonPrimary type="submit">Continue</ButtonPrimary>
-          </form> */}
+          
           <LoginForm />
 
           {/* ==== */}
@@ -53,6 +41,10 @@ const PageLoginSMS: FC<PageForgotPassProps> = ({ className = "" }) => {
         </div>
       </LayoutPage>
     </div>
+    </PrivatePage>
+
+
+    
   );
 };
 

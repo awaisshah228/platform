@@ -36,7 +36,7 @@ function LoginForm() {
   };
 
   return (
-    <PrivatePage>
+    // <PrivatePage>
       <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
@@ -75,7 +75,7 @@ function LoginForm() {
         );
       }}
     </Formik>
-    </PrivatePage>
+    // </PrivatePage>
     
   );
 }

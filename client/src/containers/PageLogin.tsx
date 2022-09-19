@@ -12,6 +12,7 @@ import * as Yup from 'yup'
 import LoginForm from './../components/Form/LoginForm';
 import GoogleLoginForm from "../components/Oauth/GoogleLoginForm";
 import FacebookLoginForm from "../components/Oauth/FacebookLoginForm";
+import SMSLoginForm from "../components/Oauth/SMSLogin";
 
 export interface PageLoginProps {
   className?: string;
@@ -32,13 +33,13 @@ const loginSocials = [
     component :({item})=> <GoogleLoginForm item={item}/>
 
   },
-  // {
-  //   name: "Continue with Mobile",
-  //   href: "/login-sms",
-  //   icon: mobSvg,
-  //   component :({item})=> <GoogleLoginForm item={item}/>
+  {
+    name: "Continue with Mobile",
+    href: "/login-sms",
+    icon: mobSvg,
+    component :({item})=> <SMSLoginForm item={item}/>
 
-  // },
+  },
 ];
 
 const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
@@ -48,6 +49,7 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
 
   
   return (
+    
     <div className={`nc-PageLogin ${className}`} data-nc-id="PageLogin">
       <Helmet>
         <title>Login || Blog Magazine React Template</title>

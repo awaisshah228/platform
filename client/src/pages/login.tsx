@@ -1,11 +1,12 @@
 import React from 'react'
 import PageLogin from '../containers/PageLogin'
+import PrivatePage from '../routers/PrivatePage'
 
 const Login = () => {
   return (
-    <div>
+    <PrivatePage>
         <PageLogin />
-    </div>
+    </PrivatePage>
   )
 }
 
