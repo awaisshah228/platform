@@ -2,11 +2,12 @@ import ButtonPrimary from "../../components/Button/ButtonPrimary";
 import Input from "../../components/Input/Input";
 import Label from "../../components/Label/Label";
 import React from "react";
+import EditProfile from "../../components/Form/EditProfile";
 
 const DashboardEditProfile = () => {
   return (
     <div className="rounded-xl md:border md:border-neutral-100 dark:border-neutral-800 md:p-6">
-      <form className="grid md:grid-cols-2 gap-6" action="#" method="post">
+      {/* <form className="grid md:grid-cols-2 gap-6" action="#" method="post">
         <label className="block">
           <Label>First name</Label>
           <Input placeholder="Example Doe" type="text" className="mt-1" />
@@ -34,7 +35,8 @@ const DashboardEditProfile = () => {
         <ButtonPrimary className="md:col-span-2" type="submit">
           Update profile
         </ButtonPrimary>
-      </form>
+      </form> */}
+      <EditProfile />
     </div>
   );
 };
