@@ -4,7 +4,7 @@ import authReducer from './auth/authSlice'
 // import commentLikesReducer from "./commentLikes/commentLikes";
 import darkmodeReducer from "./darkmode/darkmode";
 // import pagesReducer from "./pages/pages";
-// import mediaRunningReducer from "./mediaRunning/mediaRunning";
+import mediaRunningReducer from "./mediaRunning/mediaRunning";
 
 const rootReducers = {
   auth : authReducer,
@@ -13,7 +13,7 @@ const rootReducers = {
   darkmode: darkmodeReducer,
 //   commentLikes: commentLikesReducer,
 //   pages: pagesReducer,
-//   mediaRunning: mediaRunningReducer,
+  mediaRunning: mediaRunningReducer,
 };
 
 export default rootReducers;

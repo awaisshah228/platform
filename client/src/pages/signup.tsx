@@ -1,9 +1,13 @@
 import React from 'react'
 import PageSignUp from '../containers/PageSignup'
+import RedirectHome from '../routers/RedirectHome'
 
 const Signup = () => {
   return (
-    <PageSignUp />
+    <RedirectHome>
+      <PageSignUp />
+    </RedirectHome>
+    
   )
 }
 
