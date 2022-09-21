@@ -43,6 +43,10 @@ export interface IUserParams {
 
 export interface IReqAuth extends Request {
   user?: IUser
+  // file : any,
+  // [x: string]: any;
+  file?: any
+  
 }
 
 

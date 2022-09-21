@@ -1,55 +1,43 @@
-import { Request, Response } from 'express'
-import { IReqAuth } from '../utils/interface'
-import {User} from '../models/userModel'
-import bcrypt from 'bcrypt'
+import { Request, Response } from "express";
+import { IReqAuth } from "../utils/interface";
+import { User } from "../models/userModel";
+import { NotFoundError } from "../errors";
+
 
 
 const userCtrl = {
-//   updateUser: async (req: IReqAuth, res: Response) => {
-//     if(!req.user) return res.status(400).json({msg: "Invalid Authentication."})
-    
-//     try {
-//       const { avatar, name } = req.body
+  updateUser: async (req: IReqAuth, res: Response) => {
+    const { name } = req.body;
 
-//       await User.findOneAndUpdate({_id: req.user._id}, {
-//         avatar, name
-//       })
+    await User.findOneAndUpdate(
+      { _id: req.user?._id },
+      {
+        avatar: req.file?.location,
+        name,
+      }
+    );
+    res.json({ msg: req.file })
+     // res.json({ msg: "Update Success!" })
+  },
+  resetPassword: async (req: IReqAuth, res: Response) => {
+    const { password } = req.body;
 
-//       res.json({ msg: "Update Success!" })
-//     } catch (err: any) {
-//       return res.status(500).json({msg: err.message})
-//     }
-//   },
-//   resetPassword: async (req: IReqAuth, res: Response) => {
-//     if(!req.user) return res.status(400).json({msg: "Invalid Authentication."})
-    
-//     if(req.user.type !== 'register')
-//       return res.status(400).json({
-//         msg: `Quick login account with ${req.user.type} can't use this function.`
-//       })
+    await User.findOneAndUpdate(
+      { _id: req.user?._id },
+      {
+        password: password,
+      }
+    );
 
-//     try {
-//       const { password } = req.body
-//       const passwordHash = await bcrypt.hash(password, 12)
-
-//       await User.findOneAndUpdate({_id: req.user._id}, {
-//         password: passwordHash
-//       })
-
-//       res.json({ msg: "Reset Password Success!" })
-//     } catch (err: any) {
-//       return res.status(500).json({msg: err.message})
-//     }
-//   },
-//   getUser: async (req: Request, res: Response) => {
-//     try {
-//       const user = await User.findById(req.params.id).select('-password')
-//       res.json(user)
-//     } catch (err: any) {
-//       return res.status(500).json({msg: err.message})
-//     }
-//   }
-}
-
+    res.json({ msg: "Reset Password Success!" });
+  },
+  getUser: async (req: Request, res: Response) => {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      throw new NotFoundError();
+    }
+    res.json(user);
+  },
+};
 
 export default userCtrl;

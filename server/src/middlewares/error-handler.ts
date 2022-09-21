@@ -11,11 +11,20 @@ export const errorHandler = (
   if (err instanceof CustomError) {
     return res.status(err.statusCode).send({errors: err.serializeErrors()});
   }
-  if(err){
-    return  res.status(400).send({
+  // const tokenExpire: any=JSON.stringify(err)
+  console.log(err.name)
+  // console.log(tokenExpire.name)
+  if(err.name=='TokenExpiredError'){
+    return  res.status(401).send({
       errors: [err],
     });
+
   }
+  // if(err){
+  //   return  res.status(400).send({
+  //     errors: [err],
+  //   });
+  // }
   res.status(400).send({
     errors: ["something went wrong "],
   });

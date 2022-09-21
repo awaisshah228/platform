@@ -4,17 +4,25 @@ import jwt from 'jsonwebtoken'
 import { IDecodedToken, IReqAuth } from '../utils/interface'
 
 const currentUser = async (req: IReqAuth, res: Response, next: NextFunction) => {
-    const token = req.header("Authorization")
-    if(!token)  return next();
 
-    const decoded = <IDecodedToken>jwt.verify(token, `${process.env.ACCESS_TOKEN_SECRET}`)
+    try {
+        const token = req.header("Authorization")
+        if(!token)  return next();
+    
+        const decoded = <IDecodedToken>jwt.verify(token, `${process.env.ACCESS_TOKEN_SECRET}`)
+    
+        const user = await User.findOne({_id: decoded.id})
+        if(!user) return next();
+    
+        req.user = user;
+        
+    } catch (error) {
+        next()
+        
+    }
+   
 
-    const user = await User.findOne({_id: decoded.id})
-    if(!user) return next();
-
-    req.user = user;
-
-    next()
+    
  
 }
 

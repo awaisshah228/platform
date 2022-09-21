@@ -106,8 +106,10 @@ const authCtrl = {
     return res.json({ msg: "Logged out!" });
   },
   refreshToken: async (req: Request, res: Response) => {
+
+    
     const rf_token = req.cookies.refreshtoken;
-    console.log(rf_token);
+    // console.log(rf_token);
     if (!rf_token) throw new BadRequestError("Please Login before");
 
     const decoded = <IDecodedToken>(
@@ -115,6 +117,7 @@ const authCtrl = {
     );
 
     const user = await User.findById(decoded.id).select("+rf_token");
+    console.log("iam from refresh",user)
     // const user = await Users.findById(decoded.id).select("-password +rf_token")
 
     if (!user) throw new BadRequestError("Account not exists");
@@ -270,7 +273,6 @@ const loginUser = async (
   res: Response,
   type: string
 ) => {
-  console.log(password, user.password);
   const isMatch = await bcrypt.compare(password, user.password);
 
   if (!type && !isMatch) {
@@ -300,7 +302,7 @@ const loginUser = async (
 };
 
 const registerUser = async (user: IUserParams, res: Response) => {
-  const newUser = new User(user);
+  const newUser = User.build(user);
 
   const access_token = generateAccessToken({ id: newUser._id });
   const refresh_token = generateRefreshToken({ id: newUser._id }, res);
