@@ -5,7 +5,7 @@ import TextError from "./TextError";
 function Input(props) {
   const { label, name, className, ...rest } = props;
   return (
-    <div className="mt-2">
+    <div className="form-control mt-2">
       <label htmlFor={name} className="">
         <span className="text-neutral-800 dark:text-neutral-200">{label}</span>
       </label>

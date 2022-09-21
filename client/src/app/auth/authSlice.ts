@@ -33,9 +33,6 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    updateAccessToken(state,action){
-      state.msg=action.payload.access_token
-    }
   },
   extraReducers: (builder) => {
     builder
@@ -135,6 +132,6 @@ const authSlice = createSlice({
   // },
 })
 
-export const {updateAccessToken} = authSlice.actions
+// export const authActions = authSlice.actions
 
 export default authSlice.reducer
