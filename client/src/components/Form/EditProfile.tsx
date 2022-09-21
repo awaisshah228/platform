@@ -23,6 +23,7 @@ function EditProfile() {
     file: "",
    
   })
+  const [Image, setImage] = useState('')
   
 
   const FILE_SIZE = 160 * 1024;
@@ -34,11 +35,25 @@ function EditProfile() {
   ];
 
   const populateData=async()=>{
-    if(userId){
-      const profile= await getAPI(`user/${userId}`)
-      console.log(profile)
+    
+      const res= await getAPI(`user/${userId}`)
+      console.log(res)
+      // setinitialValues(res)
+      let profile=res.data
+       setinitialValues({
+        name: profile.name,
+        account: profile.account,
+        password: "",
+        confirmPassword: "",
+        file: '',
+        // modeOfContact: '',
+        // phone: ''
+      } );
+      setImage(profile.avatar)
+      console.log(initialValues);
+      
 
-    }
+    
    
   }
   useEffect(() => {
@@ -110,6 +125,7 @@ function EditProfile() {
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
+      enableReinitialize={true}
     >
       {(formik) => {
         return (
@@ -124,6 +140,11 @@ function EditProfile() {
                 ) : (
                   <UserIcon className="h-24 w-24" />
                 )}
+                {/* {formik.values.file ? (
+                  <Preview file={formik.values.file} />
+                ) : (
+                  <UserIcon className="h-24 w-24" />
+                )} */}
               </label>
               <input
                 id="file"
@@ -146,6 +167,7 @@ function EditProfile() {
               label="Full Name"
               name="name"
               className=""
+              value={formik.values.name}
             />
 
             <FormikControl
