@@ -1,34 +1,30 @@
-import { Response, NextFunction} from 'express'
-import {User} from '../models/userModel'
-import jwt from 'jsonwebtoken'
-import { IDecodedToken, IReqAuth } from '../utils/interface'
+import { Response, NextFunction } from "express";
+import { User } from "../models/userModel";
+import jwt from "jsonwebtoken";
+import { IDecodedToken, IReqAuth } from "../utils/interface";
 
-const currentUser = async (req: IReqAuth, res: Response, next: NextFunction) => {
+const currentUser = async (
+  req: IReqAuth,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const token = req.header("Authorization");
+    if (!token) return next();
 
-    try {
-        const token = req.header("Authorization")
-        if(!token)  return next();
-    
-        const decoded = <IDecodedToken>jwt.verify(token, `${process.env.ACCESS_TOKEN_SECRET}`)
-    
-        const user = await User.findOne({_id: decoded.id})
-        if(!user) return next();
-    
-        req.user = user;
-        
-    } catch (error) {
-        
-        
-    }
-    next()
-   
+    const decoded = <IDecodedToken>(
+      jwt.verify(token, `${process.env.ACCESS_TOKEN_SECRET}`)
+    );
 
-    
- 
-}
+    const user = await User.findOne({ _id: decoded.id });
+    if (!user) return next();
+
+    req.user = user;
+  } catch (error) {}
+  next();
+};
 
 export default currentUser;
-
 
 // import { Request, Response, NextFunction } from 'express';
 // import jwt from 'jsonwebtoken';
