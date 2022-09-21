@@ -1,28 +1,68 @@
-import React from "react";
-import { Formik, Form } from "formik";
+import React,{useEffect, useState} from "react";
+import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import FormikControl from "./FormikControl";
 import ButtonPrimary from "../Button/ButtonPrimary";
-import { useAppDispatch } from "../../app/hook";
+import { useAppDispatch, useAppSelector } from "../../app/hook";
 import { register } from "../../app/auth/authActions";
 import PrivatePage from "../../routers/PrivatePage";
+import Preview from "./Preview";
+import TextError from "./TextError";
+import Avatar from "../Avatar/Avatar";
+import { UserIcon } from "@heroicons/react/solid";
+import { getAPI } from "../../utils/fetchData";
+
 function EditProfile() {
   const dispatch = useAppDispatch();
-  const options = [
-    { key: "Email", value: "emailmoc" },
-    { key: "Telephone", value: "telephonemoc" },
-  ];
-  const initialValues = {
+  const userId=useAppSelector(state=>state.auth.user?.id)
+  const [initialValues, setinitialValues] = useState({
     name: "",
     account: "",
     password: "",
     confirmPassword: "",
-    // modeOfContact: '',
-    // phone: ''
-  };
+    file: "",
+   
+  })
+  
+
+  const FILE_SIZE = 160 * 1024;
+  const SUPPORTED_FORMATS = [
+    "image/jpg",
+    "image/jpeg",
+    "image/gif",
+    "image/png",
+  ];
+
+  const populateData=async()=>{
+    if(userId){
+      const profile= await getAPI(`user/${userId}`)
+      console.log(profile)
+
+    }
+   
+  }
+  useEffect(() => {
+
+    populateData()
+    
+     
+  },[])
+  
+
+  // const initialValues = {
+  //   name: "",
+  //   account: "",
+  //   password: "",
+  //   confirmPassword: "",
+  //   file: "",
+  //   // modeOfContact: '',
+  //   // phone: ''
+  // };
 
   const validationSchema = Yup.object({
-    name: Yup.string().required("Required"),
+    first: Yup.string().required("Required"),
+    last: Yup.string().required("Required"),
+    // name: Yup.string().required("Required"),
     account: Yup.string()
       // .email("Enter a valid email")
       .required("Email/Phone Number is required")
@@ -44,69 +84,104 @@ function EditProfile() {
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("password"), ""], "Passwords must match")
       .required("Required"),
+    file: Yup.mixed()
+      .required("A file is required")
+      .test(
+        "fileSize",
+        "File too large",
+        (value) => value && value.size <= FILE_SIZE
+      )
+      .test(
+        "fileFormat",
+        "Unsupported Format",
+        (value) => value && SUPPORTED_FORMATS.includes(value.type)
+      ),
   });
 
   const onSubmit = (values) => {
     console.log("Form data", values);
-    
+
     dispatch(register(values));
   };
 
   return (
-    <PrivatePage>
-      <Formik
+    // <PrivatePage>
+    <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
       {(formik) => {
         return (
-          <Form className="grid md:grid-cols-2 gap-6">
+          <Form className="grid grid-cols-1 md:p-10 gap-6">
+            <div className="flex justify-center flex-col items-center">
+              <label
+                htmlFor="file"
+                className="bg-slate-500 hover:cursor-pointer rounded-full  text-white"
+              >
+                {formik.values.file ? (
+                  <Preview file={formik.values.file} />
+                ) : (
+                  <UserIcon className="h-24 w-24" />
+                )}
+              </label>
+              <input
+                id="file"
+                type="file"
+                //   name="file"
+                placeholder="file"
+                className="hidden"
+                onChange={(e) => {
+                  console.log(e.target.files[0]);
+                  // console.log(typeof e.target.files[0])
+                  formik.setFieldValue("file", e.target.files[0]);
+                }}
+              />
+              <ErrorMessage component={TextError} name="file" />
+            </div>
+
             <FormikControl
               control="input"
               type="text"
-              label="First Name"
-              name="first"
-              className="block"
+              label="Full Name"
+              name="name"
+              className=""
             />
-            <FormikControl
-              control="input"
-              type="text"
-              label="Last Name"
-              name="last"
-              className="block"
-            />
-            
+
             <FormikControl
               control="password"
               // type='password'
               label="Password"
               name="password"
-              className="block"
+              className=""
             />
             <FormikControl
               control="password"
               // type='password'
               label="Confirm Password"
               name="confirmPassword"
-              className="block"
+              className=""
             />
             <FormikControl
               control="input"
               type="text"
               label="Email/Phone"
               name="account"
-              className='md:col-start-1 md:col-end-3'
+              className=""
             />
 
-            <ButtonPrimary type="submit" disabled={!formik.isValid} className='md:col-span-2'>
+            <ButtonPrimary
+              type="submit"
+              disabled={!formik.isValid}
+              className=""
+            >
               Continue
             </ButtonPrimary>
           </Form>
         );
       }}
     </Formik>
-    </PrivatePage>
+    // </PrivatePage>
   );
 }
 

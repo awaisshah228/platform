@@ -3,10 +3,13 @@ import Avatar from "../Avatar/Avatar";
 import { avatarImgs } from "../../contains/fakeData";
 import { Fragment } from "react";
 import { Link } from "react-router-dom";
-import { useAppDispatch } from "../../app/hook";
+import { useAppDispatch, useAppSelector } from "../../app/hook";
 import { logout } from "../../app/auth/authActions";
 
+
 export default function AvatarDropdown() {
+  const userId= useAppSelector(state=>state.auth.user.id)
+
   const dispatch= useAppDispatch()
   return (
     <div className="AvatarDropdown">
@@ -53,7 +56,7 @@ export default function AvatarDropdown() {
 
                     {/* ------------------ 1 --------------------- */}
                     <Link
-                      to={"/author/demo-slug"}
+                      to={`/profile/${userId}`}
                       className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
                     >
                       <div className="flex items-center justify-center flex-shrink-0 text-neutral-500 dark:text-neutral-300">
@@ -87,7 +90,7 @@ export default function AvatarDropdown() {
 
                     {/* ------------------ 2 --------------------- */}
                     <Link
-                      to={"/author/demo-slug"}
+                      to={"/profile/demo-slug"}
                       className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
                     >
                       <div className="flex items-center justify-center flex-shrink-0 text-neutral-500 dark:text-neutral-300">
@@ -172,7 +175,7 @@ export default function AvatarDropdown() {
                         </svg>
                       </div>
                       <div className="ml-4">
-                        <p className="text-sm font-medium ">{"Edit profile"}</p>
+                        <p className="text-sm font-medium ">{"Dashboard"}</p>
                       </div>
                     </Link>
 

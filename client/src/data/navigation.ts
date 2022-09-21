@@ -367,21 +367,21 @@ const demoChildMenus: NavItemType[] = [
 const templateChilds: NavItemType[] = [
   ...archviePageChildrenMenus,
   singleChildrenMenus,
-  {
-    id: ncNanoId(),
-    href: "/single-gallery/this-is-single-slug",
-    name: "Single Gallery",
-  },
-  {
-    id: ncNanoId(),
-    href: "/single-audio/this-is-single-slug",
-    name: "Single Audio",
-  },
-  {
-    id: ncNanoId(),
-    href: "/single-video/this-is-single-slug",
-    name: "Single Video",
-  },
+  // {
+  //   id: ncNanoId(),
+  //   href: "/single-gallery/this-is-single-slug",
+  //   name: "Single Gallery",
+  // },
+  // {
+  //   id: ncNanoId(),
+  //   href: "/single-audio/this-is-single-slug",
+  //   name: "Single Audio",
+  // },
+  // {
+  //   id: ncNanoId(),
+  //   href: "/single-video/this-is-single-slug",
+  //   name: "Single Video",
+  // },
 ];
 
 export const NAVIGATION_DEMO: NavItemType[] = [
@@ -389,38 +389,38 @@ export const NAVIGATION_DEMO: NavItemType[] = [
     id: ncNanoId(),
     href: "/",
     name: "Home",
-    type: "dropdown",
-    children: demoChildMenus,
+    // type: "dropdown",
+    // children: demoChildMenus,
   },
-  {
-    id: ncNanoId(),
-    href: "#",
-    name: "Five cols",
-    type: "megaMenu",
-    megaMenu: megaMenuDemo,
-  },
+  // {
+  //   id: ncNanoId(),
+  //   href: "#",
+  //   name: "Five cols",
+  //   type: "megaMenu",
+  //   megaMenu: megaMenuDemo,
+  // },
 
-  {
-    id: ncNanoId(),
-    href: "#",
-    name: "Fewer cols",
-    type: "megaMenu",
-    megaMenu: megaMenu3ItemDemo,
-  },
-  {
-    id: ncNanoId(),
-    href: "#",
-    name: "Templates",
-    type: "dropdown",
-    children: templateChilds,
-  },
-  {
-    id: ncNanoId(),
-    href: "#",
-    name: "Other pages",
-    type: "dropdown",
-    children: otherPageChildMenus,
-  },
+  // {
+  //   id: ncNanoId(),
+  //   href: "#",
+  //   name: "Fewer cols",
+  //   type: "megaMenu",
+  //   megaMenu: megaMenu3ItemDemo,
+  // },
+  // {
+  //   id: ncNanoId(),
+  //   href: "#",
+  //   name: "Templates",
+  //   type: "dropdown",
+  //   children: templateChilds,
+  // },
+  // {
+  //   id: ncNanoId(),
+  //   href: "#",
+  //   name: "Other pages",
+  //   type: "dropdown",
+  //   children: otherPageChildMenus,
+  // },
 ];
 
 export const NAVIGATION_SHORT_DEMO: NavItemType[] = [
@@ -428,15 +428,15 @@ export const NAVIGATION_SHORT_DEMO: NavItemType[] = [
     id: ncNanoId(),
     href: "/",
     name: "Home",
-    type: "dropdown",
-    children: demoChildMenus,
+    // type: "dropdown",
+    // children: demoChildMenus,
   },
   {
     id: ncNanoId(),
     href: "#",
     name: "Discover",
-    type: "dropdown",
-    children: templateChilds,
+    // type: "dropdown",
+    // children: templateChilds,
   },
   {
     id: ncNanoId(),

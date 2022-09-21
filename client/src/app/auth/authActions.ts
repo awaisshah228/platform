@@ -17,7 +17,7 @@ export const login = createAsyncThunk(
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        });
+      });
       //
 
       return res.data;
@@ -126,7 +126,7 @@ export const logout = createAsyncThunk(
   "auth/logout",
   async (_, { rejectWithValue }) => {
     try {
-      const res=await getAPI("auth/logout");
+      const res = await getAPI("auth/logout");
       toast(res.data?.msg, {
         position: "top-right",
         autoClose: 5000,
@@ -135,7 +135,7 @@ export const logout = createAsyncThunk(
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        });
+      });
       return { msg: "Logged out", user: {}, access_token: "" };
     } catch (error) {
       // return custom error message from API if any
@@ -164,7 +164,7 @@ export const googleLogin = createAsyncThunk(
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        });
+      });
       //
 
       return res.data;
@@ -215,8 +215,8 @@ export const facebookLogin = createAsyncThunk(
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        });
-     
+      });
+
       //
 
       return res.data;
@@ -254,11 +254,7 @@ export const smsLogin = createAsyncThunk(
   "auth/smsLogin",
   async (phone: string, { rejectWithValue }) => {
     try {
-      const res = await postAPI(
-        "auth/login_sms",
-        { phone},
-        ""
-      );
+      const res = await postAPI("auth/login_sms", { phone }, "");
       toast("Check phone for OTP", {
         position: "top-right",
         autoClose: 5000,
@@ -267,7 +263,7 @@ export const smsLogin = createAsyncThunk(
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        });
+      });
       //
 
       return res.data;
@@ -303,13 +299,9 @@ export const smsLogin = createAsyncThunk(
 );
 export const smsVerify = createAsyncThunk(
   "auth/smsVerify",
-  async ({phone,code}:any, { rejectWithValue }) => {
+  async ({ phone, code }: any, { rejectWithValue }) => {
     try {
-      const res = await postAPI(
-        "auth/sms_verify",
-        { phone,code},
-        ""
-      );
+      const res = await postAPI("auth/sms_verify", { phone, code }, "");
       toast(res.data?.msg, {
         position: "top-right",
         autoClose: 5000,
@@ -318,7 +310,7 @@ export const smsVerify = createAsyncThunk(
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        });
+      });
       //
 
       return res.data;
@@ -352,11 +344,53 @@ export const smsVerify = createAsyncThunk(
     }
   }
 );
+export const updateUser = createAsyncThunk(
+  "auth/updateUser",
+  async ({ name, file }: any, { rejectWithValue }) => {
+    try {
+      const res = await postAPI("user", { name, file }, "");
+      toast(res.data?.msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      //
 
-
-
-
-
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      //       // return custom error message from API if any
+      if (error.response && error.response.data.errors) {
+        console.log(error.response.data.errors);
+        toast.error(error.response.data.errors[0].message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        return rejectWithValue(error.response.data.errors);
+      } else {
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
 
 // export const forgotPassword = (account: string) =>
 // async (dispatch: Dispatch<IAuthType | IAlertType>) => {

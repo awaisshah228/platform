@@ -8,7 +8,7 @@ const RedirectHome = ({ children }) => {
   const LoggedIn = useAppSelector((state) => state.auth.access_token);
   
   useEffect(() => {
-    if (LoggedIn) {
+    if (LoggedIn!='') {
       return navigate("/");
     }
   },[LoggedIn]);
