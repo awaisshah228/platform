@@ -16,7 +16,7 @@ function EditProfile() {
     { key: "Email", value: "emailmoc" },
     { key: "Telephone", value: "telephonemoc" },
   ];
-  const userId=useAppSelector(state=>state.auth.user._id)
+  const userId=useAppSelector(state=>state.auth.user.id)
   const [initialValues, setinitialValues] = useState({name: "",
   account: "",
   password: "",
@@ -115,22 +115,19 @@ function EditProfile() {
     >
       {(formik) => {
         return (
-          <Form className="grid grid-cols-1 md:p-10 gap-6">
+          <Form className="flex flex-col gap-6 md:p-10">
             <div className="flex justify-center flex-col items-center">
+          
               <label
                 htmlFor="file"
                 className="bg-slate-500 hover:cursor-pointer rounded-full  text-white"
               >
+               
                 {formik.values.file ? (
                   <Preview file={formik.values.file} />
                 ) : (
                   <UserIcon className="h-24 w-24" />
                 )}
-                {/* {formik.values.file ? (
-                  <Preview file={formik.values.file} />
-                ) : (
-                  <UserIcon className="h-24 w-24" />
-                )} */}
               </label>
               <input
                 id="file"
@@ -155,13 +152,7 @@ function EditProfile() {
               className=""
               value={formik.values.name}
             />
-            <FormikControl
-              control="input"
-              type="text"
-              label="Last Name"
-              name="last"
-              className="block"
-            />
+          
             
             <FormikControl
               control="password"
