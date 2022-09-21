@@ -17,9 +17,10 @@ const currentUser = async (req: IReqAuth, res: Response, next: NextFunction) => 
         req.user = user;
         
     } catch (error) {
-        next()
+        
         
     }
+    next()
    
 
     
