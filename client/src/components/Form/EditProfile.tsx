@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import FormikControl from "./FormikControl";
@@ -7,22 +7,22 @@ import { useAppDispatch, useAppSelector } from "../../app/hook";
 import { register } from "../../app/auth/authActions";
 import PrivatePage from "../../routers/PrivatePage";
 import Preview from "./Preview";
-import TextError from "./TextError";
-import Avatar from "../Avatar/Avatar";
 import { UserIcon } from "@heroicons/react/solid";
+import TextError from "./TextError";
 import { getAPI } from "../../utils/fetchData";
-
 function EditProfile() {
   const dispatch = useAppDispatch();
-  const userId=useAppSelector(state=>state.auth.user?.id)
-  const [initialValues, setinitialValues] = useState({
-    name: "",
-    account: "",
-    password: "",
-    confirmPassword: "",
-    file: "",
-   
-  })
+  const options = [
+    { key: "Email", value: "emailmoc" },
+    { key: "Telephone", value: "telephonemoc" },
+  ];
+  const userId=useAppSelector(state=>state.auth.user._id)
+  const [initialValues, setinitialValues] = useState({name: "",
+  account: "",
+  password: "",
+  confirmPassword: "",
+  file: "",})
+  
   const [Image, setImage] = useState('')
   
 
@@ -75,9 +75,7 @@ function EditProfile() {
   // };
 
   const validationSchema = Yup.object({
-    first: Yup.string().required("Required"),
-    last: Yup.string().required("Required"),
-    // name: Yup.string().required("Required"),
+    name: Yup.string().required("Required"),
     account: Yup.string()
       // .email("Enter a valid email")
       .required("Email/Phone Number is required")
@@ -99,29 +97,17 @@ function EditProfile() {
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("password"), ""], "Passwords must match")
       .required("Required"),
-    file: Yup.mixed()
-      .required("A file is required")
-      .test(
-        "fileSize",
-        "File too large",
-        (value) => value && value.size <= FILE_SIZE
-      )
-      .test(
-        "fileFormat",
-        "Unsupported Format",
-        (value) => value && SUPPORTED_FORMATS.includes(value.type)
-      ),
   });
 
   const onSubmit = (values) => {
     console.log("Form data", values);
-
+    
     dispatch(register(values));
   };
 
   return (
-    // <PrivatePage>
-    <Formik
+    <PrivatePage>
+      <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
@@ -169,41 +155,44 @@ function EditProfile() {
               className=""
               value={formik.values.name}
             />
-
+            <FormikControl
+              control="input"
+              type="text"
+              label="Last Name"
+              name="last"
+              className="block"
+            />
+            
             <FormikControl
               control="password"
               // type='password'
               label="Password"
               name="password"
-              className=""
+              className="block"
             />
             <FormikControl
               control="password"
               // type='password'
               label="Confirm Password"
               name="confirmPassword"
-              className=""
+              className="block"
             />
             <FormikControl
               control="input"
               type="text"
               label="Email/Phone"
               name="account"
-              className=""
+              className='md:col-start-1 md:col-end-3'
             />
 
-            <ButtonPrimary
-              type="submit"
-              disabled={!formik.isValid}
-              className=""
-            >
+            <ButtonPrimary type="submit" disabled={!formik.isValid} className='md:col-span-2'>
               Continue
             </ButtonPrimary>
           </Form>
         );
       }}
     </Formik>
-    // </PrivatePage>
+    </PrivatePage>
   );
 }
 

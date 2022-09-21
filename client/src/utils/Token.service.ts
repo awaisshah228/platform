@@ -1,6 +1,4 @@
 class TokenService {
-
-  
    
   
     getLocalAccessToken() {
@@ -11,27 +9,12 @@ class TokenService {
   
     updateLocalAccessToken(token) {
 
-
-               
-         console.log("i am origina"+localStorage.getItem("persist:root"))
-        // console.log("token",token)
       let root = JSON.parse(localStorage.getItem("persist:root"));
       let auth = JSON.parse(root?.auth);
-      // console.log("auth before"+JSON.stringify(auth))
+
+    //   let user = JSON.parse(localStorage.getItem("user"));
       auth.access_token = token;
-      
-    //   
-      auth=JSON.stringify(auth).replace(/\\n/g, "\\n")
-      .replace(/\\'/g, "\\'")
-      .replace(/\\"/g, '\\"')
-      .replace(/\\&/g, "\\&")
-      .replace(/\\r/g, "\\r")
-      .replace(/\\t/g, "\\t")
-      .replace(/\\b/g, "\\b")
-      .replace(/\\f/g, "\\f");
-      root.auth=(auth);
-      // console.log(root)
-      // console.log("i am changed"+ JSON.stringify(root))
+      root.auth=auth;
       localStorage.setItem("persist:root", JSON.stringify(root));
     }
   

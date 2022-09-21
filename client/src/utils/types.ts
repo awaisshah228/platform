@@ -32,7 +32,7 @@ export interface IUser extends IUserLogin {
   role: string
   type: string
   updatedAt: string
-  id: string
+  _id: string
 }
 
 export interface IUserProfile extends IUserRegister {

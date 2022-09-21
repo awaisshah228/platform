@@ -78,8 +78,7 @@ const PageDashboard: FC<PageDashboardProps> = ({ className = "" }) => {
   let location = useLocation();
 
   return (
-    <PrivatePage>
-      <div className={`nc-PageDashboard ${className}`} data-nc-id="PageDashboard">
+       <div className={`nc-PageDashboard ${className}`} data-nc-id="PageDashboard">
       <Helmet>
         <title>Dashboard || Blog Magazine React Template</title>
       </Helmet>
@@ -142,8 +141,6 @@ const PageDashboard: FC<PageDashboardProps> = ({ className = "" }) => {
         </div>
       </LayoutPage>
     </div>
-    </PrivatePage>
-       
    
    
   );

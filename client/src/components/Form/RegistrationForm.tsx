@@ -53,7 +53,7 @@ function RegistrationForm() {
   };
 
   return (
-   
+    <PrivatePage>
       <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
@@ -94,6 +94,7 @@ function RegistrationForm() {
         );
       }}
     </Formik>
+    </PrivatePage>
   );
 }
 

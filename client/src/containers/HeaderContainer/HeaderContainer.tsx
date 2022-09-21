@@ -40,22 +40,22 @@ const HeaderContainer: FC<HeaderContainerProps> = ({ className = "" }) => {
       name: "Home Main",
       slug: "/",
     },
-    // {
-    //   name: "Home 2",
-    //   slug: "/home-demo-2",
-    // },
-    // {
-    //   name: "Home 3",
-    //   slug: "/home-demo-3",
-    // },
-    // {
-    //   name: "Home 4",
-    //   slug: "/home-demo-4",
-    // },
-    // {
-    //   name: "Home 5",
-    //   slug: "/home-demo-6",
-    // },
+    {
+      name: "Home 2",
+      slug: "/home-demo-2",
+    },
+    {
+      name: "Home 3",
+      slug: "/home-demo-3",
+    },
+    {
+      name: "Home 4",
+      slug: "/home-demo-4",
+    },
+    {
+      name: "Home 5",
+      slug: "/home-demo-6",
+    },
   ]);
   const [headerSelected, setHeaderSelected] =
     React.useState<SiteHeaders>("Header 2");
