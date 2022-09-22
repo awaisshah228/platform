@@ -20,11 +20,11 @@ export const errorHandler = (
     });
 
   }
-  // if(err){
-  //   return  res.status(400).send({
-  //     errors: [err],
-  //   });
-  // }
+  if(err){
+    return  res.status(400).send({
+      errors: [err],
+    });
+  }
   res.status(400).send({
     errors: ["something went wrong "],
   });

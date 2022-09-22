@@ -22,6 +22,7 @@ import {
 import { OAuth2Client } from "google-auth-library";
 // import fetch from "node-fetch";
 import axios from "axios";
+import { CustomError } from "../errors/custom-errors";
 
 const client = new OAuth2Client(`${process.env.MAIL_CLIENT_ID}`);
 const CLIENT_URL = `${process.env.BASE_URL}`;
@@ -106,36 +107,56 @@ const authCtrl = {
     return res.json({ msg: "Logged out!" });
   },
   refreshToken: async (req: Request, res: Response) => {
+    try {
+      const rf_token = req.cookies.refreshtoken;
+      // console.log(rf_token);
+      if (!rf_token) throw new BadRequestError("Please Login before");
 
-    
-    const rf_token = req.cookies.refreshtoken;
-    // console.log(rf_token);
-    if (!rf_token) throw new BadRequestError("Please Login before");
+      const decoded = <IDecodedToken>(
+        jwt.verify(rf_token, `${process.env.REFRESH_TOKEN_SECRET}`)
+      );
 
-    const decoded = <IDecodedToken>(
-      jwt.verify(rf_token, `${process.env.REFRESH_TOKEN_SECRET}`)
-    );
+      const user = await User.findById(decoded.id).select("+rf_token");
+      // const user = await Users.findById(decoded.id).select("-password +rf_token")
 
-    const user = await User.findById(decoded.id).select("+rf_token");
-    console.log("iam from refresh",user)
-    // const user = await Users.findById(decoded.id).select("-password +rf_token")
+      if (!user) throw new BadRequestError("Account not exists");
 
-    if (!user) throw new BadRequestError("Account not exists");
+      if (rf_token !== user.rf_token)
+        throw new BadRequestError("Please Login before");
 
-    if (rf_token !== user.rf_token)
-      throw new BadRequestError("Please Login before");
+      const access_token = generateAccessToken({ id: user._id });
+      const refresh_token = generateRefreshToken({ id: user._id }, res);
 
-    const access_token = generateAccessToken({ id: user._id });
-    const refresh_token = generateRefreshToken({ id: user._id }, res);
+      await User.findOneAndUpdate(
+        { _id: user._id },
+        {
+          rf_token: refresh_token,
+        }
+      );
 
-    await User.findOneAndUpdate(
-      { _id: user._id },
-      {
-        rf_token: refresh_token,
+      res.json({ access_token, user });
+    } catch (err: any) {
+      if (err instanceof CustomError) {
+        return res
+          .status(err.statusCode)
+          .send({ errors: err.serializeErrors() });
       }
-    );
+      console.log(JSON.stringify(err));
 
-    res.json({ access_token, user });
+      if (err.name == "TokenExpiredError") {
+        return res.status(400).send({
+          errors: [err],
+        });
+      }
+      if (err) {
+        return res.status(400).send({
+          errors: [err],
+        });
+      }
+      res.status(400).send({
+        errors: ["something went wrong "],
+      });
+    }
   },
   googleLogin: async (req: Request, res: Response) => {
     const { id_token } = req.body;
@@ -202,69 +223,61 @@ const authCtrl = {
       registerUser(user, res);
     }
   },
-    loginSMS: async(req: Request, res: Response) => {
-     
-        const { phone } = req.body
-        console.log(phone)
-        // res.json({phone})
+  loginSMS: async (req: Request, res: Response) => {
+    const { phone } = req.body;
+    console.log(phone);
+    // res.json({phone})
 
-        const data = await smsOTP(phone, 'sms')
-        res.json(data)
-     
-    },
-    smsVerify: async(req: Request, res: Response) => {
-     
-        const { phone, code } = req.body
+    const data = await smsOTP(phone, "sms");
+    res.json(data);
+  },
+  smsVerify: async (req: Request, res: Response) => {
+    const { phone, code } = req.body;
 
-        const data = await smsVerify(phone, code)
-        if(!data?.valid) throw new BadRequestError("Invalid authentication")
+    const data = await smsVerify(phone, code);
+    if (!data?.valid) throw new BadRequestError("Invalid authentication");
 
-        const password = phone + 'your phone secrect password'
-        const passwordHash = await bcrypt.hash(password, 12)
+    const password = phone + "your phone secrect password";
+    const passwordHash = await bcrypt.hash(password, 12);
 
-        const user = await User.findOne({account: phone})
+    const user = await User.findOne({ account: phone });
 
-        if(user){
-          loginUser(user, password, res,"mobile")
-        }else{
-          const user = {
-            name: phone,
-            account: phone,
-            password: password,
-            type: 'sms'
-          }
-          registerUser(user, res)
-        }
+    if (user) {
+      loginUser(user, password, res, "mobile");
+    } else {
+      const user = {
+        name: phone,
+        account: phone,
+        password: password,
+        type: "sms",
+      };
+      registerUser(user, res);
+    }
+  },
+  forgotPassword: async (req: Request, res: Response) => {
+    const { account } = req.body;
 
-    
-    },
-    forgotPassword: async(req: Request, res: Response) => {
-      
-        const { account } = req.body
+    const user = await User.findOne({ account });
+    if (!user)
+      return res.status(400).json({ msg: "This account does not exist." });
 
-        const user = await User.findOne({account})
-        if(!user)
-          return res.status(400).json({msg: 'This account does not exist.'})
+    if (user.type !== "register")
+      throw new BadRequestError(
+        "Quick login account with ${user.type} can't use this function"
+      );
 
-        if(user.type !== 'register')
-        throw new BadRequestError("Quick login account with ${user.type} can't use this function")
-         
+    const access_token = generateAccessToken({ id: user._id });
 
-        const access_token = generateAccessToken({id: user._id})
+    const url = `${CLIENT_URL}/reset_password/${access_token}`;
 
-        const url = `${CLIENT_URL}/reset_password/${access_token}`
-
-        if(validPhone(account)){
-          sendSms(account, url, "Forgot password?")
-          return res.json({msg: "Success! Please check your phone."})
-
-        }else if(validateEmail(account)){
-          sendMail(account, url, "Forgot password?")
-          return res.json({msg: "Success! Please check your email."})
-        }
-
-     
-    },
+    if (validPhone(account)) {
+      sendSms(account, url, "Forgot password?");
+      return res.json({ msg: "Success! Please check your phone." });
+    } else if (validateEmail(account)) {
+      sendMail(account, url, "Forgot password?");
+      return res.json({ msg: "Success! Please check your email." });
+    }
+  },
 };
 
 const loginUser = async (
