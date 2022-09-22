@@ -2,21 +2,28 @@ import { Request, Response } from "express";
 import { IReqAuth } from "../utils/interface";
 import { User } from "../models/userModel";
 import { NotFoundError } from "../errors";
+import { IUser } from './../utils/interface';
+import { BadRequestError } from './../errors/bad-request-error';
 
 
 
 const userCtrl = {
   updateUser: async (req: IReqAuth, res: Response) => {
     const { name } = req.body;
+    
+    if(!req.body.name){
+      throw new BadRequestError("Name is not suppliend")
+    }
+    const user:any=await User.find({_id:req.user?._id })
 
-    await User.findOneAndUpdate(
+    const updateUser= await User.findOneAndUpdate(
       { _id: req.user?._id },
       {
-        avatar: req.file?.location,
+        avatar: req.file? req.file?.location : user?.avatar,
         name,
       }
     );
-    res.json({ msg: req.file })
+    res.json({ msg: "success",user: updateUser})
      // res.json({ msg: "Update Success!" })
   },
   resetPassword: async (req: IReqAuth, res: Response) => {

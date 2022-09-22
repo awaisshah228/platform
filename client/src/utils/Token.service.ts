@@ -8,14 +8,26 @@ class TokenService {
     }
   
     updateLocalAccessToken(token) {
-
       let root = JSON.parse(localStorage.getItem("persist:root"));
       let auth = JSON.parse(root?.auth);
-
-    //   let user = JSON.parse(localStorage.getItem("user"));
       auth.access_token = token;
-      root.auth=auth;
-      localStorage.setItem("persist:root", JSON.stringify(root));
+
+      //   
+        auth=JSON.stringify(auth).replace(/\\n/g, "\\n")
+        .replace(/\\'/g, "\\'")
+        .replace(/\\"/g, '\\"')
+        .replace(/\\&/g, "\\&")
+        .replace(/\\r/g, "\\r")
+        .replace(/\\t/g, "\\t")
+        .replace(/\\b/g, "\\b")
+        .replace(/\\f/g, "\\f");
+        // console.log(root)
+        // console.log("i am changed"+ JSON.stringify(root))
+        root.auth=auth;
+        localStorage.setItem("persist:root", JSON.stringify(root));
+
+
+   
     }
   
     getUser() {
@@ -27,9 +39,13 @@ class TokenService {
     //   localStorage.setItem("user", JSON.stringify(user));
     // }
   
-    // removeUser() {
-    //   localStorage.removeItem("user");
-    // }
+    removeUser() {
+      let root = JSON.parse(localStorage.getItem("persist:root"));
+      root.auth={};
+      localStorage.setItem("persist:root", JSON.stringify(root))
+
+
+    }
   }
   
   export default new TokenService();

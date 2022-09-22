@@ -9,14 +9,18 @@ import PrivatePage from "../../routers/PrivatePage";
 import Preview from "./Preview";
 import { UserIcon } from "@heroicons/react/solid";
 import TextError from "./TextError";
-import { getAPI } from "../../utils/fetchData";
+import { getAPI, patchAPI } from "../../utils/fetchData";
+import { toast } from "react-toastify";
+import { postAPI } from './../../utils/fetchData';
+import Password from './Password';
+import Avatar from "../Avatar/Avatar";
 function EditProfile() {
   const dispatch = useAppDispatch();
   const options = [
     { key: "Email", value: "emailmoc" },
     { key: "Telephone", value: "telephonemoc" },
   ];
-  const userId=useAppSelector(state=>state.auth.user.id)
+  const userId=useAppSelector(state=>state.auth.user?.id)
   const [initialValues, setinitialValues] = useState({name: "",
   account: "",
   password: "",
@@ -35,7 +39,8 @@ function EditProfile() {
   ];
 
   const populateData=async()=>{
-    
+    try {
+
       const res= await getAPI(`user/${userId}`)
       console.log(res)
       // setinitialValues(res)
@@ -51,6 +56,33 @@ function EditProfile() {
       } );
       setImage(profile.avatar)
       console.log(initialValues);
+      
+    } catch (error) {
+      // if (error.response && error.response.data.errors) {
+      //   console.log(error.response.data.errors);
+      //   toast.error(error.response.data.errors[0].message, {
+      //     position: "top-right",
+      //     autoClose: 5000,
+      //     hideProgressBar: false,
+      //     closeOnClick: true,
+      //     pauseOnHover: true,
+      //     draggable: true,
+      //     progress: undefined,
+      //   });
+      // } else {
+      //   toast.error(error.message, {
+      //     position: "top-right",
+      //     autoClose: 5000,
+      //     hideProgressBar: false,
+      //     closeOnClick: true,
+      //     pauseOnHover: true,
+      //     draggable: true,
+      //     progress: undefined,
+      //   });
+      // }
+    }
+    
+     
       
 
     
@@ -99,10 +131,19 @@ function EditProfile() {
       .required("Required"),
   });
 
-  const onSubmit = (values) => {
-    console.log("Form data", values);
+  const onSubmit = async({name,account,file}) => {
+    try {
+      // console.log("Form data", values);
     
-    dispatch(register(values));
+   const res= await patchAPI('user/',name,file)
+   console.log(res)
+      
+    } catch (error) {
+      console.log(error) 
+    }
+    
+    // dispatch(register(values));
+    
   };
 
   return (
@@ -126,7 +167,8 @@ function EditProfile() {
                 {formik.values.file ? (
                   <Preview file={formik.values.file} />
                 ) : (
-                  <UserIcon className="h-24 w-24" />
+                  // <UserIcon className="h-24 w-24" />
+                  <Avatar imgUrl={Image} sizeClass="h-20 w-20" radius="30" />
                 )}
               </label>
               <input

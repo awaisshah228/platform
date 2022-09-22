@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { DEMO_POSTS } from "../../data/posts";
 import { PostAuthorType, PostDataType } from "../../data/types";
 import Pagination from "../../components/Pagination/Pagination";
@@ -18,6 +18,9 @@ import { DEMO_CATEGORIES } from "../../data/taxonomies";
 import ButtonSecondary from "../../components/Button/ButtonSecondary";
 import SectionSliderNewAuthors from "../../components/SectionSliderNewAthors/SectionSliderNewAuthors";
 import NcImage from "../../components/NcImage/NcImage";
+import { useParams } from "react-router-dom";
+import { getAPI } from "../../utils/fetchData";
+import { toast } from "react-toastify";
 
 export interface PageAuthorProps {
   className?: string;
@@ -35,6 +38,49 @@ const TABS = ["Articles", "Favorites", "Saved"];
 
 const PageAuthor: FC<PageAuthorProps> = ({ className = "" }) => {
   const [tabActive, setTabActive] = useState<string>(TABS[0]);
+
+  const [initialValues, setinitialValues] = useState({ name: "", avatar: "" });
+  const { slug } = useParams();
+  const populateData = async () => {
+    try {
+      const res = await getAPI(`user/${slug}`);
+      // console.log(res)
+      // setinitialValues(res)
+      let profile = res.data;
+      setinitialValues({
+        name: profile.name,
+        avatar: profile.avatar,
+      });
+    } catch (error) {
+      if (error.response && error.response.data.errors) {
+        console.log(error.response.data.errors);
+        toast.error(error.response.data.errors[0].message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else {
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    populateData();
+    console.log(slug);
+  }, [slug]);
 
   const handleClickTab = (item: string) => {
     if (item === tabActive) {
@@ -62,13 +108,13 @@ const PageAuthor: FC<PageAuthorProps> = ({ className = "" }) => {
           <div className=" bg-white dark:bg-neutral-900 dark:border dark:border-neutral-700 p-5 lg:p-16 rounded-[40px] shadow-2xl flex flex-col sm:flex-row sm:items-center">
             <Avatar
               containerClassName="ring-4 ring-white dark:ring-0 shadow-2xl"
-              imgUrl={AUTHOR.avatar}
+              imgUrl={initialValues.avatar}
               sizeClass="w-20 h-20 text-xl lg:text-2xl lg:w-36 lg:h-36"
               radius="rounded-full"
             />
             <div className="mt-5 sm:mt-0 sm:ml-8 space-y-4 max-w-lg">
               <h2 className="inline-block text-2xl sm:text-3xl md:text-4xl font-semibold">
-                {AUTHOR.displayName}
+                {initialValues.name}
               </h2>
               <span className="block text-sm text-neutral-6000 dark:text-neutral-300 md:text-base">
                 {AUTHOR.desc}

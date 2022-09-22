@@ -24,7 +24,9 @@ const upload = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key: function (req, file, cb) {
-      cb(null, Date.now().toString());
+      let extArray = file.mimetype.split("/");
+      let extension = extArray[extArray.length - 1];
+      cb(null, file.fieldname + '-' + Date.now()+crypto.randomBytes(8).toString('hex')+ '.' +extension)
     },
   }),
 });

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 import TokenService from "./Token.service";
 
 const instance = axios.create({
@@ -33,7 +34,7 @@ instance.interceptors.response.use(
 
     if (originalConfig.url !== "/auth/login" && err.response) {
       // Access Token was expired
-      if (err.response.statusCode === 401 && !originalConfig._retry) {
+      if (err.response.status === 401 && !originalConfig._retry) {
         originalConfig._retry = true;
 
         try {
@@ -43,8 +44,34 @@ instance.interceptors.response.use(
           TokenService.updateLocalAccessToken(access_token);
 
           return instance(originalConfig);
-        } catch (_error) {
-          return Promise.reject(_error);
+        } catch (error) {
+          TokenService.removeUser()
+          if (error.response && error.response.data.errors) {
+            console.log(error.response.data.errors);
+            toast.error(error.response.data.errors[0].message, {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+           
+          } else {
+            toast.error(error.message, {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+           
+          }
+          
+          return Promise.reject(error);
         }
       }
     }

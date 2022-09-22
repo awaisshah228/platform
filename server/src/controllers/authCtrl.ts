@@ -107,7 +107,7 @@ const authCtrl = {
     return res.json({ msg: "Logged out!" });
   },
   refreshToken: async (req: Request, res: Response) => {
-    try {
+    
       const rf_token = req.cookies.refreshtoken;
       // console.log(rf_token);
       if (!rf_token) throw new BadRequestError("Please Login before");
@@ -135,28 +135,7 @@ const authCtrl = {
       );
 
       res.json({ access_token, user });
-    } catch (err: any) {
-      if (err instanceof CustomError) {
-        return res
-          .status(err.statusCode)
-          .send({ errors: err.serializeErrors() });
-      }
-      console.log(JSON.stringify(err));
-
-      if (err.name == "TokenExpiredError") {
-        return res.status(400).send({
-          errors: [err],
-        });
-      }
-      if (err) {
-        return res.status(400).send({
-          errors: [err],
-        });
-      }
-      res.status(400).send({
-        errors: ["something went wrong "],
-      });
-    }
+    
   },
   googleLogin: async (req: Request, res: Response) => {
     const { id_token } = req.body;

@@ -1,6 +1,6 @@
 import express from "express";
 import userCtrl from "../controllers/userCtrl";
-import { body, oneOf } from "express-validator";
+import { body, check, oneOf } from "express-validator";
 import { validateRequest } from "../middlewares/validate-request";
 import { requireAuth } from "../middlewares/require-auth";
 import upload from "../middlewares/upload-file";
@@ -10,8 +10,8 @@ const router = express.Router();
 router.patch(
   "/",
   requireAuth,
-  [body("name").trim().notEmpty().withMessage("You must supply a name"),],
-  validateRequest,
+  // [ body("name").notEmpty().withMessage("You must supply a name")],
+  // validateRequest,
   upload.single("file"),
   userCtrl.updateUser
 );
