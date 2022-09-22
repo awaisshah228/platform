@@ -23,7 +23,7 @@ const index = () => {
       <Routes>
         {/* <Route path="/" element={<App />} /> */}
 
-        <Route path="/" element={<App />} />
+        <Route path="/" element={< PageRender/>} />
         <Route path="/dashboard/*" element={<PageDashboard />} />
 
         <Route path="/:page" element={<PageRender />} />

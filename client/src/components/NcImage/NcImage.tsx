@@ -66,7 +66,7 @@ const NcImage: FC<NcImageProps> = ({
     return () => {
       setIsMounted(false)
     };
-  }, [src]);
+  }, [__src]);
 
   const renderLoadingPlaceholder = () => {
     return (

@@ -39,7 +39,7 @@ const Card11: FC<Card11Props> = ({
           <PostFeaturedMedia post={post} isHover={isHover} />
         </div>
       </div>
-      <Link to={href} className="absolute inset-0"></Link>
+      <Link to={`/blog${href}`} className="absolute inset-0"></Link>
       <span className="absolute top-3 inset-x-3 z-10">
         <CategoryBadgeList categories={categories} />
       </span>

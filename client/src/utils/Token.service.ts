@@ -4,6 +4,7 @@ class TokenService {
     getLocalAccessToken() {
       const root = JSON.parse(localStorage.getItem("persist:root"));
       const auth = JSON.parse(root?.auth);
+      // console.log(auth)
       return auth?.access_token;
     }
   
