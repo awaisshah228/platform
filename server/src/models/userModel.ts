@@ -65,10 +65,9 @@ const userSchema = new mongoose.Schema(
     rf_token: { type: String, select: false },
   },
   {
-    // timestamps: true,
+    timestamps: true,
     toJSON: {
       transform(doc, ret) {
-        // console.log(doc)
         ret.id = ret._id;
         delete ret._id;
         delete ret.password;
@@ -85,7 +84,17 @@ userSchema.pre("save", async function (done) {
     this.set("password", hashed);
   }
   done();
+
 });
+// userSchema.pre("update", async function (done) {
+//   if (this.isModified("password")) {
+//     const hashed = await bcrypt.hash(this.get("password"), 12);
+
+//     //   const hashed = await Password.toHash(this.get('password'));
+//     this.set("password", hashed);
+//   }
+//   done();
+// });
 
 userSchema.statics.build = (attrs: UserAttrs) => {
   return new User(attrs);

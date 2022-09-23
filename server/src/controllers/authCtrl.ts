@@ -238,8 +238,7 @@ const authCtrl = {
 
     const user = await User.findOne({ account });
     if (!user)
-      return res.status(400).json({ msg: "This account does not exist." });
-
+           throw new BadRequestError('User not exists')
     if (user.type !== "register")
       throw new BadRequestError(
         "Quick login account with ${user.type} can't use this function"

@@ -20,6 +20,7 @@ export const errorHandler = (
     });
 
   }
+  
   if(err){
     return  res.status(400).send({
       errors: [err],

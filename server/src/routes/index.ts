@@ -4,6 +4,7 @@ import swaggerJsDoc from 'swagger-jsdoc';
 import testRouter from './testRouter';
 import authRouter from './authRouter'
 import userRouter from './userRouter';
+import categoryRouter from './categoryRouter';
 const options= {
   definition: {
     openapi: '3.0.0',
@@ -29,6 +30,7 @@ api.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
 api.use('/test', testRouter);
 api.use('/auth', authRouter);
 api.use('/user', userRouter);
+api.use('/category', categoryRouter);
 
 
 export default api;
