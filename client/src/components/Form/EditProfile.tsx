@@ -23,8 +23,6 @@ function EditProfile() {
   const userId=useAppSelector(state=>state.auth.user?.id)
   const [initialValues, setinitialValues] = useState({name: "",
   account: "",
-  password: "",
-  confirmPassword: "",
   file: "",})
   
   const [Image, setImage] = useState('')
@@ -48,8 +46,8 @@ function EditProfile() {
        setinitialValues({
         name: profile.name,
         account: profile.account,
-        password: "",
-        confirmPassword: "",
+        // password: "",
+        // confirmPassword: "",
         file: '',
         // modeOfContact: '',
         // phone: ''
@@ -125,21 +123,52 @@ function EditProfile() {
       }), // email: Yup.string()
     //   .email('Invalid email format')
     //   .required('Required'),
-    password: Yup.string().required("Required"),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password"), ""], "Passwords must match")
-      .required("Required"),
+    // password: Yup.string().required("Required"),
+    // confirmPassword: Yup.string()
+    //   .oneOf([Yup.ref("password"), ""], "Passwords must match")
+    //   .required("Required"),
   });
 
   const onSubmit = async({name,account,file}) => {
     try {
       // console.log("Form data", values);
     
-   const res= await patchAPI('user/',name,file)
-   console.log(res)
+   const res= await patchAPI('user/',{name,file,account})
+   toast(res.data?.msg, {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    });
+   
       
     } catch (error) {
-      console.log(error) 
+ if (error.response && error.response.data.errors) {
+        console.log(error);
+        toast.error(error.response.data.errors[0].message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else {
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+
     }
     
     // dispatch(register(values));
@@ -196,7 +225,7 @@ function EditProfile() {
             />
           
             
-            <FormikControl
+            {/* <FormikControl
               control="password"
               // type='password'
               label="Password"
@@ -209,7 +238,7 @@ function EditProfile() {
               label="Confirm Password"
               name="confirmPassword"
               className="block"
-            />
+            /> */}
             <FormikControl
               control="input"
               type="text"

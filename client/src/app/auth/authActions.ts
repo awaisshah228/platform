@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getAPI, postAPI } from "../../utils/fetchData";
+import { getAPI, patchAPI, postAPI } from "../../utils/fetchData";
 import { toast } from "react-toastify";
 
 export const login = createAsyncThunk(
@@ -324,6 +324,109 @@ export const smsVerify = createAsyncThunk(
       return res.data;
     } catch (error) {
       console.log(error);
+      //       // return custom error message from API if any
+      if (error.response && error.response.data.errors) {
+        console.log(error.response.data.errors);
+        toast.error(error.response.data.errors[0].message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        return rejectWithValue(error.response.data.errors);
+      } else {
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+export const changePass = createAsyncThunk(
+  "auth/changePass",
+  async ({password}:any, { rejectWithValue }) => {
+    try {
+      const res = await patchAPI(
+        "user/reset_password",
+        {password},
+        ""
+      );
+      toast(res.data?.msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+      //
+
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      //       // return custom error message from API if any
+      if (error.response && error.response.data.errors) {
+        console.log(error.response.data.errors);
+        toast.error(error.response.data.errors[0].message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        return rejectWithValue(error.response.data.errors);
+      } else {
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const forgotPass = createAsyncThunk(
+  "auth/forgotPass",
+  async ({account}:any, { rejectWithValue }) => {
+    try {
+      
+      const res = await postAPI(
+        "auth/forgot_password",
+        {account},
+        ""
+      );
+      toast(res.data?.msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+      //
+
+      return res.data;
+    } catch (error) {
       //       // return custom error message from API if any
       if (error.response && error.response.data.errors) {
         console.log(error.response.data.errors);

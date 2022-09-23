@@ -5,26 +5,25 @@ import PageRender from "./PageRender";
 import HeaderContainer from "../containers/HeaderContainer/HeaderContainer";
 import Footer from "../components/Footer/Footer";
 import PageDashboard from "../containers/PageDashboard/PageDashboard";
-import DashboardBillingAddress from "../containers/PageDashboard/DashboardBillingAddress";
-import DashboardEditProfile from "../containers/PageDashboard/DashboardEditProfile";
-import DashboardPosts from "../containers/PageDashboard/DashboardPosts";
-import DashboardRoot from "../containers/PageDashboard/DashboardRoot";
-import DashboardSubcription from "../containers/PageDashboard/DashboardSubcription";
-import DashboardSubmitPost from "../containers/PageDashboard/DashboardSubmitPost";
+import { useAppSelector } from "../app/hook";
+import PageAdminDashboard from "../containers/PageAdminDashboard/PageAdminDashboard";
+
 
 // interface Props{
 //     children : React.ReactNode
 // }
 
-const index = () => {
+const Index = () => {
+
+  const role=useAppSelector(state=>state.auth.user.role)
   return (
     <BrowserRouter>
       <HeaderContainer />
       <Routes>
         {/* <Route path="/" element={<App />} /> */}
 
-        <Route path="/" element={< PageRender/>} />
-        <Route path="/dashboard/*" element={<PageDashboard />} />
+        <Route path="/" element={<PageRender />} />
+        <Route path="/dashboard/*" element={role=='admin'?<PageAdminDashboard/>: <PageDashboard />} />
 
         <Route path="/:page" element={<PageRender />} />
         <Route path="/:page/:slug" element={<PageRender />} />
@@ -34,4 +33,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

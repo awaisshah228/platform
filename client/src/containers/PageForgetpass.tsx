@@ -4,6 +4,7 @@ import Input from "../components/Input/Input";
 import ButtonPrimary from "../components/Button/ButtonPrimary";
 import NcLink from "../components/NcLink/NcLink";
 import { Helmet } from "react-helmet";
+import ForgetPassForm from './../components/Form/ForgetPassForm';
 
 export interface PageForgotPassProps {
   className?: string;
@@ -25,7 +26,7 @@ const PageForgotPass: FC<PageForgotPassProps> = ({ className = "" }) => {
       >
         <div className="max-w-md mx-auto space-y-6">
           {/* FORM */}
-          <form className="grid grid-cols-1 gap-6" action="#" method="post">
+          {/* <form className="grid grid-cols-1 gap-6" action="#" method="post">
             <label className="block">
               <span className="text-neutral-800 dark:text-neutral-200">
                 Email address
@@ -37,7 +38,8 @@ const PageForgotPass: FC<PageForgotPassProps> = ({ className = "" }) => {
               />
             </label>
             <ButtonPrimary type="submit">Continue</ButtonPrimary>
-          </form>
+          </form> */}
+          <ForgetPassForm />
 
           {/* ==== */}
           <span className="block text-center text-neutral-700 dark:text-neutral-300">

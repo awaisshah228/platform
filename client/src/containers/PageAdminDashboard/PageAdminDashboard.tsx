@@ -10,9 +10,8 @@ import DashboardSubcription from "./DashboardSubcription";
 import DashboardSubmitPost from "./DashboardSubmitPost";
 import { Helmet } from "react-helmet";
 import PrivatePage from "../../routers/PrivatePage";
-import DashBoardChangePass from '../PageAdminDashboard//DashBoardChangePass';
-
-
+import DashBoardCategory from "./DashBoardCategory";
+import DashBoardChangePass from './DashBoardChangePass';
 
 export interface PageDashboardProps {
   className?: string;
@@ -21,6 +20,7 @@ export interface PageDashboardProps {
 interface DashboardLocationState {
   "/root"?: {};
   "/posts"?: {};
+  "/categories"?: {};
   "/edit-profile"?: {};
   "/change-pass"?: {};
   "/subscription"?: {};
@@ -50,6 +50,12 @@ const subPages: DashboardPage[] = [
     component: <DashboardPosts />,
     emoij: "📕",
     pageName: "Posts",
+  },
+  {
+    sPath: "/categories",
+    component: <DashBoardCategory />,
+    emoij: "🈹 ",
+    pageName: "Categories",
   },
   {
     sPath: "/edit-profile",
@@ -83,7 +89,7 @@ const subPages: DashboardPage[] = [
   },
 ];
 
-const PageDashboard: FC<PageDashboardProps> = ({ className = "" }) => {
+const PageAdminDashboard: FC<PageDashboardProps> = ({ className = "" }) => {
   // let { path, url } = useRouteMatch();
   let location = useLocation();
 
@@ -137,10 +143,10 @@ const PageDashboard: FC<PageDashboardProps> = ({ className = "" }) => {
             </Routes> */}
             <Routes>
               <Route path="root" element={<DashboardRoot />} />
+              <Route path="categories" element={<DashBoardCategory />} />
               <Route path="posts" element={<DashboardPosts />} />
               <Route path="edit-profile" element={<DashboardEditProfile />} />
               <Route path="change-pass" element={<DashBoardChangePass />} />
-
               <Route path="subscription" element={<DashboardSubcription />} />
               <Route
                 path="billing-address"
@@ -161,4 +167,4 @@ const PageDashboard: FC<PageDashboardProps> = ({ className = "" }) => {
   );
 };
 
-export default PageDashboard;
+export default PageAdminDashboard;
