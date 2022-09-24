@@ -70,4 +70,3 @@ const Blog = mongoose.model<BlogDoc, BlogModel>("Blog", blogSchema);
 
 export  { Blog };
 
-// export default mongoose.model<IBlog>('blog', blogSchema)

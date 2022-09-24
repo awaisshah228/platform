@@ -108,6 +108,7 @@ const authCtrl = {
   },
   refreshToken: async (req: Request, res: Response) => {
     
+    try {
       const rf_token = req.cookies.refreshtoken;
       // console.log(rf_token);
       if (!rf_token) throw new BadRequestError("Please Login before");
@@ -135,6 +136,35 @@ const authCtrl = {
       );
 
       res.json({ access_token, user });
+      
+    } catch (err:any) {
+
+      if (err instanceof CustomError) {
+        return res.status(err.statusCode).send({errors: err.serializeErrors()});
+      }
+      // const tokenExpire: any=JSON.stringify(err)
+      // console.log(tokenExpire.name)
+      if(err.name=='TokenExpiredError'){
+        return res.status(400).send({errors:[{ message:"please Login before"}]});
+    
+      }
+
+      
+     
+      
+      if(err){
+        return  res.status(400).send({
+          errors: [err],
+        });
+      }
+      res.status(400).send({
+        errors: ["something went wrong "],
+      });
+      
+    }
+    
+    
+      
     
   },
   googleLogin: async (req: Request, res: Response) => {

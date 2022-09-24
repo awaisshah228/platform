@@ -4,29 +4,26 @@ import * as Yup from "yup";
 import FormikControl from "./FormikControl";
 import ButtonPrimary from "../Button/ButtonPrimary";
 import { useAppDispatch, useAppSelector } from "../../app/hook";
-import { register } from "../../app/auth/authActions";
 import PrivatePage from "../../routers/PrivatePage";
 import Preview from "./Preview";
-import { UserIcon } from "@heroicons/react/solid";
 import TextError from "./TextError";
-import { getAPI, patchAPI } from "../../utils/fetchData";
-import { toast } from "react-toastify";
-import { postAPI } from './../../utils/fetchData';
-import Password from './Password';
+
 import Avatar from "../Avatar/Avatar";
+import { editProfile } from "./../../app/auth/authActions";
 function EditProfile() {
   const dispatch = useAppDispatch();
   const options = [
     { key: "Email", value: "emailmoc" },
     { key: "Telephone", value: "telephonemoc" },
   ];
-  const userId=useAppSelector(state=>state.auth.user?.id)
-  const [initialValues, setinitialValues] = useState({name: "",
-  account: "",
-  file: "",})
-  
-  const [Image, setImage] = useState('')
-  
+  const user = useAppSelector((state) => state.auth.user);
+  const [initialValues, setinitialValues] = useState({
+    name: "",
+    account: "",
+    file: "",
+  });
+
+  const [Image, setImage] = useState("");
 
   const FILE_SIZE = 160 * 1024;
   const SUPPORTED_FORMATS = [
@@ -36,78 +33,26 @@ function EditProfile() {
     "image/png",
   ];
 
-  const populateData=async()=>{
+  const populateData = async () => {
     try {
+      setinitialValues({
+        name: user.name,
+        account: user.account,
 
-      const res= await getAPI(`user/${userId}`)
-      console.log(res)
-      // setinitialValues(res)
-      let profile=res.data
-       setinitialValues({
-        name: profile.name,
-        account: profile.account,
-        // password: "",
-        // confirmPassword: "",
-        file: '',
-        // modeOfContact: '',
-        // phone: ''
-      } );
-      setImage(profile.avatar)
-      console.log(initialValues);
-      
-    } catch (error) {
-      // if (error.response && error.response.data.errors) {
-      //   console.log(error.response.data.errors);
-      //   toast.error(error.response.data.errors[0].message, {
-      //     position: "top-right",
-      //     autoClose: 5000,
-      //     hideProgressBar: false,
-      //     closeOnClick: true,
-      //     pauseOnHover: true,
-      //     draggable: true,
-      //     progress: undefined,
-      //   });
-      // } else {
-      //   toast.error(error.message, {
-      //     position: "top-right",
-      //     autoClose: 5000,
-      //     hideProgressBar: false,
-      //     closeOnClick: true,
-      //     pauseOnHover: true,
-      //     draggable: true,
-      //     progress: undefined,
-      //   });
-      // }
-    }
-    
-     
-      
-
-    
-   
-  }
+        file: "",
+      });
+      setImage(user.avatar);
+    } catch (error) {}
+  };
   useEffect(() => {
+    populateData();
+  }, [user]);
 
-    populateData()
-    
-     
-  },[])
   
-
-  // const initialValues = {
-  //   name: "",
-  //   account: "",
-  //   password: "",
-  //   confirmPassword: "",
-  //   file: "",
-  //   // modeOfContact: '',
-  //   // phone: ''
-  // };
 
   const validationSchema = Yup.object({
     name: Yup.string().required("Required"),
     account: Yup.string()
-      // .email("Enter a valid email")
       .required("Email/Phone Number is required")
       .test("test-name", "Enter Valid Phone/Email", function (value) {
         const emailRegex =
@@ -120,112 +65,61 @@ function EditProfile() {
           return false;
         }
         return true;
-      }), // email: Yup.string()
-    //   .email('Invalid email format')
-    //   .required('Required'),
-    // password: Yup.string().required("Required"),
-    // confirmPassword: Yup.string()
-    //   .oneOf([Yup.ref("password"), ""], "Passwords must match")
-    //   .required("Required"),
+      }), 
   });
 
-  const onSubmit = async({name,account,file}) => {
-    try {
-      // console.log("Form data", values);
-    
-   const res= await patchAPI('user/',{name,file,account})
-   toast(res.data?.msg, {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    });
-   
-      
-    } catch (error) {
- if (error.response && error.response.data.errors) {
-        console.log(error);
-        toast.error(error.response.data.errors[0].message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      } else {
-        toast.error(error.message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      }
-
-    }
-    
-    // dispatch(register(values));
-    
+  const onSubmit = async ({ name, account, file }) => {
+    dispatch(editProfile({ name, account, file }));
   };
 
   return (
     <PrivatePage>
       <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={onSubmit}
-      enableReinitialize={true}
-    >
-      {(formik) => {
-        return (
-          <Form className="flex flex-col gap-6 md:p-10">
-            <div className="flex justify-center flex-col items-center">
-          
-              <label
-                htmlFor="file"
-                className="bg-slate-500 hover:cursor-pointer rounded-full  text-white"
-              >
-               
-                {formik.values.file ? (
-                  <Preview file={formik.values.file} />
-                ) : (
-                  // <UserIcon className="h-24 w-24" />
-                  <Avatar imgUrl={Image} sizeClass="h-20 w-20" radius="30" />
-                )}
-              </label>
-              <input
-                id="file"
-                type="file"
-                //   name="file"
-                placeholder="file"
-                className="hidden"
-                onChange={(e) => {
-                  console.log(e.target.files[0]);
-                  // console.log(typeof e.target.files[0])
-                  formik.setFieldValue("file", e.target.files[0]);
-                }}
-              />
-              <ErrorMessage component={TextError} name="file" />
-            </div>
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+        enableReinitialize={true}
+      >
+        {(formik) => {
+          return (
+            <Form className="flex flex-col gap-6 md:p-10">
+              <div className="flex justify-center flex-col items-center">
+                <label
+                  htmlFor="file"
+                  className="bg-slate-500 hover:cursor-pointer rounded-full  text-white"
+                >
+                  {formik.values.file ? (
+                    <Preview file={formik.values.file} />
+                  ) : (
+                    // <UserIcon className="h-24 w-24" />
+                    <Avatar imgUrl={Image} sizeClass="h-20 w-20" radius="30" />
+                  )}
+                </label>
+                <input
+                  id="file"
+                  type="file"
+                  //   name="file"
+                  placeholder="file"
+                  className="hidden"
+                  onChange={(e) => {
+                    console.log(e.target.files[0]);
+                    // console.log(typeof e.target.files[0])
+                    formik.setFieldValue("file", e.target.files[0]);
+                  }}
+                />
+                <ErrorMessage component={TextError} name="file" />
+              </div>
 
-            <FormikControl
-              control="input"
-              type="text"
-              label="Full Name"
-              name="name"
-              className=""
-              value={formik.values.name}
-            />
-          
-            
-            {/* <FormikControl
+              <FormikControl
+                control="input"
+                type="text"
+                label="Full Name"
+                name="name"
+                className=""
+                value={formik.values.name}
+              />
+
+              {/* <FormikControl
               control="password"
               // type='password'
               label="Password"
@@ -239,21 +133,25 @@ function EditProfile() {
               name="confirmPassword"
               className="block"
             /> */}
-            <FormikControl
-              control="input"
-              type="text"
-              label="Email/Phone"
-              name="account"
-              className='md:col-start-1 md:col-end-3'
-            />
+              <FormikControl
+                control="input"
+                type="text"
+                label="Email/Phone"
+                name="account"
+                className="md:col-start-1 md:col-end-3"
+              />
 
-            <ButtonPrimary type="submit" disabled={!formik.isValid} className='md:col-span-2'>
-              Continue
-            </ButtonPrimary>
-          </Form>
-        );
-      }}
-    </Formik>
+              <ButtonPrimary
+                type="submit"
+                disabled={!formik.isValid}
+                className="md:col-span-2"
+              >
+                Continue
+              </ButtonPrimary>
+            </Form>
+          );
+        }}
+      </Formik>
     </PrivatePage>
   );
 }

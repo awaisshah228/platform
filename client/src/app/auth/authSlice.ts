@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { login, register , logout, googleLogin, facebookLogin, smsLogin, smsVerify } from './authActions'
+import { login, register , logout, googleLogin, facebookLogin, smsLogin, smsVerify, editProfile } from './authActions'
 import { IUser } from '../../utils/types'
 
 
@@ -33,6 +33,9 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    resetAccessToken(state,action){
+      state.access_token=action.payload.access_token
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -78,6 +81,9 @@ const authSlice = createSlice({
       .addCase(logout.rejected, (state, action) => {
           state.access_token=''
           state.user={}    
+      })
+      .addCase(editProfile.fulfilled, (state, action:any) => {
+          state.user=action.payload.updateUser;  
       })
       // You can chain calls, or have separate `builder.addCase()` lines each time
       // .addCase(decrement, (state, action) => {})
@@ -132,6 +138,6 @@ const authSlice = createSlice({
   // },
 })
 
-// export const authActions = authSlice.actions
+export const {resetAccessToken} = authSlice.actions
 
 export default authSlice.reducer

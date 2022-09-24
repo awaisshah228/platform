@@ -9,7 +9,7 @@ import { useAppSelector } from "../../app/hook";
 
 export default function AvatarDropdown() {
   const dispatch= useAppDispatch()
-  const userId= useAppSelector(state=>state.auth.user.id)
+  const userId= useAppSelector(state=>state.auth.user?.id)
   return (
     <div className="AvatarDropdown">
       <Popover className="relative">

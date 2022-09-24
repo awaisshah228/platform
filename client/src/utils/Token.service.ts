@@ -2,10 +2,21 @@ class TokenService {
    
   
     getLocalAccessToken() {
-      const root = JSON.parse(localStorage.getItem("persist:root"));
-      const auth = JSON.parse(root?.auth);
+      try {
+        const root = JSON.parse(localStorage.getItem("persist:root"));
+     
+        const auth = JSON.parse(root?.auth);
+        return auth?.access_token;
+        
+      } catch (error) {
+        return ''
+      }
+
+
+
+   
+     
       // console.log(auth)
-      return auth?.access_token;
     }
   
     updateLocalAccessToken(token) {
@@ -41,6 +52,7 @@ class TokenService {
     // }
   
     removeUser() {
+      
       let root = JSON.parse(localStorage.getItem("persist:root"));
       root.auth={};
       localStorage.setItem("persist:root", JSON.stringify(root))

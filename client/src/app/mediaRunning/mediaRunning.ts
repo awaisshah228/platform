@@ -81,19 +81,18 @@ export const mediaRunningSlice = createSlice({
         newestAudioPlayerUrl: action.payload,
       };
     },
-    //
-    // changeDataPlayerMediaRunning: (
-    //   state,
-    //   action: PayloadAction<KeysOfPlayerData>
-    // ) => {
-    //   return {
-    //     ...state,
-    //     player: {
-    //       ...(state.player || {}),
-    //       ...action.payload,
-    //     },
-    //   };
-    // },
+    changeDataPlayerMediaRunning: (
+      state,
+      action: any
+    ) => {
+      return {
+        ...state,
+        player: {
+          ...(state.player || {}),
+          ...action.payload,
+        },
+      };
+    },
   },
 });
 

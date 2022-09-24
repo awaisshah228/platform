@@ -45,6 +45,7 @@ instance.interceptors.response.use(
 
           return instance(originalConfig);
         } catch (error) {
+          console.log(error.response)
           TokenService.removeUser()
           if (error.response && error.response.data.errors) {
             console.log(error.response.data.errors);

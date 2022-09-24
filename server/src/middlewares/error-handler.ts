@@ -1,8 +1,11 @@
 import {Request, Response, NextFunction} from 'express';
 import {CustomError} from '../errors/custom-errors';
-
+interface IError extends Error{
+   keyValue?: any;
+   code?: any
+}
 export const errorHandler = (
-    err: Error,
+    err: IError,
     req: Request,
     res: Response,
     next: NextFunction,
@@ -12,7 +15,6 @@ export const errorHandler = (
     return res.status(err.statusCode).send({errors: err.serializeErrors()});
   }
   // const tokenExpire: any=JSON.stringify(err)
-  console.log(err.name)
   // console.log(tokenExpire.name)
   if(err.name=='TokenExpiredError'){
     return  res.status(401).send({
@@ -20,6 +22,12 @@ export const errorHandler = (
     });
 
   }
+  console.log(err)
+  if(err.code === 11000){
+    let message = Object.values(err.keyValue)[0] + " already exists."
+    return res.status(400).send({errors:[{message}]});
+  }
+ 
   
   if(err){
     return  res.status(400).send({

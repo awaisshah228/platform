@@ -18,9 +18,10 @@ const router = express.Router()
 router.route('/')
   .get(categoryCtrl.getCategories)
   .post(requireAuth,adminAuth, categoryCtrl.createCategory)
+  // .post(categoryCtrl.createCategory)
 
-// router.route('/:id')
-//   .patch(auth, categoryCtrl.updateCategory)
-//   .delete(auth, categoryCtrl.deleteCategory)
+router.route('/:id')
+  .patch(requireAuth,adminAuth, categoryCtrl.updateCategory)
+  .delete(requireAuth,adminAuth, categoryCtrl.deleteCategory)
 
 export default router;

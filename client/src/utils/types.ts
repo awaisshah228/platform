@@ -49,14 +49,14 @@ export interface IAlert {
 
 
 export interface ICategory {
-  _id: string
+  id: string
   name: string
   createdAt: string
   updatedAt: string
 }
 
 export interface IBlog {
-  _id?: string
+  id?: string
   user: string | IUser
   title: string
   content: string
