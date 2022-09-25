@@ -66,6 +66,7 @@ function CategoryForm() {
                 type="text"
                 label="Category"
                 name="name"
+                className="dark:border-white border-solid"
                 // value={name}
                 // onChange={e => setName(e.target.value)}
 
@@ -93,7 +94,7 @@ function CategoryForm() {
  
       <div className="flex flex-col m-5 gap-4 w-full">
         {categories.map((category, key) => (
-          <div className="flex justify-between" key={category.id}>
+          <div className="flex justify-between bg-yellow-400 px-3 py-1 rounded-md" key={category.id}>
             <p className="text-xl">{category.name}</p>
             <div className="flex">
               <PencilAltIcon

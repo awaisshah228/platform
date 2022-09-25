@@ -1,4 +1,4 @@
-import React, { FC, useRef } from "react";
+import React, { FC, useEffect, useRef } from "react";
 import NcImage from "../NcImage/NcImage";
 import { PostDataType } from "../../data/types";
 import GallerySlider from "./GallerySlider";
@@ -76,6 +76,8 @@ const PostFeaturedMedia: FC<PostFeaturedMediaProps> = ({
     if (postType === "audio" && !!audioUrl) {
       return <MediaAudio post={post} />;
     }
+   
+    
 
     // ICON
     return (
@@ -92,6 +94,7 @@ const PostFeaturedMedia: FC<PostFeaturedMediaProps> = ({
     );
   };
 
+
   return (
     <div
       className={`nc-PostFeaturedMedia relative ${className}`}
@@ -99,6 +102,7 @@ const PostFeaturedMedia: FC<PostFeaturedMediaProps> = ({
       ref={videoRef}
     >
       <NcImage containerClassName="absolute inset-0" src={featuredImage} />
+      
       {renderContent()}
     </div>
   );

@@ -4,6 +4,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   sizeClass?: string;
   fontClass?: string;
   rounded?: string;
+  field?: any
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
