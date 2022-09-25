@@ -7,20 +7,21 @@ export const createBlog = createAsyncThunk(
   "blogs/createBlog",
   async (value: any, { rejectWithValue }) => {
     try {
-    //   const res = await postAPI("category", { name});
-    //   // localStorage.setItem('access_token',res.data.access_token)
-    //   toast(res.data?.msg, {
-    //     position: "top-right",
-    //     autoClose: 5000,
-    //     hideProgressBar: false,
-    //     closeOnClick: true,
-    //     pauseOnHover: true,
-    //     draggable: true,
-    //     progress: undefined,
-    //     });
-    //   //
+      const res = await postAPI("blog", value);
+      toast(res.data?.msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+        return res.data;
 
-      return value;
+      //
+
+      // return value;
     } catch (error) {
       console.log(error);
       //       // return custom error message from API if any

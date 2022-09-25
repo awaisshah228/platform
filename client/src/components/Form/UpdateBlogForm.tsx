@@ -14,8 +14,9 @@ import * as Yup from "yup";
 import TextError from "./TextError";
 import { useAppDispatch } from './../../app/hook';
 import { createBlog } from './../../app/blogs/blogActions';
+import { getAPI } from "../../utils/fetchData";
 
-const CreateBlogForm = () => {
+const UpdateBlogForm = ({slug}) => {
   const user = useAppSelector((state) => state.auth.user);
   const categories = useAppSelector((state) => state.category);
   // const [options, setoptions] = useState([])
@@ -123,6 +124,15 @@ const CreateBlogForm = () => {
   const handleSubmit=({title,description,category,content,thumbnail})=>{
        dispatch(createBlog({title,description,category,content,thumbnail}))
   }
+  const populateData = async () => {
+    try {
+        const res= await getAPI(`blog/${slug}`)
+      
+    } catch (error) {}
+  };
+  useEffect(() => {
+    populateData();
+  }, [user]);
 
   return (
     <>
@@ -287,4 +297,4 @@ const CreateBlogForm = () => {
   );
 };
 
-export default CreateBlogForm;
+export default UpdateBlogForm;
