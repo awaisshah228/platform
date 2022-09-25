@@ -51,8 +51,8 @@ const Card11: FC<Card11Props> = ({
           <span className="text-xs text-neutral-500">{date}</span>
         )}
         <h2 className="nc-card-title block text-base font-semibold text-neutral-900 dark:text-neutral-100 ">
-          <Link to={href} className="line-clamp-2" title={title}>
-            {title}
+          <Link to={href} className="line-clamp-2" title={title??'title'}>
+            {title??'title'}
           </Link>
         </h2>
         <div className="flex items-end justify-between mt-auto">
