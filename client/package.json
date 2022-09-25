@@ -20,6 +20,7 @@
     "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
     "@types/react-google-login-component": "^0.9.1",
+    "axios": "^0.27.2",
     "formik": "^2.2.9",
     "gapi-script": "^1.2.0",
     "ncmaz_react": "file:..",
