@@ -5,6 +5,7 @@ import testRouter from './testRouter';
 import authRouter from './authRouter'
 import userRouter from './userRouter';
 import categoryRouter from './categoryRouter';
+import blogRouter from './blogRouter';
 const options= {
   definition: {
     openapi: '3.0.0',
@@ -31,6 +32,7 @@ api.use('/test', testRouter);
 api.use('/auth', authRouter);
 api.use('/user', userRouter);
 api.use('/category', categoryRouter);
+api.use('/blog', blogRouter);
 
 
 export default api;

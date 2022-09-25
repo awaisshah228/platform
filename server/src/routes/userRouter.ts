@@ -10,9 +10,20 @@ const router = express.Router();
 router.patch(
   "/",
   requireAuth,
-  // [ body("name").notEmpty().withMessage("You must supply a name")],
-  // validateRequest,
   upload.single("file"),
+
+  [ body("name").notEmpty().withMessage("You must supply a name"),
+  oneOf([
+    body("account").isEmail().withMessage("Email must be valid"),
+    body("account")
+      .custom((value) => {
+        const re = /^[+]/g;
+        return re.test(value);
+      })
+      .withMessage("Must provide number"),
+  ]),
+],
+  validateRequest,
   userCtrl.updateUser
 );
 
