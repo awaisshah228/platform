@@ -103,6 +103,7 @@ const PageHomeDemo4: React.FC = () => {
         <title>BlogFore - Learn and Spread Smile, Ideas and Knowledge</title>
         <meta  name="robots" content="index,follow"></meta>
         <meta name="keywords" content="blogfore, blogs, news , magzines, technology,tech, ideas software development, javascript"></meta>
+        <meta name="author" content="Muhammad Awais Shah, m.awaisshah228@gmail.com"></meta>
       </Helmet>
 
       {/* ======== ALL SECTIONS ======== */}
