@@ -100,7 +100,9 @@ const PageHomeDemo4: React.FC = () => {
   return (
     <div className="nc-PageHomeDemo4 relative">
       <Helmet>
-        <title>Home 2 || Blog Magazine React Template</title>
+        <title>BlogFore - Learn and Spread Smile, Ideas and Knowledge</title>
+        <meta  name="robots" content="index,follow"></meta>
+        <meta name="keywords" content="blogfore, blogs, news , magzines, technology,tech, ideas software development, javascript"></meta>
       </Helmet>
 
       {/* ======== ALL SECTIONS ======== */}
