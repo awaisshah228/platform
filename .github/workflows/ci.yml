@@ -42,11 +42,10 @@ jobs:
             nvm install 16
             nvm use 16
             npm install -g pm2
-            mkdir blog
             cd ~/blog
             git pull origin main
-            npm run install-server
-            npm run deploy-cluster
+            cd server
+            npm run cluster
             echo "i am done"
 
 # name: CICD for Blog
