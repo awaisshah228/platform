@@ -2,18 +2,17 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x, 15.x,16.x]
+        node-version: [15.x]
 
     steps:
       - uses: actions/checkout@v3
@@ -24,6 +23,29 @@ jobs:
       - run: npm run install-server
       - run: npm run server-build --if-present
       - run: echo "i am done"
+  depoly:
+    needs: [build]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+            . ~/.nvm/nvm.sh
+
+            nvm install --lts
+            npm install -g pm2
+            cd ~/CICD
+            git pull origin main
+            npm run install-server
+            npm run deploy-cluster
+            echo "i am done"
 
 # name: CICD for Blog
 
@@ -53,25 +75,3 @@ jobs:
 #         env:
 #           CI: true
 
-#   depoly:
-#     needs: [build]
-#     runs-on: ubuntu-latest
-
-#     steps:
-#       - name: SSH deploy
-#         uses: appleboy/ssh-action@master
-#         with:
-#           host: ${{ secrets.HOST }}
-#           username: ${{ secrets.USER }}
-#           key: ${{ secrets.KEY }}
-#           port: ${{ secrets.PORT }}
-#           script: |
-#             curl -o-   https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh    | bash
-#             . ~/.nvm/nvm.sh
-
-#              nvm instal 16
-#              npm install -g pm2
-#              cd ~/CICD
-#              git pull origin main
-#              npm run install-server
-#              npm run deploy-cluster
