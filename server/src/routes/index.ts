@@ -6,6 +6,7 @@ import authRouter from './authRouter'
 import userRouter from './userRouter';
 import categoryRouter from './categoryRouter';
 import blogRouter from './blogRouter';
+import imageRouter from './imageRouter'
 const options= {
   definition: {
     openapi: '3.0.0',
@@ -33,6 +34,7 @@ api.use('/auth', authRouter);
 api.use('/user', userRouter);
 api.use('/category', categoryRouter);
 api.use('/blog', blogRouter);
+api.use('/image', imageRouter);
 
 
 export default api;

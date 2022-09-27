@@ -20,7 +20,7 @@ const blogCtrl = {
     const categoryCheck: any = await Category.findOne({ name: category });
     console.log(categoryCheck);
 
-    const newBlog: any = new Blog({
+    const newBlog: any =  Blog.build({
       user: req.user?.id,
       title: title.toLowerCase(),
       content,

@@ -7,8 +7,8 @@ interface BlogAttrs {
     description: string
     thumbnail: string
     category: string
-    likes:[]
-    views: number
+    likes?:[]
+    views?: number
 }
 
 interface BlogModel extends mongoose.Model<BlogDoc> {
