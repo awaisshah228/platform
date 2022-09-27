@@ -27,7 +27,7 @@ const PostMeta2: FC<PostMeta2Props> = ({
       } ${className}`}
       data-nc-id="PostMeta2"
     >
-      <Link to={`profile/${user.id}`} className="flex items-center space-x-2">
+      <Link to={`profile/${user?.id}`} className="flex items-center space-x-2">
         <Avatar
           radius={avatarRounded}
           sizeClass={
@@ -35,14 +35,14 @@ const PostMeta2: FC<PostMeta2Props> = ({
               ? "h-6 w-6 text-sm"
               : "h-10 w-10 sm:h-11 sm:w-11 text-xl"
           }
-          imgUrl={user.avatar}
-          userName={user.name}
+          imgUrl={user?.avatar}
+          userName={user?.name}
         />
       </Link>
       <div className="ml-3">
         <div className="flex items-center">
-          <Link to={`profile/${user.id}`} className="block font-semibold">
-            {user.name}
+          <Link to={`profile/${user?.id}`} className="block font-semibold">
+            {user?.name}
           </Link>
 
           {!hiddenCategories && (
@@ -51,8 +51,8 @@ const PostMeta2: FC<PostMeta2Props> = ({
               <div className="ml-0">
                 <span className="text-xs">🏷 </span>
                 {/* {categories.map((cat, index) => ( */}
-                  <Link key={category.id} to={`/category/${category.id}`} className="font-semibold">
-                    {category.name}
+                  <Link key={category?.id} to={`/category/${category?.id}`} className="font-semibold">
+                    {category?.name}
                   </Link>
                 {/* ))} */}
               </div>
