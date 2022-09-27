@@ -1,10 +1,12 @@
 import CategoryBadgeList from "../../components/CategoryBadgeList/CategoryBadgeList";
+
 import React, { FC } from "react";
 import SingleTitle from "./SingleTitle";
 import { SinglePageType } from "./PageSingleTemp3Sidebar";
 import PostMeta2 from "../../components/PostMeta2/PostMeta2";
 import SingleMetaAction2 from "./SingleMetaAction2";
 import { Helmet } from "react-helmet";
+import CategoryBadgeListV2 from "../../components/CategoryBadgeList/CategoryBadgeListV2";
 
 export interface SingleHeaderProps {
   pageData: any;
@@ -21,7 +23,7 @@ const SingleHeader: FC<SingleHeaderProps> = ({
   className = "",
   metaActionStyle = "style1",
 }) => {
-  const { categories, desc, title } = pageData;
+  const { category, description:desc, title } = pageData;
 
   return (
     <>
@@ -30,7 +32,7 @@ const SingleHeader: FC<SingleHeaderProps> = ({
       </Helmet>
       <div className={`nc-SingleHeader ${className}`}>
         <div className="space-y-5">
-          <CategoryBadgeList itemClass="!px-3" categories={categories} />
+          <CategoryBadgeListV2 itemClass="!px-3" category={category} />
           <SingleTitle mainClass={titleMainClass} title={title} />
           {!!desc && !hiddenDesc && (
             <span className="block text-base text-neutral-500 md:text-lg dark:text-neutral-400 pb-1">
@@ -46,7 +48,7 @@ const SingleHeader: FC<SingleHeaderProps> = ({
               hiddenCategories
               avatarRounded="rounded-full shadow-inner"
             />
-            <SingleMetaAction2 meta={pageData} />
+            {/* <SingleMetaAction2 meta={pageData} /> */}
           </div>
         </div>
       </div>

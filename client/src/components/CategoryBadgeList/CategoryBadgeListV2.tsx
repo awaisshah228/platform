@@ -23,9 +23,9 @@ const CategoryBadgeListV2: FC<CategoryBadgeListProps> = ({
 
        <Badge
           className={itemClass}
-          key={category.id}
-          name={category.name}
-          href={`/category${category.id}`}
+          key={category?.id}
+          name={category?.name}
+          href={`/category${category?.id}`}
         //   color={item.color as any}
         />
       {/* {categories.map((item, index) => ( */}

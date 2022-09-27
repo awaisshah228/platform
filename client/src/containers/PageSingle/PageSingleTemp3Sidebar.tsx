@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useEffect } from "react";
+import React, { FC, ReactNode, useEffect, useState } from "react";
 import { PostDataType, TaxonomyType } from "../../data/types";
 import { SINGLE } from "../../data/single";
 import SingleContent from "./SingleContent";
@@ -7,6 +7,9 @@ import SingleRelatedPosts from "./SingleRelatedPosts";
 import { useAppDispatch } from "../../app/hook";
 import { Sidebar } from "./Sidebar";
 import SingleHeader from "./SingleHeader";
+import { useParams } from "react-router-dom";
+import { getAPI } from "../../utils/fetchData";
+import { toast } from "react-toastify";
 
 export interface PageSingleTemp3SidebarProps {
   className?: string;
@@ -22,6 +25,51 @@ const PageSingleTemp3Sidebar: FC<PageSingleTemp3SidebarProps> = ({
   className = "",
 }) => {
   const dispatch = useAppDispatch();
+  const {slug}=useParams()
+  console.log(slug)
+  const [blog, setblog] = useState({})
+
+  const populateData=async ()=>{
+    try {
+
+      const res= await getAPI(`blog/${slug}`)
+      console.log(res.data)
+      setblog(res.data)
+      
+    } catch (error) {
+
+      if (error.response && error.response.data.errors) {
+        toast.error("Error fetching blog", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        return;
+      } else {
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        return ;
+      }
+      
+    }
+    
+  }
+
+  useEffect(()=>{
+    populateData();
+
+  },[])
 
   // UPDATE CURRENTPAGE DATA IN PAGEREDUCERS
  
@@ -39,7 +87,7 @@ const PageSingleTemp3Sidebar: FC<PageSingleTemp3SidebarProps> = ({
               <SingleHeader
                 hiddenDesc
                 metaActionStyle="style2"
-                pageData={SINGLE}
+                pageData={blog}
               />
             </div>
           </div>
