@@ -17,6 +17,7 @@ router.post('/', requireAuth,upload.single('thumbnail'),
   validateRequest,
 blogCtrl.createBlog)
 
+router.get('/trending', blogCtrl.getTrendingBlogs)
 // router.get('/home/blogs', blogCtrl.getHomeBlogs)
 
 // router.get('/blogs/category/:id', blogCtrl.getBlogsByCategory)

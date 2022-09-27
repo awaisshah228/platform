@@ -7,6 +7,8 @@ interface BlogAttrs {
     description: string
     thumbnail: string
     category: string
+    likes:[]
+    views: number
 }
 
 interface BlogModel extends mongoose.Model<BlogDoc> {
@@ -19,6 +21,8 @@ interface BlogDoc extends mongoose.Document {
     description: string
     thumbnail: string
     category: string
+    likes:[]
+    views: number
 }
 
 const blogSchema = new mongoose.Schema(
@@ -46,6 +50,11 @@ const blogSchema = new mongoose.Schema(
     thumbnail: {
       type: String,
       require: true,
+    },
+    likes:[{ type: mongoose.Types.ObjectId, ref: 'user' }],
+    views:{
+      type: Number,
+      default: 0
     },
     category: { type: mongoose.Types.ObjectId, ref: "Category" },
   },
