@@ -16,6 +16,7 @@ import SectionGridPosts from "./SectionGridPosts";
 import BgGlassmorphism from "../../components/BgGlassmorphism/BgGlassmorphism";
 import SectionTrending from "./SectionTrending";
 import SectionMagazine6 from "./SectionMagazine6";
+import { useAppSelector } from "../../app/hook";
 
 // DEMO POST FOR MAGAZINE SECTION
 const MAGAZINE1_TABS = ["all", "Garden", "Fitness", "Design"];
@@ -85,6 +86,11 @@ const TRAVEL_SUBCATS: TaxonomyType[] = [
 ];
 
 const PageHomeDemo4: React.FC = () => {
+
+  const trendingPost=useAppSelector(state=>state.blogs.trendingBlogs)
+
+
+  
   useEffect(() => {
     const $body = document.querySelector("body");
     if ($body) {
@@ -124,9 +130,9 @@ const PageHomeDemo4: React.FC = () => {
           {/* ======= START CONTAINER ============= */}
           <div className="container relative">
             <SectionTrending
-              heading=""
+              heading="Popular Blogs"
               className="py-16 lg:py-28"
-              posts={DEMO_POSTS.filter((_, i) => i < 8)}
+              posts={trendingPost}
             />
 
             {/* SECTION 1 */}

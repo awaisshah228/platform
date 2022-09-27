@@ -59,7 +59,7 @@ export interface IBlog {
   id?: string
   user: string | IUser
   title: string
-  content: string
+  content? : string
   description: string
   thumbnail: string | File
   category: string

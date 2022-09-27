@@ -2,16 +2,17 @@ import React, { FC } from "react";
 import Heading from "../../components/Heading/Heading";
 import { PostDataType } from "../../data/types";
 import Card5 from "../../components/Card5/Card5";
+import Card5V2 from "../../components/Card5/Card5V2";
 
 export interface SectionTrendingProps {
-  posts: PostDataType[];
+  posts: any;
   heading?: string;
   className?: string;
 }
 
 const SectionTrending: FC<SectionTrendingProps> = ({
   posts,
-  heading = "Trending on Ncmaz",
+  heading = "Trending on BlogFore",
   className = "",
 }) => {
   return (
@@ -19,7 +20,7 @@ const SectionTrending: FC<SectionTrendingProps> = ({
       {!!heading && <Heading>{heading}</Heading>}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:md:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
         {posts.map((post) => {
-          return <Card5 key={post.id} post={post} />;
+          return <Card5V2 key={post.id} post={post} />;
         })}
       </div>
     </div>

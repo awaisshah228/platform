@@ -1,10 +1,8 @@
-import React from 'react'
-import PageHomeDemo4 from '../containers/PageHome/PageHomeDemo4'
+import React from "react";
+import PageHomeDemo4 from "../containers/PageHome/PageHomeDemo4";
 
 const index = () => {
-  return (
-<PageHomeDemo4 />
-    )
-}
+  return <PageHomeDemo4 />;
+};
 
-export default index
+export default index;

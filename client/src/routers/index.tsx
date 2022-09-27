@@ -8,6 +8,7 @@ import PageDashboard from "../containers/PageDashboard/PageDashboard";
 import { useAppSelector,useAppDispatch } from "../app/hook";
 import PageAdminDashboard from "../containers/PageAdminDashboard/PageAdminDashboard";
 import { getCategories } from "../app/category/categoryActions";
+import { getTrendingBlogs } from "../app/blogs/blogActions";
 
 
 
@@ -21,6 +22,7 @@ const Index = () => {
   const dispatch= useAppDispatch()
   useEffect(() => {
     dispatch(getCategories())
+    dispatch(getTrendingBlogs())
     // dispatch(refreshToken())
     // dispatch(getHomeBlogs())
   },[dispatch])

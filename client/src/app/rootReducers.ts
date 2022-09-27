@@ -6,10 +6,12 @@ import darkmodeReducer from "./darkmode/darkmode";
 // import pagesReducer from "./pages/pages";
 import mediaRunningReducer from "./mediaRunning/mediaRunning";
 import categoryReducer from './category/categorySlice'
+import blogReducer from './blogs/blogSlice'
 
 const rootReducers = {
   auth : authReducer,
   bookmark: bookmarkReducer,
+  blogs: blogReducer,
   postLike: postLikesReducer,
   darkmode: darkmodeReducer,
   commentLikes: commentLikesReducer,
