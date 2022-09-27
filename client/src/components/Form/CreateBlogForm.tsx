@@ -14,13 +14,12 @@ import * as Yup from "yup";
 import TextError from "./TextError";
 import { useAppDispatch } from './../../app/hook';
 import { createBlog } from './../../app/blogs/blogActions';
+import ReactQuilCustom from "../Editor/ReactQuilCustom";
 
 const CreateBlogForm = () => {
   const user = useAppSelector((state) => state.auth.user);
   const categories = useAppSelector((state) => state.category);
   // const [options, setoptions] = useState([])
-  const quillRef = useRef<ReactQuill>(null);
-  const [value, setValue] = useState("");
   const dispatch= useAppDispatch()
 
   const options = categories.map((item, key) => {
@@ -266,12 +265,8 @@ const CreateBlogForm = () => {
                 </label>
                 <Field name="content">
                   {({ field }) => (
-                    <ReactQuill
-                      value={field.value}
-                      onChange={field.onChange(field.name)}
-                      modules={modules}
-                      placeholder="Write Something"
-                    />
+                    
+                    <ReactQuilCustom field={field}/>
                   )}
                 </Field>
               </div>
