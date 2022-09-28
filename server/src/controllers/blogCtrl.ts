@@ -234,15 +234,15 @@ const blogCtrl = {
   //       return res.status(500).json({msg: err.message})
   //     }
   //   },
-  // getBlog: async (req: Request, res: Response) => {
-  //     const blog = await Blog.findOne({_id: req.params.id})
-  //     .populate("user", "-password")
+  getBlog: async (req: Request, res: Response) => {
+      const blog = await Blog.findOneAndUpdate({_id: req.params.id},{$inc:{views:1}},{new: true})
+      .populate("user", "-password").populate('category')
 
-  //     if(!blog) throw new BadRequestError("Blog does not exist.")
+      if(!blog) throw new BadRequestError("Blog does not exist.")
 
-  //     return res.json(blog)
+      return res.json(blog)
 
-  // },
+  },
   //   updateBlog: async (req: IReqAuth, res: Response) => {
   //     if(!req.user)
   //       return res.status(400).json({msg: "Invalid Authentication."})

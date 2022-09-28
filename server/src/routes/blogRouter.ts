@@ -24,8 +24,8 @@ router.get('/trending', blogCtrl.getTrendingBlogs)
 
 // router.get('/blogs/user/:id', blogCtrl.getBlogsByUser)
 
-// router.route('/blog/:id')
-//   .get(blogCtrl.getBlog)
+router.route('/:id')
+  .get(blogCtrl.getBlog)
 //   .put(auth, blogCtrl.updateBlog)
 //   .delete(auth, blogCtrl.deleteBlog)
 
