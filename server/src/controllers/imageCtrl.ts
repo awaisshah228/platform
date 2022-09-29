@@ -7,7 +7,6 @@ type IRequest= Request &{
 const imageCtrl={
 
     uploadImage:(req:IRequest,res:Response)=>{
-        console.log(req.file)
 
         res.json({path:req.file?.location})
     }
