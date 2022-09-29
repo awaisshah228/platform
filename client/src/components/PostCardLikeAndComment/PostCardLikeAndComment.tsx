@@ -6,7 +6,8 @@ import { PostDataType } from "../../data/types";
 export interface PostCardLikeAndCommentProps {
   className?: string;
   itemClass?: string;
-  postData: Pick<PostDataType, "like" | "id" | "href" | "commentCount">;
+  // postData: Pick<PostDataType, "like" | "id" | "href" | "commentCount">;
+  postData:any;
   hiddenCommentOnMobile?: boolean;
   onClickLike?: (id: PostDataType["id"]) => void;
 }
@@ -29,13 +30,13 @@ const PostCardLikeAndComment: FC<PostCardLikeAndCommentProps> = ({
         onClickLike={onClickLike}
         postId={postData.id}
       />
-      <PostCardCommentBtn
+      {/* <PostCardCommentBtn
         href={postData.href}
         commentCount={postData.commentCount}
         className={`${
           hiddenCommentOnMobile ? "hidden sm:flex" : "flex"
         }  ${itemClass}`}
-      />
+      /> */}
     </div>
   );
 };

@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-const SingleContentDemo = () => {
+const SingleContentDemo = ({data}) => {
+  console.log(data)
+  // useEffect(()=>{
+
+  // },[data])
   return (
     <>
+    <div dangerouslySetInnerHTML={{
+        __html: data.content
+      }} />
+
+    {/* {} */}
       {/* THIS IS THE DEMP CONTENT */}
       {/* IF YOUR DATA IS JSON, YOU CAN USE render with html-react-parser (https://www.npmjs.com/package/html-react-parser) */}
-      <p>
+      {/* <p>
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iure vel
         officiis ipsum placeat itaque neque dolorem modi perspiciatis dolor
         distinctio veritatis sapiente, minima corrupti dolores necessitatibus
@@ -110,7 +119,7 @@ const SingleContentDemo = () => {
       <p>
         What I've written here is probably long enough, but adding this final
         sentence can't hurt.
-      </p>
+      </p> */}
     </>
   );
 };

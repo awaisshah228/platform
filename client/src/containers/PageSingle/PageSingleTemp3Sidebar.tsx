@@ -33,7 +33,7 @@ const PageSingleTemp3Sidebar: FC<PageSingleTemp3SidebarProps> = ({
     try {
 
       const res= await getAPI(`blog/${slug}`)
-      console.log(res.data)
+      // console.log(res.data)
       setblog(res.data)
       
     } catch (error) {
@@ -106,7 +106,7 @@ const PageSingleTemp3Sidebar: FC<PageSingleTemp3SidebarProps> = ({
         {/* SINGLE MAIN CONTENT */}
         <div className="container flex flex-col my-10 lg:flex-row ">
           <div className="w-full lg:w-3/5 xl:w-2/3 xl:pr-20">
-            <SingleContent data={SINGLE} />
+            <SingleContent data={blog} />
           </div>
           <div className="w-full mt-12 lg:mt-0 lg:w-2/5 lg:pl-10 xl:pl-0 xl:w-1/3">
             <Sidebar />

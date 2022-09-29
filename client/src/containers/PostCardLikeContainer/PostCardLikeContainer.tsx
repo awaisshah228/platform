@@ -56,15 +56,17 @@ const PostCardLikeContainer: FC<PostCardLikeContainerProps> = ({
     }
     onClickLike && onClickLike(postId);
   };
+  console.log()
 
   return (
-    <PostCardLikeAction
-      {...args}
-      isLiked={isLiked()}
-      likeCount={getLikeCount()}
-      postId={postId}
-      onClickLike={handleClickLike}
-    />
+    <div>Hi</div>
+    // <PostCardLikeAction
+    //   {...args}
+    //   isLiked={isLiked()}
+    //   likeCount={getLikeCount()}
+    //   postId={postId}
+    //   onClickLike={handleClickLike}
+    // />
   );
 };
 

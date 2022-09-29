@@ -8,7 +8,7 @@ import SingleContentDemo from "./SingleContentDemo";
 import { useLocation } from "react-router";
 
 export interface SingleContentProps {
-  data: SinglePageType;
+  data: any;
 }
 
 const SingleContent: FC<SingleContentProps> = ({ data }) => {
@@ -41,21 +41,21 @@ const SingleContent: FC<SingleContentProps> = ({ data }) => {
       >
         {/* THIS IS THE DEMP CONTENT */}
         {/* IF YOUR DATA IS JSON, YOU CAN USE render with html-react-parser (https://www.npmjs.com/package/html-react-parser) */}
-        <SingleContentDemo />
+        <SingleContentDemo data={data} />
       </div>
 
       {/* TAGS */}
-      <div className="max-w-screen-md mx-auto flex flex-wrap">
+      {/* <div className="max-w-screen-md mx-auto flex flex-wrap">
         {tags.map((item) => (
           <Tag hideCount key={item.id} tag={item} className="mr-2 mb-2" />
         ))}
-      </div>
+      </div> */}
 
       {/* AUTHOR */}
-      <div className="max-w-screen-md mx-auto border-b border-t border-neutral-100 dark:border-neutral-700"></div>
+      {/* <div className="max-w-screen-md mx-auto border-b border-t border-neutral-100 dark:border-neutral-700"></div>
       <div className="max-w-screen-md mx-auto ">
         <SingleAuthor author={author} />
-      </div>
+      </div> */}
 
       {/* COMMENT FORM */}
       <div
@@ -63,19 +63,19 @@ const SingleContent: FC<SingleContentProps> = ({ data }) => {
         ref={commentRef}
         className="max-w-screen-md mx-auto pt-5"
       >
-        <h3 className="text-xl font-semibold text-neutral-800 dark:text-neutral-200">
+        {/* <h3 className="text-xl font-semibold text-neutral-800 dark:text-neutral-200">
           Responses ({commentCount})
-        </h3>
-        <SingleCommentForm
+        </h3> */}
+        {/* <SingleCommentForm
           onClickSubmit={(id) => console.log(id)}
           onClickCancel={(id) => console.log(id)}
-        />
+        /> */}
       </div>
 
       {/* COMMENTS LIST */}
-      <div className="max-w-screen-md mx-auto">
+      {/* <div className="max-w-screen-md mx-auto">
         <SingleCommentLists comments={comments} />
-      </div>
+      </div> */}
     </div>
   );
 };

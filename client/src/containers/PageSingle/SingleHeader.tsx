@@ -48,7 +48,7 @@ const SingleHeader: FC<SingleHeaderProps> = ({
               hiddenCategories
               avatarRounded="rounded-full shadow-inner"
             />
-            {/* <SingleMetaAction2 meta={pageData} /> */}
+            <SingleMetaAction2 meta={pageData} />
           </div>
         </div>
       </div>
