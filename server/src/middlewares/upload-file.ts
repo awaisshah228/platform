@@ -30,6 +30,8 @@ const upload = multer({
     },
   }),
 });
+// const upload = multer({ dest: 'uploads/' })
+
 export default upload;
 
 // const uploadFile=()=>{

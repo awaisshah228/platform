@@ -6,7 +6,7 @@ import { requireAuth } from '../middlewares/require-auth'
 const router= express.Router()
 
 router.post('/',
-// requireAuth,
+requireAuth,
 upload.single('image'),
 imageCtrl.uploadImage)
 

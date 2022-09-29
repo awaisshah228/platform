@@ -15,15 +15,15 @@ const userCtrl = {
   updateUser: async (req: IReqAuth, res: Response) => {
     const { name,account } = req.body;
     
-    // if(!req.body.name){
-    //   throw new BadRequestError("Name is not suppliend")
-    // }
+    if(!req.body.name){
+      throw new BadRequestError("Name is not suppliend")
+    }
     if(!req.body.account){
       throw new BadRequestError("Email or Phone is not suppliend")
     }
-    // if(!validateEmail(account) && !validPhone(account)){
-    //      throw new BadRequestError("account not valid");
-    // }
+    if(!validateEmail(account) && !validPhone(account)){
+         throw new BadRequestError("account not valid");
+    }
     const user:any=await User.findOne({_id:req.user?._id })
 
     const accountCheck:any = await User.findOne({account})
@@ -41,6 +41,8 @@ const userCtrl = {
         name,
         account
         
+      },{
+        new: true
       }
     );
     res.json({ msg: "success",updateUser})
