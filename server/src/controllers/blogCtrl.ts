@@ -237,6 +237,8 @@ const blogCtrl = {
   getBlog: async (req: Request, res: Response) => {
       const blog = await Blog.findOneAndUpdate({_id: req.params.id},{$inc:{views:1}},{new: true})
       .populate("user", "-password").populate('category')
+      console.log(req.ip)
+      // console.log(req.socket.remoteAddress);
 
       if(!blog) throw new BadRequestError("Blog does not exist.")
 

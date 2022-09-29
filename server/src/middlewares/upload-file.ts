@@ -16,6 +16,19 @@ const s3 = new S3Client({
   },
 });
 
+// const upload = multer({ dest: './public/data/uploads/' })
+// var storage = multer.diskStorage({
+//   destination: function (request, file, callback) {
+//       callback(null, './uploads/');
+//   },
+//   filename: function (request, file, callback) {
+//       console.log(file);
+//       callback(null, file.originalname)
+//   }
+// });
+
+// var upload = multer({ storage: storage });
+
 const upload = multer({
   storage: multerS3({
     s3: s3,

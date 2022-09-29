@@ -5,6 +5,9 @@ import { requireAuth } from '../middlewares/require-auth'
 
 const router= express.Router()
 
-router.post('/',requireAuth,upload.single('image'),imageCtrl.uploadImage)
+router.post('/',
+// requireAuth,
+upload.single('image'),
+imageCtrl.uploadImage)
 
 export default router;

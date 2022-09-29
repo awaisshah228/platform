@@ -32,11 +32,12 @@ const userCtrl = {
     if(accountCheck && JSON.stringify(user._id)!=JSON.stringify(accountCheck._id)){
           throw new BadRequestError("this is already is in use by some one else")
     }
+    console.log(req.file)
 
     const updateUser= await User.findOneAndUpdate(
       { _id: req.user?._id },
       {
-        avatar: req.file? req.file?.location : user?.avatar,
+        avatar: req.file ? req.file?.location : user?.avatar,
         name,
         account
         
