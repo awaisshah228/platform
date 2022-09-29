@@ -1,7 +1,7 @@
-import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getAPI, patchAPI, postAPI } from "../../utils/fetchData";
 import { toast } from "react-toastify";
+import axios from '../../utils/api'
 
 export const login = createAsyncThunk(
   "auth/login",
@@ -457,10 +457,25 @@ export const forgotPass = createAsyncThunk(
 );
 export const editProfile = createAsyncThunk(
   "auth/editProfile",
-  async ({name,file,account}:any, { rejectWithValue }) => {
+  async ({name,account,file}:any, { rejectWithValue }) => {
     try {
+
+      console.log(file)
+
+      let bodyFormData = new FormData();
+      bodyFormData.append('name', name);
+      bodyFormData.append('account', account);
+      bodyFormData.append('file', file);
+
       
-      const res:any= await patchAPI('user/',{name,file,account})
+      const res:any= await patchAPI('user/',bodyFormData)
+      // const res:any= await axios({
+      //   method: "patch",
+      //   url: "user/",
+      //   data: bodyFormData,
+      //   headers: { "Content-Type": "multipart/form-data" },
+      // })
+      console.log(res)
       toast(res.data?.msg, {
         position: "top-right",
         autoClose: 5000,
@@ -470,7 +485,7 @@ export const editProfile = createAsyncThunk(
         draggable: true,
         progress: undefined,
         });
-      //
+      
 
       return res.data;
     } catch (error) {
