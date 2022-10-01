@@ -33,6 +33,8 @@ export interface IUser extends IUserLogin {
   type: string
   updatedAt: string
   id: string
+  saved:string[]
+  likes:string[]
 }
 
 export interface IUserProfile extends IUserRegister {

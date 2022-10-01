@@ -14,13 +14,18 @@ import PostCardLikeAction, {
 
 export interface PostCardLikeContainerProps
   extends Omit<PostCardLikeActionProps, "isLiked" | "likeCount"> {
-  like: PostDataType["like"];
+  like: any;
+  post:{
+    likes:[]
+    [x : string]: any
+  }
 }
 
-const PostCardLikeContainer: FC<PostCardLikeContainerProps> = ({
+const PostCardLikeContainerV2: FC<PostCardLikeContainerProps> = ({
   like,
   postId,
   onClickLike,
+  post,
   ...args
 }) => {
   const recentLikeds = useAppSelector(selectRecentLikeds);
@@ -28,36 +33,45 @@ const PostCardLikeContainer: FC<PostCardLikeContainerProps> = ({
   const dispatch = useAppDispatch();
 
   const isLiked = () => {
-    if (recentLikeds.includes(postId)) {
-      return true;
-    }
-    if (like.isLiked && !recentRemoveds.includes(postId)) {
-      return true;
-    }
+    // if(post.likes.lenght){
+    //    if (post.likes.includes(post.id)) {
+    //   return true;
+    // }
+
+    // }
+   
+    // if (like.isLiked && !recentRemoveds.includes(postId)) {
+    //   return true;
+    // }
     return false;
   };
 
   const getLikeCount = (): number => {
     // Recent Liked
-    if (recentLikeds.includes(postId)) {
-      return like.count + 1;
-    }
-    if (like.isLiked && recentRemoveds.includes(postId)) {
-      return like.count - 1;
-    }
-    return like.count;
+    // if (recentLikeds.includes(postId)) {
+    //   return like.count + 1;
+    // }
+    // if (like.isLiked && recentRemoveds.includes(postId)) {
+    //   return like.count - 1;
+    // }
+    // console.log(post.likes.lenght??0)
+    // return like.length;
+    console.log(post?.likes?.length)
+    return post?.likes?.length??0;
   };
 
   const handleClickLike = () => {
-    if (isLiked()) {
-      dispatch(removeLikedByPostId(postId));
-    } else {
-      dispatch(addNewLikedByPostId(postId));
-    }
-    onClickLike && onClickLike(postId);
+    // if (isLiked()) {
+    //   dispatch(removeLikedByPostId(postId));
+    // } else {
+    //   dispatch(addNewLikedByPostId(postId));
+    // }
+    // onClickLike && onClickLike(postId);
   };
+  console.log(post)
 
   return (
+    // <div>Hi</div>
     <PostCardLikeAction
       {...args}
       isLiked={isLiked()}
@@ -68,4 +82,4 @@ const PostCardLikeContainer: FC<PostCardLikeContainerProps> = ({
   );
 };
 
-export default PostCardLikeContainer;
+export default PostCardLikeContainerV2;

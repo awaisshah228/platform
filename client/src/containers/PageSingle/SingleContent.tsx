@@ -6,6 +6,7 @@ import SingleCommentForm from "./SingleCommentForm";
 import SingleCommentLists from "./SingleCommentLists";
 import SingleContentDemo from "./SingleContentDemo";
 import { useLocation } from "react-router";
+import SingleAuthorV2 from "./SingleAuthorV2";
 
 export interface SingleContentProps {
   data: any;
@@ -52,10 +53,10 @@ const SingleContent: FC<SingleContentProps> = ({ data }) => {
       </div> */}
 
       {/* AUTHOR */}
-      {/* <div className="max-w-screen-md mx-auto border-b border-t border-neutral-100 dark:border-neutral-700"></div>
+      <div className="max-w-screen-md mx-auto border-b border-t border-neutral-100 dark:border-neutral-700"></div>
       <div className="max-w-screen-md mx-auto ">
-        <SingleAuthor author={author} />
-      </div> */}
+        <SingleAuthorV2 author={data.user} />
+      </div>
 
       {/* COMMENT FORM */}
       <div

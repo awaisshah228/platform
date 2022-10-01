@@ -19,7 +19,7 @@ import SectionMagazine6 from "./SectionMagazine6";
 import { useAppSelector } from "../../app/hook";
 
 // DEMO POST FOR MAGAZINE SECTION
-const MAGAZINE1_TABS = ["all", "Garden", "Fitness", "Design"];
+
 const MAGAZINE1_POSTS = DEMO_POSTS.filter((_, i) => i >= 8 && i < 16);
 //
 const TRAVEL_SUBCATS: TaxonomyType[] = [
@@ -88,6 +88,9 @@ const TRAVEL_SUBCATS: TaxonomyType[] = [
 const PageHomeDemo4: React.FC = () => {
 
   const trendingPost=useAppSelector(state=>state.blogs.trendingBlogs)
+  const categories=useAppSelector(state=>state.category)
+  console.log(categories)
+  const MAGAZINE1_TABS = categories.map(item=> item.name);
 
 
   
@@ -136,7 +139,7 @@ const PageHomeDemo4: React.FC = () => {
             />
 
             {/* SECTION 1 */}
-            <div className="relative py-16">
+            {/* <div className="relative py-16">
               <BackgroundSection />
               <SectionSliderNewCategories
                 heading="Subtopics of Travel"
@@ -144,13 +147,13 @@ const PageHomeDemo4: React.FC = () => {
                 categories={TRAVEL_SUBCATS}
                 uniqueSliderClass="PageHomeDemo4"
               />
-            </div>
+            </div> */}
 
             <SectionMagazine6
               className="py-16 lg:py-28"
               heading="🧩 Editor Picks"
               posts={MAGAZINE1_POSTS}
-              tabs={MAGAZINE1_TABS}
+              tabs={MAGAZINE1_TABS.sort()}
             />
 
             {/* SECTION 3 */}

@@ -6,17 +6,19 @@ import BookmarkContainer from "../../containers/BookmarkContainer/BookmarkContai
 import { PostDataType } from "../../data/types";
 import NcDropDown from "../../components/NcDropDown/NcDropDown";
 import PostCardLikeAndCommentV2 from "../../components/PostCardLikeAndComment/PostCardLikeAndComment2";
+import BookmarkContainerV2 from "../BookmarkContainer/BookmarkContainerV2";
+import PostActionDropdownV2 from "../../components/PostActionDropdown/PostActionDropdownV2";
 
 export interface SingleMetaAction2Props {
   className?: string;
-  meta: PostDataType;
+  meta: any;
 }
 
-const SingleMetaAction2: FC<SingleMetaAction2Props> = ({
+const SingleMetaActionV2: FC<SingleMetaAction2Props> = ({
   className = "",
   meta,
 }) => {
-  const { id, bookmark } = meta;
+  const { id, saved } = meta;
   console.log(meta)
 
   return (
@@ -32,8 +34,8 @@ const SingleMetaAction2: FC<SingleMetaAction2Props> = ({
           <div className="border-l border-neutral-200 dark:border-neutral-700 h-6" />
         </div>
 
-        {/* <BookmarkContainer
-          initBookmarked={bookmark.isBookmarked}
+        <BookmarkContainerV2
+          // initBookmarked={bookmark.isBookmarked}
           postId={String(id)}
           containerClassName="h-9 w-9 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-neutral-200"
           iconClass="h-5 w-5"
@@ -59,14 +61,14 @@ const SingleMetaAction2: FC<SingleMetaAction2Props> = ({
           onClick={() => {}}
           data={SOCIALS_DATA}
         />
-        <PostActionDropdown
+        <PostActionDropdownV2
           containerClassName="h-9 w-9 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700"
           iconClass="h-5 w-5"
           postData={meta}
-        /> */}
+        />
       </div>
     </div>
   );
 };
 
-export default SingleMetaAction2;
+export default SingleMetaActionV2;

@@ -103,6 +103,13 @@ const PageSingleTemp3Sidebar: FC<PageSingleTemp3SidebarProps> = ({
           </div>
         </header>
 
+
+        {/* <div className="container">
+          <SingleContent data={blog} />
+        </div> */}
+
+        
+
         {/* SINGLE MAIN CONTENT */}
         <div className="container flex flex-col my-10 lg:flex-row ">
           <div className="w-full lg:w-3/5 xl:w-2/3 xl:pr-20">

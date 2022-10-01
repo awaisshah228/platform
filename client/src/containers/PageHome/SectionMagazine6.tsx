@@ -20,6 +20,7 @@ const SectionMagazine6: FC<SectionMagazine6Props> = ({
   className = "",
 }) => {
   const [tabActive, setTabActive] = useState<string>(tabs[0]);
+  console.log(tabActive)
 
   const handleClickTab = (item: string) => {
     if (item === tabActive) {

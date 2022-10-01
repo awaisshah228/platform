@@ -7,6 +7,7 @@ import PostMeta2 from "../../components/PostMeta2/PostMeta2";
 import SingleMetaAction2 from "./SingleMetaAction2";
 import { Helmet } from "react-helmet";
 import CategoryBadgeListV2 from "../../components/CategoryBadgeList/CategoryBadgeListV2";
+import SingleMetaActionV2 from "./SingleMetaAction2V2";
 
 export interface SingleHeaderProps {
   pageData: any;
@@ -24,6 +25,7 @@ const SingleHeader: FC<SingleHeaderProps> = ({
   metaActionStyle = "style1",
 }) => {
   const { category, description:desc, title } = pageData;
+  console.log(desc)
 
   return (
     <>
@@ -34,11 +36,10 @@ const SingleHeader: FC<SingleHeaderProps> = ({
         <div className="space-y-5">
           <CategoryBadgeListV2 itemClass="!px-3" category={category} />
           <SingleTitle mainClass={titleMainClass} title={title} />
-          {!!desc && !hiddenDesc && (
             <span className="block text-base text-neutral-500 md:text-lg dark:text-neutral-400 pb-1">
-              {desc}
+              {desc??''}
             </span>
-          )}
+         
           <div className="w-full border-b border-neutral-100 dark:border-neutral-800"></div>
           <div className="flex flex-col sm:flex-row justify-between sm:items-end space-y-5 sm:space-y-0 sm:space-x-5">
             <PostMeta2
@@ -48,7 +49,7 @@ const SingleHeader: FC<SingleHeaderProps> = ({
               hiddenCategories
               avatarRounded="rounded-full shadow-inner"
             />
-            <SingleMetaAction2 meta={pageData} />
+            <SingleMetaActionV2 meta={pageData} />
           </div>
         </div>
       </div>

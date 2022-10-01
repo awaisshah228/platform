@@ -20,7 +20,7 @@ const CardAuthor2V2: FC<CardAuthor2Props> = ({
 }) => {
   const { name, href = "/", avatar } = user;
  let date2= new Date(date)
-  console.log(user)
+  // console.log(user)
   return (
     <Link
       to={href}
