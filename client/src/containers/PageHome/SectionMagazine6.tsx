@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { PostDataType } from "../../data/types";
 import HeaderFilter from "./HeaderFilter";
 import NcImage from "../../components/NcImage/NcImage";
@@ -20,7 +20,6 @@ const SectionMagazine6: FC<SectionMagazine6Props> = ({
   className = "",
 }) => {
   const [tabActive, setTabActive] = useState<string>(tabs[0]);
-  console.log(tabActive)
 
   const handleClickTab = (item: string) => {
     if (item === tabActive) {
@@ -28,6 +27,9 @@ const SectionMagazine6: FC<SectionMagazine6Props> = ({
     }
     setTabActive(item);
   };
+  useEffect(()=>{
+     setTabActive(tabs[0]) 
+  },[tabs])
 
   const renderMain = () => {
     const { featuredImage, author, title, date, desc, href, readingTime } =

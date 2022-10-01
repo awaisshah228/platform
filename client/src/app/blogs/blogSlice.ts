@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IBlog, ICategory } from '../../utils/types'
-import { getTrendingBlogs } from "./blogActions";
+import { getLatestBlogs, getTrendingBlogs } from "./blogActions";
 
 
 interface blogs{
@@ -25,6 +25,10 @@ const categorySlice = createSlice({
     builder
       .addCase(getTrendingBlogs.fulfilled, (state, action) => {
         state.trendingBlogs=action.payload
+      })
+    builder
+      .addCase(getLatestBlogs.fulfilled, (state, action) => {
+        state.latestBlogs=action.payload
       })
    
   

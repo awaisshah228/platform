@@ -33,7 +33,7 @@ const PageSingleTemp3Sidebar: FC<PageSingleTemp3SidebarProps> = ({
     try {
 
       const res= await getAPI(`blog/${slug}`)
-      // console.log(res.data)
+      console.log(res.data)
       setblog(res.data)
       
     } catch (error) {
@@ -97,7 +97,7 @@ const PageSingleTemp3Sidebar: FC<PageSingleTemp3SidebarProps> = ({
             <div className="hidden md:block absolute top-0 left-0 bottom-0 w-1/5 from-neutral-900 dark:from-black bg-gradient-to-r"></div>
             <img
               className="block w-full h-full object-cover"
-              src={blog?.thumbnail ?  blog?.thumbnail : ""}
+              src={blog?.thumbnail??''}
               alt=""
             />
           </div>

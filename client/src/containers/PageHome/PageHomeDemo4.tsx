@@ -17,6 +17,7 @@ import BgGlassmorphism from "../../components/BgGlassmorphism/BgGlassmorphism";
 import SectionTrending from "./SectionTrending";
 import SectionMagazine6 from "./SectionMagazine6";
 import { useAppSelector } from "../../app/hook";
+import SectionGridLatestPosts from "./SectionGridLatestPost";
 
 // DEMO POST FOR MAGAZINE SECTION
 
@@ -88,6 +89,7 @@ const TRAVEL_SUBCATS: TaxonomyType[] = [
 const PageHomeDemo4: React.FC = () => {
 
   const trendingPost=useAppSelector(state=>state.blogs.trendingBlogs)
+  const latestPost=useAppSelector(state=>state.blogs.latestBlogs)
   const categories=useAppSelector(state=>state.category)
   console.log(categories)
   const MAGAZINE1_TABS = categories.map(item=> item.name);
@@ -104,7 +106,7 @@ const PageHomeDemo4: React.FC = () => {
         $body.className = "";
       }
     };
-  }, []);
+  }, [categories]);
 
   return (
     <div className="nc-PageHomeDemo4 relative">
@@ -118,7 +120,7 @@ const PageHomeDemo4: React.FC = () => {
       {/* ======== ALL SECTIONS ======== */}
       <div className="relative">
         <SectionHero2
-          href="/single-template-3/this-is-single-slug"
+          href={`/blog/`}
           youtubeID="qTsXfGVjm1w"
           rightImg="https://images.pexels.com/photos/4666750/pexels-photo-4666750.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
           heading="The hidden world of whale culture"
@@ -198,12 +200,12 @@ const PageHomeDemo4: React.FC = () => {
 
           <div className="dark bg-neutral-900 dark:bg-black dark:bg-opacity-20 text-neutral-100">
             <div className="relative container ">
-              <SectionGridPosts
+              <SectionGridLatestPosts
                 className="py-16 lg:py-28"
                 postCardName="card11"
                 heading="Explore other latest articles"
                 subHeading="Explore 1129 other articles"
-                posts={DEMO_POSTS.filter((_, i) => i > 5 && i < 18)}
+                posts={latestPost}
                 gridClass="sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8"
               />
             </div>
