@@ -3,6 +3,8 @@ import { BadRequestError } from "../errors";
 import { Blog } from "../models/blogModel";
 import { Category } from "../models/categoryModel";
 import { IReqAuth } from "../utils/interface";
+import { Comment } from "../models/commentModel";
+import mongoose from "mongoose";
 // import mongoose from 'mongoose'
 
 const Pagination = (req: IReqAuth) => {
@@ -20,7 +22,7 @@ const blogCtrl = {
     const categoryCheck: any = await Category.findOne({ name: category });
     console.log(categoryCheck);
 
-    const newBlog: any =  Blog.build({
+    const newBlog: any = Blog.build({
       user: req.user?.id,
       title: title.toLowerCase(),
       content,
@@ -38,7 +40,12 @@ const blogCtrl = {
     // res.json({...req.body,...req.file})
   },
   getTrendingBlogs: async (req: Request, res: Response) => {
-    const blogs = await Blog.find({}).sort("-views -likes -createdAt").select('-content').limit(8).populate('user').populate('category');
+    const blogs = await Blog.find({})
+      .sort("-views -likes -createdAt")
+      .select("-content")
+      .limit(8)
+      .populate("user")
+      .populate("category");
     // console.log(blogs)
     // res.json('done')
     res.json(blogs);
@@ -100,223 +107,201 @@ const blogCtrl = {
   //       return res.status(500).json({msg: err.message})
   //     }
   //   },
-  //   getBlogsByCategory: async (req: Request, res: Response) => {
-  //     const { limit, skip } = Pagination(req)
+  getBlogsByCategory: async (req: Request, res: Response) => {
+    const { limit, skip } = Pagination(req);
 
-  //     try {
-  //       const Data = await Blog.aggregate([
-  //         {
-  //           $facet: {
-  //             totalData: [
-  //               {
-  //                 $match:{
-  //                   category: new mongoose.Types.ObjectId(req.params.id)
-  //                 }
-  //               },
-  //               // User
-  //               {
-  //                 $lookup:{
-  //                   from: "users",
-  //                   let: { user_id: "$user" },
-  //                   pipeline: [
-  //                     { $match: { $expr: { $eq: ["$_id", "$$user_id"] } } },
-  //                     { $project: { password: 0 }}
-  //                   ],
-  //                   as: "user"
-  //                 }
-  //               },
-  //               // array -> object
-  //               { $unwind: "$user" },
-  //               // Sorting
-  //               { $sort: { createdAt: -1 } },
-  //               { $skip: skip },
-  //               { $limit: limit }
-  //             ],
-  //             totalCount: [
-  //               {
-  //                 $match: {
-  //                   category: new mongoose.Types.ObjectId(req.params.id)
-  //                 }
-  //               },
-  //               { $count: 'count' }
-  //             ]
-  //           }
-  //         },
-  //         {
-  //           $project: {
-  //             count: { $arrayElemAt: ["$totalCount.count", 0] },
-  //             totalData: 1
-  //           }
-  //         }
-  //       ])
+    const Data = await Blog.aggregate([
+      {
+        $facet: {
+          totalData: [
+            {
+              $match: {
+                category: new mongoose.Types.ObjectId(req.params.id),
+              },
+            },
+            // User
+            {
+              $lookup: {
+                from: "users",
+                let: { user_id: "$user" },
+                pipeline: [
+                  { $match: { $expr: { $eq: ["$_id", "$$user_id"] } } },
+                  { $project: { password: 0 } },
+                ],
+                as: "user",
+              },
+            },
+            // array -> object
+            { $unwind: "$user" },
+            // Sorting
+            { $sort: { createdAt: -1 } },
+            { $skip: skip },
+            { $limit: limit },
+          ],
+          totalCount: [
+            {
+              $match: {
+                category: new mongoose.Types.ObjectId(req.params.id),
+              },
+            },
+            { $count: "count" },
+          ],
+        },
+      },
+      {
+        $project: {
+          count: { $arrayElemAt: ["$totalCount.count", 0] },
+          totalData: 1,
+        },
+      },
+    ]);
 
-  //       const blogs = Data[0].totalData;
-  //       const count = Data[0].count;
+    const blogs = Data[0].totalData;
+    const count = Data[0].count;
 
-  //       // Pagination
-  //       let total = 0;
+    // Pagination
+    let total = 0;
 
-  //       if(count % limit === 0){
-  //         total = count / limit;
-  //       }else {
-  //         total = Math.floor(count / limit) + 1;
-  //       }
+    if (count % limit === 0) {
+      total = count / limit;
+    } else {
+      total = Math.floor(count / limit) + 1;
+    }
 
-  //       res.json({ blogs, total })
-  //     } catch (err: any) {
-  //       return res.status(500).json({msg: err.message})
-  //     }
-  //   },
-  //   getBlogsByUser: async (req: Request, res: Response) => {
-  //     const { limit, skip } = Pagination(req)
-
-  //     try {
-  //       const Data = await Blog.aggregate([
-  //         {
-  //           $facet: {
-  //             totalData: [
-  //               {
-  //                 $match:{
-  //                   user: new mongoose.Types.ObjectId(req.params.id)
-  //                 }
-  //               },
-  //               // User
-  //               {
-  //                 $lookup:{
-  //                   from: "users",
-  //                   let: { user_id: "$user" },
-  //                   pipeline: [
-  //                     { $match: { $expr: { $eq: ["$_id", "$$user_id"] } } },
-  //                     { $project: { password: 0 }}
-  //                   ],
-  //                   as: "user"
-  //                 }
-  //               },
-  //               // array -> object
-  //               { $unwind: "$user" },
-  //               // Sorting
-  //               { $sort: { createdAt: -1 } },
-  //               { $skip: skip },
-  //               { $limit: limit }
-  //             ],
-  //             totalCount: [
-  //               {
-  //                 $match: {
-  //                   user: new mongoose.Types.ObjectId(req.params.id)
-  //                 }
-  //               },
-  //               { $count: 'count' }
-  //             ]
-  //           }
-  //         },
-  //         {
-  //           $project: {
-  //             count: { $arrayElemAt: ["$totalCount.count", 0] },
-  //             totalData: 1
-  //           }
-  //         }
-  //       ])
-
-  //       const blogs = Data[0].totalData;
-  //       const count = Data[0].count;
-
-  //       // Pagination
-  //       let total = 0;
-
-  //       if(count % limit === 0){
-  //         total = count / limit;
-  //       }else {
-  //         total = Math.floor(count / limit) + 1;
-  //       }
-
-  //       res.json({ blogs, total })
-  //     } catch (err: any) {
-  //       return res.status(500).json({msg: err.message})
-  //     }
-  //   },
-  getBlog: async (req: Request, res: Response) => {
-      const blog = await Blog.findOneAndUpdate({_id: req.params.id},{$inc:{views:1}},{new: true})
-      .populate("user", "-password").populate('category')
-      console.log(req.ip)
-      // console.log(req.socket.remoteAddress);
-
-      if(!blog) throw new BadRequestError("Blog does not exist.")
-
-      return res.json(blog)
-
+    res.json({ blogs, total });
   },
-  //   updateBlog: async (req: IReqAuth, res: Response) => {
-  //     if(!req.user)
-  //       return res.status(400).json({msg: "Invalid Authentication."})
+  getBlogsByUser: async (req: Request, res: Response) => {
+    const { limit, skip } = Pagination(req);
 
-  //     try {
-  //       const blog = await Blog.findOneAndUpdate({
-  //         _id: req.params.id, user: req.user._id
-  //       }, req.body)
+    const Data = await Blog.aggregate([
+      {
+        $facet: {
+          totalData: [
+            {
+              $match: {
+                user: new mongoose.Types.ObjectId(req.params.id),
+              },
+            },
+            // User
+            {
+              $lookup: {
+                from: "users",
+                let: { user_id: "$user" },
+                pipeline: [
+                  { $match: { $expr: { $eq: ["$_id", "$$user_id"] } } },
+                  { $project: { password: 0 } },
+                ],
+                as: "user",
+              },
+            },
+            // array -> object
+            { $unwind: "$user" },
+            // Sorting
+            { $sort: { createdAt: -1 } },
+            { $skip: skip },
+            { $limit: limit },
+          ],
+          totalCount: [
+            {
+              $match: {
+                user: new mongoose.Types.ObjectId(req.params.id),
+              },
+            },
+            { $count: "count" },
+          ],
+        },
+      },
+      {
+        $project: {
+          count: { $arrayElemAt: ["$totalCount.count", 0] },
+          totalData: 1,
+        },
+      },
+    ]);
 
-  //       if(!blog) return res.status(400).json({msg: "Invalid Authentication."})
+    const blogs = Data[0].totalData;
+    const count = Data[0].count;
 
-  //       res.json({ msg: 'Update Success!', blog })
+    // Pagination
+    let total = 0;
 
-  //     } catch (err: any) {
-  //       return res.status(500).json({msg: err.message})
-  //     }
-  //   },
-  //   deleteBlog: async (req: IReqAuth, res: Response) => {
-  //     if(!req.user)
-  //       return res.status(400).json({msg: "Invalid Authentication."})
+    if (count % limit === 0) {
+      total = count / limit;
+    } else {
+      total = Math.floor(count / limit) + 1;
+    }
 
-  //     try {
-  //       // Delete Blog
-  //       const blog = await Blog.findOneAndDelete({
-  //         _id: req.params.id, user: req.user._id
-  //       })
+    res.json({ blogs, total });
+  },
+  getBlog: async (req: Request, res: Response) => {
+    const blog = await Blog.findOneAndUpdate(
+      { _id: req.params.id },
+      { $inc: { views: 1 } },
+      { new: true }
+    )
+      .populate("user", "-password")
+      .populate("category");
+    console.log(req.ip);
+    // console.log(req.socket.remoteAddress);
 
-  //       if(!blog)
-  //         return res.status(400).json({msg: "Invalid Authentication."})
+    if (!blog) throw new BadRequestError("Blog does not exist.");
 
-  //       // Delete Comments
-  //     //   await Comments.deleteMany({ blog_id: blog._id })
+    return res.json(blog);
+  },
+  updateBlog: async (req: IReqAuth, res: Response) => {
+    const blog = await Blog.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        user: req.user?.id,
+      },
+      req.body
+    );
 
-  //       res.json({ msg: 'Delete Success!' })
+    if (!blog) throw new BadRequestError("Invalid authentication");
 
-  //     } catch (err: any) {
-  //       return res.status(500).json({msg: err.message})
-  //     }
-  //   },
-  //   searchBlogs: async (req: Request, res: Response) => {
-  //     try {
-  //       const blogs = await Blog.aggregate([
-  //         {
-  //           $search: {
-  //             index: "searchTitle",
-  //             autocomplete: {
-  //               "query": `${req.query.title}`,
-  //               "path": "title"
-  //             }
-  //           }
-  //         },
-  //         { $sort: { createdAt: -1 } },
-  //         { $limit: 5},
-  //         {
-  //           $project: {
-  //             title: 1,
-  //             description: 1,
-  //             thumbnail: 1,
-  //             createdAt: 1
-  //           }
-  //         }
-  //       ])
+    res.json({ msg: "Update Success!", blog });
+  },
+  deleteBlog: async (req: IReqAuth, res: Response) => {
+    // Delete Blog
+    const blog = await Blog.findOneAndDelete({
+      _id: req.params.id,
+      user: req.user?.id,
+    });
 
-  //       if(!blogs.length)
-  //         return res.status(400).json({msg: 'No Blogs.'})
+    if (!blog) throw new BadRequestError("Invalid auth");
 
-  //       res.json(blogs)
+    // Delete Comments
+    await Comment.deleteMany({ blog_id: blog._id });
 
-  //     } catch (err: any) {
-  //       return res.status(500).json({msg: err.message})
-  //     }
-  //   },
+    res.json({ msg: "Delete Success!" });
+  },
+  searchBlogs: async (req: Request, res: Response) => {
+    const blogs = await Blog.aggregate([
+      {
+        $search: {
+          index: "searchTitle",
+          autocomplete: {
+            query: `${req.query.title}`,
+            path: "title",
+          },
+        },
+      },
+      { $sort: { createdAt: -1 } },
+      { $limit: 5 },
+      {
+        $project: {
+          title: 1,
+          description: 1,
+          thumbnail: 1,
+          createdAt: 1,
+        },
+      },
+    ]);
+
+    if (!blogs.length) throw new BadRequestError("No blog found");
+
+    res.json(blogs);
+  },
 };
 
 export default blogCtrl;
