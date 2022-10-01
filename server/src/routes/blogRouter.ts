@@ -18,9 +18,10 @@ router.post('/', requireAuth,upload.single('thumbnail'),
 blogCtrl.createBlog)
 
 router.get('/trending', blogCtrl.getTrendingBlogs)
-// router.get('/home/blogs', blogCtrl.getHomeBlogs)
+router.get('/latest', blogCtrl.getLatestBlogs)
+router.get('/home', blogCtrl.getHomeBlogs)
 
-// router.get('/blogs/category/:id', blogCtrl.getBlogsByCategory)
+router.get('/category/:id', blogCtrl.getBlogsByCategory)
 
 // router.get('/blogs/user/:id', blogCtrl.getBlogsByUser)
 

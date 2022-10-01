@@ -14,6 +14,54 @@ const Pagination = (req: IReqAuth) => {
 
   return { page, limit, skip };
 };
+class APIfeatures {
+  query: any;
+  queryString: any;
+
+  constructor(query: any, queryString: any) {
+    this.query = query;
+    this.queryString = queryString;
+  }
+  filtering() {
+    const queryObj = { ...this.queryString }; //queryString = req.query
+
+    const excludedFields = ["page", "sort", "limit"];
+    excludedFields.forEach((el) => delete queryObj[el]);
+
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(
+      /\b(gte|gt|lt|lte|regex)\b/g,
+      (match) => "$" + match
+    );
+
+    //    gte = greater than or equal
+    //    lte = lesser than or equal
+    //    lt = lesser than
+    //    gt = greater than
+    this.query.find(JSON.parse(queryStr));
+
+    return this;
+  }
+
+  sorting() {
+    if (this.queryString.sort) {
+      const sortBy = this.queryString.sort.split(",").join(" ");
+      this.query = this.query.sort(sortBy);
+    } else {
+      this.query = this.query.sort("-createdAt");
+    }
+
+    return this;
+  }
+
+  paginating() {
+    const page = this.queryString.page * 1 || 1;
+    const limit = this.queryString.limit * 1 || 8;
+    const skip = (page - 1) * limit;
+    this.query = this.query.skip(skip).limit(limit);
+    return this;
+  }
+}
 
 const blogCtrl = {
   createBlog: async (req: IReqAuth, res: Response) => {
@@ -50,63 +98,73 @@ const blogCtrl = {
     // res.json('done')
     res.json(blogs);
   },
-  //   getHomeBlogs: async (req: Request, res: Response) => {
-  //     try {
-  //       const blogs = await Blog.aggregate([
-  //         // User
-  //         {
-  //           $lookup:{
-  //             from: "users",
-  //             let: { user_id: "$user" },
-  //             pipeline: [
-  //               { $match: { $expr: { $eq: ["$_id", "$$user_id"] } } },
-  //               { $project: { password: 0 }}
-  //             ],
-  //             as: "user"
-  //           }
-  //         },
-  //         // array -> object
-  //         { $unwind: "$user" },
-  //         // Category
-  //         {
-  //           $lookup: {
-  //             "from": "categories",
-  //             "localField": "category",
-  //             "foreignField": "_id",
-  //             "as": "category"
-  //           }
-  //         },
-  //         // array -> object
-  //         { $unwind: "$category" },
-  //         // Sorting
-  //         { $sort: { "createdAt": -1 } },
-  //         // Group by category
-  //         {
-  //           $group: {
-  //             _id: "$category._id",
-  //             name: { $first: "$category.name" },
-  //             blogs: { $push: "$$ROOT" },
-  //             count: { $sum: 1 }
-  //           }
-  //         },
-  //         // Pagination for blogs
-  //         {
-  //           $project: {
-  //             blogs: {
-  //               $slice: ['$blogs', 0, 4]
-  //             },
-  //             count: 1,
-  //             name: 1
-  //           }
-  //         }
-  //       ])
+  getLatestBlogs: async (req: Request, res: Response) => {
+    const features = new APIfeatures(
+      Blog.find({})
+        .sort("-createdAt")
+        .select("-content")
+        .populate("user")
+        .populate("category"),
+      req.query
+    ).paginating();
 
-  //       res.json(blogs)
+    const blogs = await features.query;
+    // console.log(blogs)
+    // res.json('done')
+    res.json(blogs);
+  },
+  getHomeBlogs: async (req: Request, res: Response) => {
+    const blogs = await Blog.aggregate([
+      // User
+      {
+        $lookup: {
+          from: "users",
+          let: { user_id: "$user" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$_id", "$$user_id"] } } },
+            { $project: { password: 0 } },
+          ],
+          as: "user",
+        },
+      },
+      // array -> object
+      { $unwind: "$user" },
+      // Category
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      // array -> object
+      { $unwind: "$category" },
+      // Sorting
+      { $sort: { createdAt: -1 } },
+      // Group by category
+      {
+        $group: {
+          _id: "$category._id",
+          name: { $first: "$category.name" },
+          blogs: { $push: "$$ROOT" },
+          count: { $sum: 1 },
+        },
+      },
+      // Pagination for blogs
+      {
+        $project: {
+          blogs: {
+            $slice: ["$blogs", 0, 4],
+          },
+          count: 1,
+          name: 1,
+        },
+      },
+    ]);
 
-  //     } catch (err: any) {
-  //       return res.status(500).json({msg: err.message})
-  //     }
-  //   },
+    res.json(blogs);
+  },
   getBlogsByCategory: async (req: Request, res: Response) => {
     const { limit, skip } = Pagination(req);
 
