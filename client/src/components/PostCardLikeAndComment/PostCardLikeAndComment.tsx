@@ -6,7 +6,7 @@ import { PostDataType } from "../../data/types";
 export interface PostCardLikeAndCommentProps {
   className?: string;
   itemClass?: string;
-  postData: Pick<PostDataType, "like" | "id" | "href" | "commentCount">;
+  postData: any;
   hiddenCommentOnMobile?: boolean;
   onClickLike?: (id: PostDataType["id"]) => void;
 }
@@ -18,11 +18,15 @@ const PostCardLikeAndComment: FC<PostCardLikeAndCommentProps> = ({
   postData,
   onClickLike = () => {},
 }) => {
+
+  console.log(postData)
   return (
     <div
       className={`nc-PostCardLikeAndComment flex items-center space-x-2 ${className}`}
       data-nc-id="PostCardLikeAndComment"
     >
+
+      {/* hi */}
       <PostCardLikeContainer
         className={itemClass}
         like={postData.like}

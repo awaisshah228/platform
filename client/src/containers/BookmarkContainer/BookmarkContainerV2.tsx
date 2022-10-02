@@ -12,7 +12,7 @@ export type BookmarkContainerProps = Omit<NcBookmarkProps, "isBookmarked"> & {
   initBookmarked?: boolean;
 };
 
-const BookmarkContainer: React.FC<BookmarkContainerProps> = (props) => {
+const BookmarkContainerV2: React.FC<BookmarkContainerProps> = (props) => {
   const { postId, initBookmarked } = props;
   const recentSaveds = useAppSelector(selectRecentSaveds);
   const recentRemoveds = useAppSelector(selectRecentRemoveds);
@@ -45,4 +45,4 @@ const BookmarkContainer: React.FC<BookmarkContainerProps> = (props) => {
   );
 };
 
-export default BookmarkContainer;
+export default BookmarkContainerV2;

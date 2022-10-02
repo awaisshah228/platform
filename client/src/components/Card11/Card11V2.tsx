@@ -11,6 +11,8 @@ import PostFeaturedMediaV2 from "../PostFeaturedMedia/PostFeatureMediaV2";
 import CategoryBadgeListV2 from "../CategoryBadgeList/CategoryBadgeListV2";
 import PostCardMetaV2 from "../PostCardMeta/PostCardMetaV2";
 import PostCardMetaV3 from "../PostCardMeta/PostCardMetaV3";
+import PostCardLikeAndCommentV2 from "../PostCardLikeAndComment/PostCardLikeAndComment2";
+import PostCardSaveActionV2 from "../PostCardSaveAction/PostCardSaveActionV2";
 
 export interface Card11Props {
   className?: string;
@@ -66,8 +68,8 @@ const Card11V2: FC<Card11Props> = ({
           </Link>
         </h2>
         <div className="flex items-end justify-between mt-auto">
-          {/* <PostCardLikeAndComment className="relative" postData={post} />
-          <PostCardSaveAction className="relative" postData={post} /> */}
+          <PostCardLikeAndCommentV2 className="relative" postData={post} />
+          <PostCardSaveActionV2 className="relative" postData={post} />
         </div>
       </div>
     </div>
