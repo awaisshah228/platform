@@ -1,16 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IBlog, ICategory } from '../../utils/types'
-import { getLatestBlogs, getTrendingBlogs } from "./blogActions";
+import { getHomeBlogs, getLatestBlogs, getTrendingBlogs } from "./blogActions";
 
 
 interface blogs{
   trendingBlogs?:IBlog[]
   latestBlogs?:IBlog[]
+  homeBlogs?:IBlog[]
 }
 
 const initialState: blogs={
   trendingBlogs:[],
-  latestBlogs:[]
+  latestBlogs:[],
+  homeBlogs:[]
 };
 
 const categorySlice = createSlice({
@@ -29,6 +31,10 @@ const categorySlice = createSlice({
     builder
       .addCase(getLatestBlogs.fulfilled, (state, action) => {
         state.latestBlogs=action.payload
+      })
+    builder
+      .addCase(getHomeBlogs.fulfilled, (state, action) => {
+        state.homeBlogs=action.payload
       })
    
   

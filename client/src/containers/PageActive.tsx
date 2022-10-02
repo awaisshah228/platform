@@ -3,7 +3,8 @@ import LayoutPage from "../components/LayoutPage/LayoutPage";
 import Input from "../components/Input/Input";
 import ButtonPrimary from "../components/Button/ButtonPrimary";
 import NcLink from "../components/NcLink/NcLink";
-import { Helmet } from "react-helmet";
+import { Helmet} from 'react-helmet-async';
+
 import { response } from "express";
 
 export interface PageForgotPassProps {

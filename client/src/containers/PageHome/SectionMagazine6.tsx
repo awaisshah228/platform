@@ -1,14 +1,19 @@
 import React, { FC, useEffect, useState } from "react";
-import { PostDataType } from "../../data/types";
-import HeaderFilter from "./HeaderFilter";
+
 import NcImage from "../../components/NcImage/NcImage";
-import PostCardMeta from "../../components/PostCardMeta/PostCardMeta";
 import { Link } from "react-router-dom";
-import CardAuthor2 from "../../components/CardAuthor2/CardAuthor2";
+import CardAuthor2V2 from "../../components/CardAuthor2/CardAuthor2V2";
+import PostCardMetaV3 from "../../components/PostCardMeta/PostCardMetaV3";
+import { Tab } from "@headlessui/react";
+import Heading from "../../components/Heading/Heading";
+import twFocusClass from "../../utils/twFocusClass";
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
 
 export interface SectionMagazine6Props {
   tabs: string[];
-  posts: PostDataType[];
+  posts: any;
   heading?: string;
   className?: string;
 }
@@ -27,14 +32,22 @@ const SectionMagazine6: FC<SectionMagazine6Props> = ({
     }
     setTabActive(item);
   };
-  useEffect(()=>{
-     setTabActive(tabs[0]) 
-  },[tabs])
+  
 
-  const renderMain = () => {
-    const { featuredImage, author, title, date, desc, href, readingTime } =
-      posts[0];
-    const subPosts = posts.filter((_, i) => i > 0);
+  const RenderMain = (items) => {
+    // const [posts, setposts] = useState(items)
+    const {
+      thumbnail: featuredImage,
+      user: author,
+      title,
+      date,
+      desc,
+      href,
+      readingTime,
+      id,
+    } = items.blogs[0];
+    // console.log(posts[0].blogs[0])
+    const subPosts = items.blogs.filter((_, i) => i > 0);
     return (
       <main className="relative">
         {/* Image */}
@@ -48,7 +61,7 @@ const SectionMagazine6: FC<SectionMagazine6Props> = ({
           <div className="group dark absolute md:w-1/2 lg:w-2/3 max-w-2xl flex flex-col justify-end p-5 lg:p-14">
             <div className="">
               <h2 className="nc-card-title text-2xl lg:text-3xl xl:text-4xl font-semibold text-white">
-                <Link to={href} className="line-clamp-2">
+                <Link to={`/blog/${id}`} className="line-clamp-2">
                   {title}
                 </Link>
               </h2>
@@ -58,10 +71,10 @@ const SectionMagazine6: FC<SectionMagazine6Props> = ({
             </div>
 
             <div className="mt-7">
-              <CardAuthor2
+              <CardAuthor2V2
                 readingTime={readingTime}
                 date={date}
-                author={author}
+                user={author}
               />
             </div>
           </div>
@@ -72,13 +85,13 @@ const SectionMagazine6: FC<SectionMagazine6Props> = ({
           <div className="flow-root h-full w-full overflow-y-auto hiddenScrollbar">
             <div className="-my-5 md:-my-7 divide-y divide-neutral-200 dark:divide-neutral-700">
               {subPosts.map((post) => (
-                <div key={post.id} className="block py-5 lg:py-7">
+                <div key={post._id} className="block py-5 lg:py-7">
                   <h2 className="nc-card-title text-base font-semibold">
-                    <Link to={post.href} className="line-clamp-2">
+                    <Link to={`/blog/${post._id}`} className="line-clamp-2">
                       {post.title}
                     </Link>
                   </h2>
-                  <PostCardMeta className="mt-4" meta={post} />
+                  <PostCardMetaV3 className="mt-4" meta={post} />
                 </div>
               ))}
             </div>
@@ -90,14 +103,47 @@ const SectionMagazine6: FC<SectionMagazine6Props> = ({
 
   return (
     <div className={`nc-SectionMagazine6 ${className}`}>
-      <HeaderFilter
-        tabActive={tabActive}
-        tabs={tabs}
-        heading={heading}
-        onClickTab={handleClickTab}
-      />
-      {!posts.length && <span>Nothing we found!</span>}
-      {posts[0] && renderMain()}
+      <Heading>{heading}</Heading>
+
+      <Tab.Group>
+        <Tab.List
+          className="relative flex w-full overflow-x-auto text-sm md:text-base nc-Nav"
+          data-nc-id="Nav"
+        >
+          {posts.map((category) => (
+            <Tab
+              key={category._id}
+              className={({ selected }) =>
+                classNames(
+                  // "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700",
+                  // "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2",
+                  `${twFocusClass()}`,
+                  "px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize block !leading-none font-medium nc-NavItem relative rounded-full",
+                  selected
+                    ? "bg-secondary-900 text-secondary-50"
+                    : "text-neutral-500 dark:text-neutral-400 dark:hover:text-neutral-100 hover:text-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                )
+              }
+            >
+              {category.name}
+            </Tab>
+          ))}
+        </Tab.List>
+        <Tab.Panels className="mt-2">
+          {posts.map((posts, idx) => (
+            <Tab.Panel
+              key={idx}
+              className={classNames(
+                "rounded-xl bg-white p-3",
+                "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2"
+              )}
+            >
+              <div>hi</div>
+              {RenderMain(posts)}
+            </Tab.Panel>
+          ))}
+        </Tab.Panels>
+      </Tab.Group>
     </div>
   );
 };

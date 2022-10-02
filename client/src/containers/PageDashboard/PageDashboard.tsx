@@ -8,7 +8,8 @@ import DashboardPosts from "./DashboardPosts";
 import DashboardRoot from "./DashboardRoot";
 import DashboardSubcription from "./DashboardSubcription";
 import DashboardSubmitPost from "./DashboardSubmitPost";
-import { Helmet } from "react-helmet";
+import { Helmet} from 'react-helmet-async';
+
 import PrivatePage from "../../routers/PrivatePage";
 import DashBoardChangePass from '../PageAdminDashboard//DashBoardChangePass';
 

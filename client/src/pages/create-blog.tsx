@@ -1,5 +1,5 @@
 import React from 'react'
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import LayoutPage from '../components/LayoutPage/LayoutPage';
 import CreatBlogPage from '../containers/BlogContainer/CreateBlogPage'
 import PrivatePage from '../routers/PrivatePage';

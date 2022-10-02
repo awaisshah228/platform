@@ -67,7 +67,7 @@ export const getCategories = createAsyncThunk(
         progress: undefined,
         });
       //
-      console.log(res.data.categories)
+      // console.log(res.data.categories)
 
       return res.data;
     } catch (error) {

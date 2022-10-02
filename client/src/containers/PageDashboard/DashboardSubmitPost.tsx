@@ -4,11 +4,12 @@ import ButtonPrimary from "../../components/Button/ButtonPrimary";
 import Select from "../../components/Select/Select";
 import Textarea from "../../components/Textarea/Textarea";
 import Label from "../../components/Label/Label";
+import CreateBlogForm from "../../components/Form/CreateBlogForm";
 
 const DashboardSubmitPost = () => {
   return (
     <div className="rounded-xl md:border md:border-neutral-100 dark:border-neutral-800 md:p-6">
-      <form className="grid md:grid-cols-2 gap-6" action="#" method="post">
+      {/* <form className="grid md:grid-cols-2 gap-6" action="#" method="post">
         <label className="block md:col-span-2">
           <Label>Post Title *</Label>
 
@@ -87,7 +88,8 @@ const DashboardSubmitPost = () => {
         <ButtonPrimary className="md:col-span-2" type="submit">
           Submit post
         </ButtonPrimary>
-      </form>
+      </form> */}
+      <CreateBlogForm />
     </div>
   );
 };

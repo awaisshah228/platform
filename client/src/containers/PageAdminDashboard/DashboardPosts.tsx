@@ -1,61 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useAppSelector } from "../../app/hook";
 import NcImage from "../../components/NcImage/NcImage";
-import Pagination from "../../components/Pagination/Pagination";
+import PaginationV2 from "../../components/Pagination/Pagination2";
+import { getAPI } from "../../utils/fetchData";
 
-const people = [
-  {
-    id: 1,
-    title: "Tokyo Fashion Week Is Making Itself Great Again",
-    image:
-      "https://images.unsplash.com/photo-1617059063772-34532796cdb5?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=60",
-    liveStatus: true,
-    payment: "Not Applicable",
-  },
-  {
-    id: 2,
-    title: "Traveling Tends to Magnify All Human Emotions",
-    image:
-      "https://images.unsplash.com/photo-1622987437805-5c6f7c2609d7?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw1fHx8ZW58MHx8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=60",
-    liveStatus: true,
-    payment: "Not Applicable",
-  },
-  {
-    id: 3,
-    title: "Interior Design: Hexagon is the New Circle in 2018",
-    image:
-      "https://images.unsplash.com/photo-1617201277988-f0efcc14e626?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxMHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=60",
-    liveStatus: true,
-    payment: "Not Applicable",
-  },
-  {
-    id: 4,
-    title: "Heritage Museums & Gardens to Open with New Landscape",
-    image:
-      "https://images.unsplash.com/photo-1622960748096-1983e5f17824?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyMHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=60",
-    liveStatus: true,
-    payment: "Not Applicable",
-  },
-  {
-    id: 5,
-    title:
-      "Man agrees to complete $5,000 Hereford Inlet Lighthouse painting job",
-    image:
-      "https://images.unsplash.com/photo-1617202227468-7597afc7046d?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyNHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=60",
-    liveStatus: false,
-    payment: "Not Applicable",
-  },
-  {
-    id: 6,
-    title:
-      "Denton Corker Marshall the mysterious black box is biennale pavilion",
-    image:
-      "https://images.unsplash.com/photo-1622978147823-33d5e241e976?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzM3x8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=60",
-    liveStatus: true,
-    payment: "Not Applicable",
-  },
-];
+
 
 const DashboardPosts = () => {
+ 
+  const [data, setdata] = useState<any>({})
+  const user=useAppSelector(state=>state.auth.user)
+
+  const populateData=async(num:number=1)=>{
+
+    const posts= await getAPI(`blog/user/${user.id}?page=${num}`)
+    setdata(posts.data)
+
+  }
+
+  useEffect(() => {
+    
+    populateData()
+    
+  }, [])
+  
+
   return (
     <div className="flex flex-col space-y-8">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -67,9 +36,9 @@ const DashboardPosts = () => {
                   <th scope="col" className="px-6 py-3">
                     Article
                   </th>
-                  <th scope="col" className="px-6 py-3">
+                  {/* <th scope="col" className="px-6 py-3">
                     Status
-                  </th>
+                  </th> */}
                   <th scope="col" className="px-6 py-3">
                     Payment
                   </th>
@@ -80,13 +49,13 @@ const DashboardPosts = () => {
                 </tr>
               </thead>
               <tbody className="bg-white dark:bg-neutral-900 divide-y divide-neutral-200 dark:divide-neutral-800">
-                {people.map((item) => (
-                  <tr key={item.id}>
+                {data.blogs?.map((item) => (
+                  <tr key={item._id}>
                     <td className="px-6 py-4">
                       <div className="flex items-center w-96 lg:w-auto max-w-md overflow-hidden">
                         <NcImage
                           containerClassName="flex-shrink-0 h-12 w-12 rounded-lg overflow-hidden lg:h-14 lg:w-14"
-                          src={item.image}
+                          src={item.thumbnail}
                         />
                         <div className="ml-4 flex-grow">
                           <h2 className="inline-flex line-clamp-2 text-sm font-semibold  dark:text-neutral-300">
@@ -95,7 +64,7 @@ const DashboardPosts = () => {
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    {/* <td className="px-6 py-4 whitespace-nowrap">
                       {item.liveStatus ? (
                         <span className="px-2 inline-flex text-xs leading-5 font-medium rounded-full bg-teal-100 text-teal-900 lg:text-sm">
                           Active
@@ -105,9 +74,9 @@ const DashboardPosts = () => {
                           Offline
                         </span>
                       )}
-                    </td>
+                    </td> */}
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">
-                      <span> {item.payment}</span>
+                      <span> {item.type?? 'free'}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium text-neutral-300">
                       <a
@@ -132,7 +101,8 @@ const DashboardPosts = () => {
         </div>
       </div>
 
-      <Pagination />
+      {/* <Pagination /> */}
+      <PaginationV2 total={data.total} callback={populateData} />
     </div>
   );
 };

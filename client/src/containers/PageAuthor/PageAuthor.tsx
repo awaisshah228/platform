@@ -9,7 +9,8 @@ import NavItem from "../../components/NavItem/NavItem";
 import Avatar from "../../components/Avatar/Avatar";
 import SocialsList from "../../components/SocialsList/SocialsList";
 import ArchiveFilterListBox from "../../components/ArchiveFilterListBox/ArchiveFilterListBox";
-import { Helmet } from "react-helmet";
+import { Helmet} from 'react-helmet-async';
+
 import SectionSubscribe2 from "../../components/SectionSubscribe2/SectionSubscribe2";
 import Card11 from "../../components/Card11/Card11";
 import BackgroundSection from "../../components/BackgroundSection/BackgroundSection";

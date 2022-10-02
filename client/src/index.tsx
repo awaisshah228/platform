@@ -9,6 +9,8 @@ import { PersistGate } from "redux-persist/integration/react";
 import Router from "./routers";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
+
 
 
 const root = ReactDOM.createRoot(
@@ -16,6 +18,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
+    <HelmetProvider>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <Router />
@@ -32,6 +35,8 @@ root.render(
       draggable
       pauseOnHover
     />
+    </HelmetProvider>
+    
   </React.StrictMode>
 );
 

@@ -7,7 +7,8 @@ import googleSvg from "../images/Google.svg";
 import Input from "../components/Input/Input";
 import ButtonPrimary from "../components/Button/ButtonPrimary";
 import NcLink from "../components/NcLink/NcLink";
-import { Helmet } from "react-helmet";
+import { Helmet} from 'react-helmet-async';
+
 import * as Yup from 'yup'
 import LoginForm from './../components/Form/LoginForm';
 import GoogleLoginForm from "../components/Oauth/GoogleLoginForm";

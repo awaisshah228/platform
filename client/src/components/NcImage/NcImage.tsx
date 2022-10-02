@@ -19,7 +19,7 @@ const NcImage: FC<NcImageProps> = ({
   className = "object-cover w-full h-full",
   ...args
 }) => {
-  const[isMounted,setIsMounted]  = useState(false);
+  let isMounted = false;
   const _containerRef = useRef(null);
   let _imageEl: HTMLImageElement | null = null;
   // const darkmodeState = useAppSelector(selectDarkmodeState);
@@ -61,12 +61,12 @@ const NcImage: FC<NcImageProps> = ({
   };
 
   useEffect(() => {
-    setIsMounted(true);
+    isMounted = true;
     _initActions();
     return () => {
-      setIsMounted(false)
+      isMounted = false;
     };
-  }, [__src,src]);
+  }, [src]);
 
   const renderLoadingPlaceholder = () => {
     return (
@@ -74,7 +74,7 @@ const NcImage: FC<NcImageProps> = ({
         className={`${className} flex items-center justify-center bg-neutral-200 dark:bg-neutral-6000 text-neutral-100 dark:text-neutral-500`}
       >
         <div className="h-2/4 max-w-[50%]">
-         {!__src && <PlaceIcon />} 
+          <PlaceIcon />
         </div>
       </div>
     );

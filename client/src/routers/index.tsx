@@ -8,7 +8,7 @@ import PageDashboard from "../containers/PageDashboard/PageDashboard";
 import { useAppSelector,useAppDispatch } from "../app/hook";
 import PageAdminDashboard from "../containers/PageAdminDashboard/PageAdminDashboard";
 import { getCategories } from "../app/category/categoryActions";
-import { getLatestBlogs, getTrendingBlogs } from "../app/blogs/blogActions";
+import { getHomeBlogs, getLatestBlogs, getTrendingBlogs } from "../app/blogs/blogActions";
 
 
 
@@ -25,7 +25,6 @@ const Index = () => {
     dispatch(getTrendingBlogs())
     dispatch(getLatestBlogs())
     // dispatch(refreshToken())
-    // dispatch(getHomeBlogs())
   },[dispatch])
   return (
     <BrowserRouter>

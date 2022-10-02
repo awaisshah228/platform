@@ -4,7 +4,8 @@ import SectionHero2 from "./SectionHero2";
 import becomAuthorImg from "../../images/BecomeAnAuthorImg.png";
 import { DEMO_POSTS, DEMO_POSTS_VIDEO } from "../../data/posts";
 import { DEMO_AUTHORS } from "../../data/authors";
-import { Helmet } from "react-helmet";
+import { Helmet} from 'react-helmet-async';
+
 import SectionSubscribe2 from "../../components/SectionSubscribe2/SectionSubscribe2";
 import BackgroundSection from "../../components/BackgroundSection/BackgroundSection";
 import SectionAds from "./SectionAds";
@@ -16,8 +17,9 @@ import SectionGridPosts from "./SectionGridPosts";
 import BgGlassmorphism from "../../components/BgGlassmorphism/BgGlassmorphism";
 import SectionTrending from "./SectionTrending";
 import SectionMagazine6 from "./SectionMagazine6";
-import { useAppSelector } from "../../app/hook";
+import { useAppDispatch, useAppSelector } from "../../app/hook";
 import SectionGridLatestPosts from "./SectionGridLatestPost";
+import { getHomeBlogs } from "../../app/blogs/blogActions";
 
 // DEMO POST FOR MAGAZINE SECTION
 
@@ -90,9 +92,12 @@ const PageHomeDemo4: React.FC = () => {
 
   const trendingPost=useAppSelector(state=>state.blogs.trendingBlogs)
   const latestPost=useAppSelector(state=>state.blogs.latestBlogs)
+  const homePost=useAppSelector(state=>state.blogs.homeBlogs)
   const categories=useAppSelector(state=>state.category)
-  console.log(categories)
+  console.log(homePost)
   const MAGAZINE1_TABS = categories.map(item=> item.name);
+  const dispatch= useAppDispatch()
+
 
 
   
@@ -107,6 +112,11 @@ const PageHomeDemo4: React.FC = () => {
       }
     };
   }, [categories]);
+
+  useEffect(()=>{
+    dispatch(getHomeBlogs())
+
+  },[])
 
   return (
     <div className="nc-PageHomeDemo4 relative">
@@ -154,7 +164,7 @@ const PageHomeDemo4: React.FC = () => {
             <SectionMagazine6
               className="py-16 lg:py-28"
               heading="🧩 Editor Picks"
-              posts={MAGAZINE1_POSTS}
+              posts={homePost}
               tabs={MAGAZINE1_TABS.sort()}
             />
 
@@ -173,13 +183,13 @@ const PageHomeDemo4: React.FC = () => {
             <SectionSubscribe2 className="py-16 lg:py-28" />
 
             {/* === SECTION 6 === */}
-            <SectionAds />
+            {/* <SectionAds /> */}
 
             {/* SECTION 3 */}
             <SectionVideos className="py-16 lg:py-28" />
 
             {/* === SECTION 7 === */}
-            <div className="relative py-16">
+            {/* <div className="relative py-16">
               <BackgroundSection />
               <SectionGridPosts
                 headingIsCenter
@@ -189,7 +199,7 @@ const PageHomeDemo4: React.FC = () => {
                 posts={DEMO_POSTS_VIDEO.filter((_, i) => i > 5 && i < 12)}
                 gridClass="sm:grid-cols-2 lg:grid-cols-3"
               />
-            </div>
+            </div> */}
 
             {/* === SECTION 7 === */}
             <SectionBecomeAnAuthor

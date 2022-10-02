@@ -25,7 +25,7 @@ const PostCardMetaV3: FC<PostCardMetaV2Props> = ({
       } ${className}`}
       data-nc-id="PostCardMetaV2"
     >
-      <Link to={`/profile/${author?.id}`} className="relative flex items-center space-x-2">
+      <Link to={`/profile/${author?.id??author._id}`} className="relative flex items-center space-x-2">
         {!hiddenAvatar && (
           <Avatar
             radius="rounded-full"
