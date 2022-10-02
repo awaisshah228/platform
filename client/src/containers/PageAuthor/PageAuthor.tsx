@@ -22,6 +22,8 @@ import NcImage from "../../components/NcImage/NcImage";
 import { useParams } from "react-router-dom";
 import { getAPI } from "../../utils/fetchData";
 import { toast } from "react-toastify";
+import Card11V2 from "../../components/Card11/Card11V2";
+import PaginationV2 from "../../components/Pagination/Pagination2";
 
 export interface PageAuthorProps {
   className?: string;
@@ -40,18 +42,29 @@ const TABS = ["Articles", "Favorites", "Saved"];
 const PageAuthor: FC<PageAuthorProps> = ({ className = "" }) => {
   const [tabActive, setTabActive] = useState<string>(TABS[0]);
 
-  const [initialValues, setinitialValues] = useState({ name: "", avatar: "" });
+  const [initialValues, setinitialValues] = useState<any>({ name: "", avatar: "" ,post:{}});
   const { slug } = useParams();
-  const populateData = async () => {
+  const populateData = async (num:number=1) => {
     try {
       const res = await getAPI(`user/${slug}`);
       // console.log(res)
       // setinitialValues(res)
       let profile = res.data;
+      // setinitialValues({
+      //   name: profile.name,
+      //   avatar: profile.avatar,
+      // });
+      // localhost:8000/v1/blog/user/631e26e5e53c0fdc0460aeff?limit=9
+      const res2 = await getAPI(`blog/user/${slug}?limit=12&page=${num}`);
+      // console.log(res2)
       setinitialValues({
+        // ...initialValues,
         name: profile.name,
         avatar: profile.avatar,
-      });
+        posts: res2.data
+      })
+      // console.log(initialValues)
+
     } catch (error) {
       if (error.response && error.response.data.errors) {
         console.log(error.response.data.errors);
@@ -150,14 +163,14 @@ const PageAuthor: FC<PageAuthorProps> = ({ className = "" }) => {
 
           {/* LOOP ITEMS */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 mt-8 lg:mt-10">
-            {posts.map((post) => (
-              <Card11 key={post.id} post={post} />
+            {initialValues.posts?.blogs?.map((post) => (
+              <Card11V2 key={post.id} post={post} />
             ))}
           </div>
 
           {/* PAGINATION */}
           <div className="flex flex-col mt-12 lg:mt-16 space-y-5 sm:space-y-0 sm:space-x-3 sm:flex-row sm:justify-between sm:items-center">
-            <Pagination />
+            <PaginationV2 total={initialValues.posts?.total} callback={populateData} />
             <ButtonPrimary>Show me more</ButtonPrimary>
           </div>
         </main>
