@@ -141,7 +141,15 @@ const blogCtrl = {
       // array -> object
       { $unwind: "$category" },
       // Sorting
-      { $sort: { createdAt: -1 } },
+      // { $sort: {
+      //   //  createdAt: -1,
+
+      //   name:1 } },
+      {
+        $project: {
+          content: 0,
+        },
+      },
       // Group by category
       {
         $group: {
@@ -155,9 +163,15 @@ const blogCtrl = {
       {
         $project: {
           blogs: {
-            $slice: ["$blogs", 0, 4],
+            $slice: ["$blogs", 0, 5],
+            // content: -1
           },
           count: 1,
+          name: 1,
+        },
+      },
+      {
+        $sort: {
           name: 1,
         },
       },
@@ -230,6 +244,7 @@ const blogCtrl = {
   },
   getBlogsByUser: async (req: Request, res: Response) => {
     const { limit, skip } = Pagination(req);
+    console.log(req.query)
 
     const Data = await Blog.aggregate([
       {
@@ -258,6 +273,7 @@ const blogCtrl = {
             { $sort: { createdAt: -1 } },
             { $skip: skip },
             { $limit: limit },
+            { $project: { content: 0 } },
           ],
           totalCount: [
             {
@@ -307,12 +323,20 @@ const blogCtrl = {
     return res.json(blog);
   },
   updateBlog: async (req: IReqAuth, res: Response) => {
+    const thumbnialCheck: any = await Blog.findOne({ _id: req.user?.id });
     const blog = await Blog.findOneAndUpdate(
       {
         _id: req.params.id,
         user: req.user?.id,
       },
-      req.body
+      {
+        ...req.body,
+
+        thumbnail: req.file ? req.file?.location : thumbnialCheck?.thumbnail,
+      },
+      {
+        new: true,
+      }
     );
 
     if (!blog) throw new BadRequestError("Invalid authentication");

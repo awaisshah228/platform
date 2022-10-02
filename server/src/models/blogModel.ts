@@ -9,6 +9,7 @@ interface BlogAttrs {
     category: string
     likes?:[]
     views?: number
+    type?: string
 }
 
 interface BlogModel extends mongoose.Model<BlogDoc> {
@@ -23,6 +24,7 @@ interface BlogDoc extends mongoose.Document {
     category: string
     likes:[]
     views: number
+    type: string
 }
 
 const blogSchema = new mongoose.Schema(
@@ -57,6 +59,11 @@ const blogSchema = new mongoose.Schema(
       default: 0
     },
     category: { type: mongoose.Types.ObjectId, ref: "Category" },
+    type:{
+      type : String,
+      enum:['free','premium'],
+      default: 'free'
+    }
   },
   {
     timestamps: true,

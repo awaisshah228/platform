@@ -23,11 +23,17 @@ router.get('/home', blogCtrl.getHomeBlogs)
 
 router.get('/category/:id', blogCtrl.getBlogsByCategory)
 
-// router.get('/blogs/user/:id', blogCtrl.getBlogsByUser)
+router.get('/user/:id', blogCtrl.getBlogsByUser)
 
 router.route('/:id')
   .get(blogCtrl.getBlog)
-//   .put(auth, blogCtrl.updateBlog)
+  .put(requireAuth,upload.single('thumbnail'),
+  [ body("title").notEmpty().withMessage("You must supply a name").isLength({min:10,max:50}).withMessage("Provide title between 10 to 50 chracter"),
+  body("content").notEmpty().withMessage("You must provide conent").isLength({min:500}).withMessage("Provide content more than 500"),
+  body("category").notEmpty().withMessage("You must provide category")
+],
+  validateRequest,
+  blogCtrl.updateBlog)
 //   .delete(auth, blogCtrl.deleteBlog)
 
 // router.get('/search/blogs', blogCtrl.searchBlogs)
