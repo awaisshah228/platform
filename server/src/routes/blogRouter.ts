@@ -34,9 +34,19 @@ router.route('/:id')
 ],
   validateRequest,
   blogCtrl.updateBlog)
-//   .delete(auth, blogCtrl.deleteBlog)
+  .delete(requireAuth, blogCtrl.deleteBlog)
 
-// router.get('/search/blogs', blogCtrl.searchBlogs)
+router.get('/search/blogs', blogCtrl.searchBlogs)
+
+router.patch('/:id/like', requireAuth, blogCtrl.likeBlog)
+
+router.patch('/:id/unlike', requireAuth, blogCtrl.unLikeBlog)
+
+router.patch('/saveBlog/:id', requireAuth, blogCtrl.saveBlog)
+
+router.patch('/unSaveBlog/:id', requireAuth, blogCtrl.unSaveBlog)
+
+router.get('/savePosts', requireAuth, blogCtrl.getSaveBlogs)
 
 
 export default router;

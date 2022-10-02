@@ -5,6 +5,7 @@ import { Category } from "../models/categoryModel";
 import { IReqAuth } from "../utils/interface";
 import { Comment } from "../models/commentModel";
 import mongoose from "mongoose";
+import { User } from "../models/userModel";
 // import mongoose from 'mongoose'
 
 const Pagination = (req: IReqAuth) => {
@@ -244,7 +245,7 @@ const blogCtrl = {
   },
   getBlogsByUser: async (req: Request, res: Response) => {
     const { limit, skip } = Pagination(req);
-    console.log(req.query)
+    console.log(req.query);
 
     const Data = await Blog.aggregate([
       {
@@ -269,6 +270,16 @@ const blogCtrl = {
             },
             // array -> object
             { $unwind: "$user" },
+            {
+              $lookup: {
+                from: "categories",
+                localField: "category",
+                foreignField: "_id",
+                as: "category",
+              },
+            },
+            // array -> object
+            { $unwind: "$category" },
             // Sorting
             { $sort: { createdAt: -1 } },
             { $skip: skip },
@@ -383,6 +394,80 @@ const blogCtrl = {
     if (!blogs.length) throw new BadRequestError("No blog found");
 
     res.json(blogs);
+  },
+  likeBlog: async (req: IReqAuth, res: Response) => {
+    const post = await Blog.find({ _id: req.params.id, likes: req.user?.id });
+    if (post.length > 0) throw new BadRequestError("You already like it");
+
+    const like = await Blog.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $push: { likes: req.user?.id },
+      },
+      { new: true }
+    );
+
+    if (!like) throw new BadRequestError("This post does not exist.");
+
+    res.json({ msg: "Liked Post!" });
+  },
+  unLikeBlog: async (req: IReqAuth, res: Response) => {
+    const like = await Blog.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $pull: { likes: req.user?.id },
+      },
+      { new: true }
+    );
+
+    if (!like) throw new BadRequestError("This post does not exist.");
+
+    res.json({ msg: "UnLiked Post!" });
+  },
+  saveBlog: async (req: IReqAuth, res: Response) => {
+    const user = await User.find({ _id: req.user?.id, saved: req.params.id });
+    if (user.length > 0)
+      return res.status(400).json({ msg: "You saved this post." });
+
+    const save = await User.findOneAndUpdate(
+      { _id: req.user?.id },
+      {
+        $push: { saved: req.params.id },
+      },
+      { new: true }
+    );
+
+    if (!save) throw new BadRequestError("This user does not exist.");
+
+    res.json({ msg: "Saved Post!" });
+  },
+  unSaveBlog: async (req: IReqAuth, res: Response) => {
+    const save = await User.findOneAndUpdate(
+      { _id: req.user?.id },
+      {
+        $pull: { saved: req.params.id },
+      },
+      { new: true }
+    );
+
+    if (!save) throw new BadRequestError("This user does not exist.");
+
+    res.json({ msg: "unSaved Post!" });
+  },
+  getSaveBlogs: async (req: IReqAuth, res: Response) => {
+    const features = new APIfeatures(
+      Blog.find({
+        _id: { $in: req.user?.saved },
+      }),
+      req.query
+    ).paginating();
+
+    const savePosts = await features.query.sort("-createdAt");
+
+    res.json({
+      savePosts,
+      result: savePosts.length,
+    });
   },
 };
 
