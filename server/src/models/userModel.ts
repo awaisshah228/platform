@@ -5,8 +5,9 @@ import bcrypt from "bcrypt";
 // that are requried to create a new User
 interface UserAttrs {
   name: string;
-  account: string;
+  account?: string;
   password: string;
+  address?: string;
 }
 
 // An interface that describes the properties
@@ -26,6 +27,7 @@ interface UserDoc extends mongoose.Document {
   type: string;
   activated: boolean;
   rf_token: string;
+  nonce: string
   saved:[]
 }
 const userSchema = new mongoose.Schema(
@@ -63,6 +65,7 @@ const userSchema = new mongoose.Schema(
       type : Boolean,
       default : false
     } ,
+    address: String,
     rf_token: { type: String, select: false },
     saved: [{type: mongoose.Types.ObjectId, ref:'Blog'}]
   },

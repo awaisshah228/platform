@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import { User } from "../models/userModel";
+import { Nonce } from "../models/nonceModel";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { generateNonce, isValidMessageHash } from "../utils/ethHelper";
 import {
   generateActiveToken,
   generateAccessToken,
@@ -18,11 +20,14 @@ import {
   IUserParams,
   IReqAuth,
 } from "../utils/interface";
+// import { verifyMessage } from 'ethers/lib/utils'
+
 
 import { OAuth2Client } from "google-auth-library";
 // import fetch from "node-fetch";
 import axios from "axios";
 import { CustomError } from "../errors/custom-errors";
+import { getArbitraryCode } from "../utils/ethHelper";
 
 const client = new OAuth2Client(`${process.env.MAIL_CLIENT_ID}`);
 const CLIENT_URL = `${process.env.BASE_URL}`;
@@ -263,6 +268,70 @@ const authCtrl = {
       registerUser(user, res);
     }
   },
+  createNonce:async (req:Request,res:Response)=>{
+
+    const nonce = generateNonce();
+    const {address}=req.body 
+
+
+    const reqSign:any = Nonce.build({nonce,address});
+    await reqSign.save()
+
+    const msg= getArbitraryCode(address,nonce)
+
+
+
+    return res.json({...reqSign._doc,msg})
+
+  },
+  metamaskLogin:async (req:Request,res:Response)=>{
+
+       const {nonce, signature}=req.body
+    const signingRequst = await Nonce.findOne({      nonce
+    }
+    );
+
+
+    if (!signingRequst) {
+      throw new BadRequestError('invalid signing request');
+    }
+
+    const address = signingRequst.address;
+      const validSignature = isValidMessageHash(
+        signature,
+        address,
+        nonce
+      );
+
+
+      if (!validSignature) {
+        throw new BadRequestError('invalid signing request');
+      }
+
+      const  user = await User.findOne({address});
+
+      const password = address + "your facebook secrect password";
+      if (user) {
+        loginUser(user, password, res, "metamask");
+      } else {
+        const user = {
+          name: address.substring(0,5),
+          address: address,
+          password: password,
+          type: "metamask",
+          account:'example@gmail.com'
+        };
+        registerUser(user, res);
+      }
+
+   
+
+
+
+    // return res.json({msg: "done"})
+
+  },
+  
   forgotPassword: async (req: Request, res: Response) => {
     const { account } = req.body;
 

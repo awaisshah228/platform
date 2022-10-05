@@ -326,7 +326,7 @@ const blogCtrl = {
     )
       .populate("user", "-password")
       .populate("category");
-    console.log(req.ip);
+    // console.log(blog);
     // console.log(req.socket.remoteAddress);
 
     if (!blog) throw new BadRequestError("Blog does not exist.");

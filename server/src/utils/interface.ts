@@ -35,10 +35,11 @@ export interface IGgPayload {
 
 export interface IUserParams {
   name: string 
-  account: string 
+  account?: string 
   password: string
   avatar?: string
   type: string
+  address?: string
 }
 
 export interface IReqAuth extends Request {
