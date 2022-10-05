@@ -53,11 +53,11 @@ const Card11V2: FC<Card11Props> = ({
       </span>
 
       <div className="p-4 flex flex-col flex-grow space-y-3">
-        {!hiddenAuthor ? (
+        {/* {!hiddenAuthor ? (
           <PostCardMetaV3 meta={post} />
         ) : (
           <span className="text-xs text-neutral-500">{date}</span>
-        )}
+        )} */}
         <h2 className="nc-card-title block text-base font-semibold text-neutral-900 dark:text-neutral-100 ">
           <Link
             to={`/blog/${id}`}

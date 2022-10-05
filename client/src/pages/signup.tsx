@@ -6,7 +6,7 @@ const Signup = () => {
   return (
     <RedirectHome>
       <PageSignUp />
-    </RedirectHome>
+     </RedirectHome>
     
   )
 }

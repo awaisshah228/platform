@@ -8,36 +8,38 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import Router from "./routers";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
+import "react-toastify/dist/ReactToastify.css";
+import { Helmet, HelmetProvider } from "react-helmet-async";
+import { Web3ConnectorConfig } from "./utils/web3/Connector";
 
-
+// import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <HelmetProvider>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <Router />
-      </PersistGate>
-    </Provider>
-    <ToastContainer
-      position="top-right"
-      autoClose={5000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover
-    />
-    </HelmetProvider>
-    
-  </React.StrictMode>
+  // <React.StrictMode>
+    <Web3ConnectorConfig>
+      <HelmetProvider>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <Router />
+          </PersistGate>
+        </Provider>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+      </HelmetProvider>
+    </Web3ConnectorConfig>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

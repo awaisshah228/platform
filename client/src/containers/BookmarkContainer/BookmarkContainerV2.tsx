@@ -16,7 +16,7 @@ const BookmarkContainerV2: React.FC<BookmarkContainerProps> = (props) => {
   const { postId, initBookmarked } = props;
   const recentSaveds = useAppSelector(selectRecentSaveds);
   const recentRemoveds = useAppSelector(selectRecentRemoveds);
-  const saved:any=useAppSelector(state=>state.auth.user.saved)
+  const saved:any=useAppSelector(state=>state.auth.user?.saved)
   const dispatch = useAppDispatch();
   const isBookmarked = () => {
     // if (saved.includes(postId)) {

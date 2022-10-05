@@ -14,6 +14,7 @@ import LoginForm from './../components/Form/LoginForm';
 import GoogleLoginForm from "../components/Oauth/GoogleLoginForm";
 import FacebookLoginForm from "../components/Oauth/FacebookLoginForm";
 import SMSLoginForm from "../components/Oauth/SMSLogin";
+import MetaMaskLoginForm from "../components/Oauth/MetaMaskLoginForm";
 
 export interface PageLoginProps {
   className?: string;
@@ -21,6 +22,12 @@ export interface PageLoginProps {
 }
 
 const loginSocials = [
+  {
+    name: "Continue with MetaMask",
+    href: "#",
+    icon: facebookSvg,
+    component :({item})=> <MetaMaskLoginForm />
+  },
   {
     name: "Continue with Facebook",
     href: "#",

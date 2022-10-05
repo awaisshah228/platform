@@ -21,7 +21,7 @@ const FacebookLoginForm = ({ item }) => {
     <FacebookLogin
       appId="622252749605587"
       // appId={`${process.env.REACT_APP_APP_ID}`}
-      autoLoad={true}
+      autoLoad={false}
       fields="name,email,picture"
       callback={responseFacebook}
       render={renderProps => (

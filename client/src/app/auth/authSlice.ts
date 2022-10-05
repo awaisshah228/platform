@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { login, register , logout, googleLogin, facebookLogin, smsLogin, smsVerify, editProfile } from './authActions'
+import { login, register , logout, googleLogin, facebookLogin, smsLogin, smsVerify, editProfile, metaMaskLogin } from './authActions'
 import { IUser } from '../../utils/types'
 
 
@@ -54,6 +54,11 @@ const authSlice = createSlice({
         state.user= action.payload.user;
        
       })
+      .addCase(metaMaskLogin.fulfilled, (state, action) => {
+        state.access_token=action.payload.access_token
+        state.user= action.payload.user;
+       
+      })
       .addCase(smsVerify.fulfilled, (state, action) => {
         state.access_token=action.payload.access_token
         state.user= action.payload.user;
@@ -64,13 +69,13 @@ const authSlice = createSlice({
         // state.user= action.payload.user;
        
       })
-      .addCase(register.fulfilled, (state, action) => {
+      // .addCase(register.fulfilled, (state, action) => {
        
-      })
-      .addCase(register.rejected, (state, action) => {
+      // })
+      // .addCase(register.rejected, (state, action) => {
         
        
-      })
+      // })
       // .addCase(refreshToken.fulfilled, (state, action) => {
        
       // })

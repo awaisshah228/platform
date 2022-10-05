@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useAppSelector } from "../../app/hook";
 import NcImage from "../../components/NcImage/NcImage";
 import PaginationV2 from "../../components/Pagination/Pagination2";
@@ -79,12 +80,13 @@ const DashboardPosts = () => {
                       <span> {item.type?? 'free'}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium text-neutral-300">
-                      <a
-                        href="/#"
+                      <Link
+                        // href="/#"
+                        to={`/dashboard/edit-blog/${item._id}`}
                         className="text-primary-800 dark:text-primary-500 hover:text-primary-900"
                       >
                         Edit
-                      </a>
+                      </Link>
                       {` | `}
                       <a
                         href="/#"

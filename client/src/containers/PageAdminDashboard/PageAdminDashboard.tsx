@@ -13,6 +13,7 @@ import { Helmet} from 'react-helmet-async';
 import PrivatePage from "../../routers/PrivatePage";
 import DashBoardCategory from "./DashBoardCategory";
 import DashBoardChangePass from './DashBoardChangePass';
+import DashboardEditBlog from './DashBoardEditBlog';
 
 export interface PageDashboardProps {
   className?: string;
@@ -165,6 +166,7 @@ const PageAdminDashboard: FC<PageDashboardProps> = ({ className = "" }) => {
               <Route path="categories" element={<DashBoardCategory />} />
               <Route path="posts" element={<DashboardPosts />} />
               <Route path="edit-profile" element={<DashboardEditProfile />} />
+              <Route path="edit-blog/:id" element={<DashboardEditBlog />} />
               <Route path="change-pass" element={<DashBoardChangePass />} />
               <Route path="subscription" element={<DashboardSubcription />} />
               <Route
