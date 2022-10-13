@@ -35,6 +35,8 @@ export interface IUser extends IUserLogin {
   id: string
   saved:string[]
   likes:string[]
+  address?: string
+
 }
 
 export interface IUserProfile extends IUserRegister {

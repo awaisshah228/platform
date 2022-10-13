@@ -205,3 +205,101 @@ export const getHomeBlogs = createAsyncThunk(
     }
   }
 );
+
+// export const updateBlog = (blog: IBlog, token: string) => 
+// async (dispatch: Dispatch<IAlertType>) => {
+//   const result = await checkTokenExp(token, dispatch)
+//   const access_token = result ? result : token
+//   let url;
+//   try {
+//     dispatch({ type: ALERT, payload: { loading: true } })
+    
+//     if(typeof(blog.thumbnail) !== 'string'){
+//       const photo = await imageUpload(blog.thumbnail)
+//       url = photo.url
+//     }else{
+//       url = blog.thumbnail
+//     }
+    
+//     const newBlog = {...blog, thumbnail: url}
+
+//     const res = await putAPI(`blog/${newBlog._id}`, newBlog, access_token)
+
+//     dispatch({ type: ALERT, payload: { success: res.data.msg } })
+//   } catch (err: any) {
+//     dispatch({ type: ALERT, payload: {errors: err.response.data.msg} })
+//   }
+// }
+
+
+// export const deleteBlog = (blog: IBlog, token: string) => 
+// async (dispatch: Dispatch<IAlertType | IDeleteBlogsUserType>) => {
+//   const result = await checkTokenExp(token, dispatch)
+//   const access_token = result ? result : token
+//   try {
+//     dispatch({
+//       type: DELETE_BLOGS_USER_ID,
+//       payload: blog
+//     })
+
+//     await deleteAPI(`blog/${blog._id}`, access_token)
+
+//   } catch (err: any) {
+//     dispatch({ type: ALERT, payload: {errors: err.response.data.msg} })
+//   }
+// }
+
+// export const likePost = ({post, auth, socket}) => async (dispatch) => {
+//   const newPost = {...post, likes: [...post.likes, auth.user]}
+//   dispatch({ type: POST_TYPES.UPDATE_POST, payload: newPost})
+
+//   socket.emit('likePost', newPost)
+
+//   try {
+//       await patchDataAPI(`post/${post._id}/like`, null, auth.token)
+      
+//       // Notify
+//       const msg = {
+//           id: auth.user._id,
+//           text: 'like your post.',
+//           recipients: [post.user._id],
+//           url: `/post/${post._id}`,
+//           content: post.content, 
+//           image: post.images[0].url
+//       }
+
+//       dispatch(createNotify({msg, auth, socket}))
+
+//   } catch (err) {
+//       dispatch({
+//           type: GLOBALTYPES.ALERT,
+//           payload: {error: err.response.data.msg}
+//       })
+//   }
+// }
+
+// export const unLikePost = ({post, auth, socket}) => async (dispatch) => {
+//   const newPost = {...post, likes: post.likes.filter(like => like._id !== auth.user._id)}
+//   dispatch({ type: POST_TYPES.UPDATE_POST, payload: newPost})
+
+//   socket.emit('unLikePost', newPost)
+
+//   try {
+//       await patchDataAPI(`post/${post._id}/unlike`, null, auth.token)
+
+//       // Notify
+//       const msg = {
+//           id: auth.user._id,
+//           text: 'like your post.',
+//           recipients: [post.user._id],
+//           url: `/post/${post._id}`,
+//       }
+//       dispatch(removeNotify({msg, auth, socket}))
+
+//   } catch (err) {
+//       dispatch({
+//           type: GLOBALTYPES.ALERT,
+//           payload: {error: err.response.data.msg}
+//       })
+//   }
+// }

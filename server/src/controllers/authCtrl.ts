@@ -319,7 +319,7 @@ const authCtrl = {
           address: address,
           password: password,
           type: "metamask",
-          account:'example@gmail.com'
+          account:`${address}@gmail.com`
         };
         registerUser(user, res);
       }

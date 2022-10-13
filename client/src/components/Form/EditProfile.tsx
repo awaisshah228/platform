@@ -20,6 +20,7 @@ function EditProfile() {
   const [initialValues, setinitialValues] = useState({
     name: "",
     account: "",
+    address: "",
     file: "",
   });
 
@@ -38,6 +39,7 @@ function EditProfile() {
       setinitialValues({
         name: user.name,
         account: user.account,
+        address: user.address??'0X00',
 
         file: "",
       });
@@ -52,6 +54,7 @@ function EditProfile() {
 
   const validationSchema = Yup.object({
     name: Yup.string().required("Required"),
+    address: Yup.string().required("Required"),
     account: Yup.string()
       .required("Email/Phone Number is required")
       .test("test-name", "Enter Valid Phone/Email", function (value) {
@@ -68,8 +71,8 @@ function EditProfile() {
       }), 
   });
 
-  const onSubmit = async ({ name, account, file }) => {
-    dispatch(editProfile({ name, account, file }));
+  const onSubmit = async ({ name, account, file ,address}) => {
+    dispatch(editProfile({ name, account, file,address }));
   };
 
   return (
@@ -138,6 +141,13 @@ function EditProfile() {
                 type="text"
                 label="Email/Phone"
                 name="account"
+                className="md:col-start-1 md:col-end-3"
+              />
+              <FormikControl
+                control="input"
+                type="text"
+                label="Wallet Adress"
+                name="address"
                 className="md:col-start-1 md:col-end-3"
               />
 

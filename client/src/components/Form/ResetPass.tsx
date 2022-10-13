@@ -7,6 +7,7 @@ import { useAppDispatch } from "../../app/hook";
 import { register } from "../../app/auth/authActions";
 import PrivatePage from "../../routers/PrivatePage";
 import { changePass } from "../../app/auth/authActions";
+import LayoutPage from "../LayoutPage/LayoutPage";
 function ResetPass() {
   const dispatch = useAppDispatch();
 
@@ -32,8 +33,14 @@ function ResetPass() {
   };
 
   return (
-    <PrivatePage>
-      <Formik
+    // <PrivatePage>
+       <LayoutPage
+        subHeading="We have sent OTP to Your number Please  Verify"
+        headingEmoji="🔐"
+        heading="Phone Verification"
+      >
+        <div className="max-w-md mx-auto space-y-6">
+        <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
@@ -62,7 +69,11 @@ function ResetPass() {
         );
       }}
     </Formik>
-    </PrivatePage>
+        </div>
+        
+      </LayoutPage>
+      
+    // </PrivatePage>
   );
 }
 

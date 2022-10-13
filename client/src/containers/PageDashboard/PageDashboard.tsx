@@ -7,11 +7,12 @@ import DashboardEditProfile from "./DashboardEditProfile";
 import DashboardPosts from "./DashboardPosts";
 import DashboardRoot from "./DashboardRoot";
 import DashboardSubcription from "./DashboardSubcription";
-import DashboardSubmitPost from "./DashboardSubmitPost";
+import DashboardSubmitPost from "../PageAdminDashboard/DashboardSubmitPost";
 import { Helmet} from 'react-helmet-async';
 
 import PrivatePage from "../../routers/PrivatePage";
 import DashBoardChangePass from '../PageAdminDashboard//DashBoardChangePass';
+import DashboardEditBlog from "../PageAdminDashboard/DashBoardEditBlog";
 
 
 
@@ -147,6 +148,8 @@ const PageDashboard: FC<PageDashboardProps> = ({ className = "" }) => {
                 path="billing-address"
                 element={<DashboardBillingAddress />}
               />
+                            <Route path="edit-blog/:id" element={<DashboardEditBlog />} />
+
               <Route path="submit-post" element={<DashboardSubmitPost />} />
               <Route path="*" element={<DashboardRoot />} />
             </Routes>

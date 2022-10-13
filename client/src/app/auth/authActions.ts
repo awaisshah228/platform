@@ -509,7 +509,7 @@ export const forgotPass = createAsyncThunk(
 );
 export const editProfile = createAsyncThunk(
   "auth/editProfile",
-  async ({name,account,file}:any, { rejectWithValue }) => {
+  async ({name,account,file,address}:any, { rejectWithValue }) => {
     try {
 
       console.log(file)
@@ -518,6 +518,7 @@ export const editProfile = createAsyncThunk(
       bodyFormData.append('name', name);
       bodyFormData.append('account', account);
       bodyFormData.append('file', file);
+      bodyFormData.append('address', address);
 
       
       const res:any= await patchAPI('user/',bodyFormData)
