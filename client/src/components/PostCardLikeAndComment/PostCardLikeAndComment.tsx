@@ -19,7 +19,7 @@ const PostCardLikeAndComment: FC<PostCardLikeAndCommentProps> = ({
   onClickLike = () => {},
 }) => {
 
-  console.log(postData)
+  // console.log(postData)
   return (
     <div
       className={`nc-PostCardLikeAndComment flex items-center space-x-2 ${className}`}

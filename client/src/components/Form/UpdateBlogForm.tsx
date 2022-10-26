@@ -127,6 +127,7 @@ const UpdateBlogForm = ({slug}) => {
   const populateData = async () => {
     try {
         const res= await getAPI(`blog/${slug}`)
+        // setinitialState(res.data)
       
     } catch (error) {}
   };

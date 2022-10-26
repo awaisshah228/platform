@@ -4,6 +4,8 @@ import { useAppSelector } from "../../app/hook";
 import NcImage from "../../components/NcImage/NcImage";
 import PaginationV2 from "../../components/Pagination/Pagination2";
 import { getAPI } from "../../utils/fetchData";
+import { deleteBlog } from "../../app/blogs/blogActions";
+import { useAppDispatch } from "../../app/hook";
 
 
 
@@ -11,6 +13,7 @@ const DashboardPosts = () => {
  
   const [data, setdata] = useState<any>({})
   const user=useAppSelector(state=>state.auth.user)
+  const dispatch= useAppDispatch();
 
   const populateData=async(num:number=1)=>{
 
@@ -89,7 +92,8 @@ const DashboardPosts = () => {
                       </Link>
                       {` | `}
                       <a
-                        href="/#"
+                        href="#"
+                        onClick={()=>dispatch(deleteBlog({id:item._id}))}
                         className="text-rose-600 hover:text-rose-900"
                       >
                         Delete

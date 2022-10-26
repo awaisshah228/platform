@@ -63,6 +63,10 @@ const blogSchema = new mongoose.Schema(
       type : String,
       enum:['free','premium'],
       default: 'free'
+    },
+    registered:{
+      type: Boolean,
+      default: false
     }
   },
   {

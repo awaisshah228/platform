@@ -25,18 +25,9 @@ router.get('/category/:id', blogCtrl.getBlogsByCategory)
 
 router.get('/user/:id', blogCtrl.getBlogsByUser)
 
-router.route('/:id')
-  .get(blogCtrl.getBlog)
-  .put(requireAuth,upload.single('thumbnail'),
-  [ body("title").notEmpty().withMessage("You must supply a name").isLength({min:10,max:50}).withMessage("Provide title between 10 to 50 chracter"),
-  body("content").notEmpty().withMessage("You must provide conent").isLength({min:500}).withMessage("Provide content more than 500"),
-  body("category").notEmpty().withMessage("You must provide category id")
-],
-  validateRequest,
-  blogCtrl.updateBlog)
-  .delete(requireAuth, blogCtrl.deleteBlog)
 
-router.get('/search/blogs', blogCtrl.searchBlogs)
+
+router.get('/search', blogCtrl.searchBlogs)
 
 router.patch('/:id/like', requireAuth, blogCtrl.likeBlog)
 
@@ -47,6 +38,18 @@ router.patch('/saveBlog/:id', requireAuth, blogCtrl.saveBlog)
 router.patch('/unSaveBlog/:id', requireAuth, blogCtrl.unSaveBlog)
 
 router.get('/savePosts', requireAuth, blogCtrl.getSaveBlogs)
+router.get('/heroPost', blogCtrl.getFeatureBlog)
+
+router.route('/:id')
+  .get(blogCtrl.getBlog)
+  .put(requireAuth,upload.single('thumbnail'),
+  [ body("title").notEmpty().withMessage("You must supply a name").isLength({min:10,max:50}).withMessage("Provide title between 10 to 50 chracter"),
+  body("content").notEmpty().withMessage("You must provide conent").isLength({min:500}).withMessage("Provide content more than 500"),
+  body("category").notEmpty().withMessage("You must provide category id")
+],
+  validateRequest,
+  blogCtrl.updateBlog)
+  .delete(requireAuth, blogCtrl.deleteBlog)
 
 
 export default router;

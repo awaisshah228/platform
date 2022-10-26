@@ -13,7 +13,7 @@ import Select from "react-select";
 import * as Yup from "yup";
 import TextError from "./TextError";
 import { useAppDispatch } from "./../../app/hook";
-import { createBlog } from "./../../app/blogs/blogActions";
+import { createBlog, updateBlog } from "./../../app/blogs/blogActions";
 import ReactQuilCustom from "../Editor/ReactQuilCustom";
 import { useParams } from "react-router-dom";
 import { getAPI } from "../../utils/fetchData";
@@ -44,20 +44,20 @@ const EditBlogForm = () => {
   const validationSchema = Yup.object({
     title: Yup.string().required("Required").min(10).max(90),
     description: Yup.string().required("Required").min(50).max(300),
-    category: Yup.string().required("Required"),
+    // category: Yup.string().required("Required"),
     content: Yup.string().required("Required").min(600),
     thumbnail: Yup.mixed()
       .required("A file is required")
-      .test(
-        "fileSize",
-        "File too large",
-        (value) => value && value.size <= FILE_SIZE
-      )
-      .test(
-        "fileFormat",
-        "Unsupported Format",
-        (value) => value && SUPPORTED_FORMATS.includes(value.type)
-      ),
+      // .test(
+      //   "fileSize",
+      //   "File too large",
+      //   (value) => value && value.size <= FILE_SIZE
+      // )
+      // .test(
+      //   "fileFormat",
+      //   "Unsupported Format",
+      //   (value) => value && SUPPORTED_FORMATS.includes(value.type)
+      // ),
   });
 
   const container = [
@@ -108,8 +108,10 @@ const EditBlogForm = () => {
     category,
     content,
     thumbnail,
+    type
   }) => {
-    dispatch(createBlog({ title, description, category, content, thumbnail }));
+    // console.log(category.id)
+    dispatch(updateBlog({ title, description, category:category.id, content, thumbnail,id,type }));
   };
 
   return (
@@ -149,6 +151,40 @@ const EditBlogForm = () => {
                     </p>
                     <ErrorMessage component={TextError} name="description" />
                   </label>
+                  <label className="block ">
+                  <Label>Type *</Label>
+                  <Field
+                    name="type"
+                    render={({ field }) => (
+                      <div className="flex flex-row space-x-2">
+                        <div className="flex p-2 items-center gap-2">
+                          <input
+                            {...field}
+                            id="free"
+                            value="free"
+                            checked={field.value === "free"}
+                            name="type"
+                            type="radio"
+                          />
+                          <label htmlFor="Free">Free</label>
+                        </div>
+
+                        <div className="flex p-2 items-center gap-2">
+                          <input
+                            {...field}
+                            id="premium"
+                            value="premium"
+                            name="type"
+                            checked={field.value === "premium"}
+                            type="radio"
+                          />
+                          <label htmlFor="premium">Premium</label>
+                        </div>
+                      </div>
+                    )}
+                  />
+                  <ErrorMessage component={TextError} name="title" />
+                </label>
                   <label className="block">
                     <Label>Category</Label>
                     <Select

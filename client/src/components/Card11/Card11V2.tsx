@@ -28,7 +28,7 @@ const Card11V2: FC<Card11Props> = ({
   ratio = "aspect-w-4 aspect-h-3",
 }) => {
   const { title, href, categories, date, category, id } = post;
-  console.log(post)
+  // console.log(post)
 
   const [isHover, setIsHover] = useState(false);
 

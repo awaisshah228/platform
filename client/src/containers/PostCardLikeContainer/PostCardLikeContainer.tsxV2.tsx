@@ -56,7 +56,7 @@ const PostCardLikeContainerV2: FC<PostCardLikeContainerProps> = ({
     // }
     // console.log(post.likes.lenght??0)
     // return like.length;
-    console.log(post?.likes?.length)
+    // console.log(post?.likes?.length)
     return post?.likes?.length??0;
   };
 
@@ -68,7 +68,7 @@ const PostCardLikeContainerV2: FC<PostCardLikeContainerProps> = ({
     // }
     // onClickLike && onClickLike(postId);
   };
-  console.log(post)
+  // console.log(post)
 
   return (
     // <div>Hi</div>

@@ -17,7 +17,7 @@ const PostCardMetaV3: FC<PostCardMetaV2Props> = ({
   size = "normal",
 }) => {
   const { createdAt:date, user:author, title } = meta;
-  console.log(meta)
+  // console.log(meta)
   return (
     <div
       className={`nc-PostCardMetaV2 inline-flex items-center flex-wrap text-neutral-800 dark:text-neutral-200 ${

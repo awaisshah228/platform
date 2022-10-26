@@ -66,7 +66,7 @@ class APIfeatures {
 
 const blogCtrl = {
   createBlog: async (req: IReqAuth, res: Response) => {
-    const { title, content, description, category } = req.body;
+    const { title, content, description, category,type } = req.body;
 
     const categoryCheck: any = await Category.findOne({ name: category });
     console.log(categoryCheck);
@@ -78,6 +78,7 @@ const blogCtrl = {
       description,
       thumbnail: req.file?.location,
       category: categoryCheck._id,
+      type
     });
 
     await newBlog.save();
@@ -160,6 +161,7 @@ const blogCtrl = {
           count: { $sum: 1 },
         },
       },
+ 
       // Pagination for blogs
       {
         $project: {
@@ -175,6 +177,15 @@ const blogCtrl = {
         $sort: {
           name: 1,
         },
+      },
+
+      {
+        $match:{
+          name:{
+            $in:['mern','devops']
+          }
+
+        }
       },
     ]);
 
@@ -319,7 +330,7 @@ const blogCtrl = {
     res.json({ blogs, total });
   },
   getBlog: async (req: Request, res: Response) => {
-    const blog = await Blog.findOneAndUpdate(
+    const blog:any = await Blog.findOneAndUpdate(
       { _id: req.params.id },
       { $inc: { views: 1 } },
       { new: true }
@@ -330,8 +341,14 @@ const blogCtrl = {
     // console.log(req.socket.remoteAddress);
 
     if (!blog) throw new BadRequestError("Blog does not exist.");
+    if(blog.type=='free'){
+      return res.json(blog);
+    }
+    // console.log({...blog})
 
-    return res.json(blog);
+    return res.json({...blog?._doc,content: blog.content.split(' ').slice(0, 100).join(' ')})
+
+    
   },
   updateBlog: async (req: IReqAuth, res: Response) => {
     const thumbnialCheck: any = await Blog.findOne({ _id: req.user?.id });
@@ -372,7 +389,7 @@ const blogCtrl = {
     const blogs = await Blog.aggregate([
       {
         $search: {
-          index: "searchTitle",
+          index: "search",
           autocomplete: {
             query: `${req.query.title}`,
             path: "title",
@@ -468,6 +485,49 @@ const blogCtrl = {
       savePosts,
       result: savePosts.length,
     });
+  },
+  getFeatureBlog: async (req: Request, res: Response) => {
+    const blog = await Blog.aggregate([
+      //lookup
+      {
+        $lookup: {
+          from: "users",
+          let: { user_id: "$user" },
+          pipeline: [
+            {
+              $match: { $expr: { $eq: ["$_id", "$$user_id"] }, role: "admin" },
+            },
+            { $project: { password: 0 } },
+          ],
+          as: "user",
+        },
+      },
+      // array -> object
+
+      //
+      { $unwind: "$user" },
+      // {
+      //   $project: {
+      //     content: 0,
+      //   },
+      // },
+      {
+        $sort: {
+          createdAt: -1,
+        },
+      },
+      {
+        $limit: 1,
+      },
+
+      //
+      // {
+      //   $match:{
+      //     role:'user'
+      //   }
+      // }
+    ]);
+    res.json(blog[0]);
   },
 };
 

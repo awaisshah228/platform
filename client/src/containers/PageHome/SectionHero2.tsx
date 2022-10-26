@@ -60,7 +60,7 @@ const SectionHero2: FC<SectionHero2Props> = ({
           <div className="flex space-x-4 mt-11">
             <ButtonPrimary href={href}>Read more</ButtonPrimary>
 
-            <NcModal
+            {/* <NcModal
               isOpenProp={showVideo}
               onCloseModal={() => setShowVideo(false)}
               contentExtraClass="max-w-screen-lg 2xl:max-w-screen-xl"
@@ -68,7 +68,7 @@ const SectionHero2: FC<SectionHero2Props> = ({
               renderContent={renderVideoModalContent}
               renderTrigger={renderOpenModalVideo}
               modalTitle=""
-            />
+            /> */}
           </div>
         </div>
       </div>

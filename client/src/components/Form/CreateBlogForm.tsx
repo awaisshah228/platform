@@ -12,15 +12,16 @@ import FormikControl from "./FormikControl";
 import Select from "react-select";
 import * as Yup from "yup";
 import TextError from "./TextError";
-import { useAppDispatch } from './../../app/hook';
-import { createBlog } from './../../app/blogs/blogActions';
+import { useAppDispatch } from "./../../app/hook";
+import { createBlog } from "./../../app/blogs/blogActions";
 import ReactQuilCustom from "../Editor/ReactQuilCustom";
+import RadioButtons from "./RadioButtons";
 
 const CreateBlogForm = () => {
   const user = useAppSelector((state) => state.auth.user);
   const categories = useAppSelector((state) => state.category);
   // const [options, setoptions] = useState([])
-  const dispatch= useAppDispatch()
+  const dispatch = useAppDispatch();
 
   const options = categories.map((item, key) => {
     return { value: item.id, label: item.name };
@@ -41,7 +42,8 @@ const CreateBlogForm = () => {
     thumbnail: null,
     // "https://images.unsplash.com/photo-1440778303588-435521a205bc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
     title: "Title",
-    description: "Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.",
+    description:
+      "Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.",
     date: new Date().toLocaleDateString("en-US", dateOptions),
     href: "#",
     commentCount: 0,
@@ -75,9 +77,10 @@ const CreateBlogForm = () => {
         color: "indigo",
       },
     ],
-    category:'',
+    category: "",
     postType: "standard",
     content: "",
+    type: "free",
   });
   const validationSchema = Yup.object({
     title: Yup.string().required("Required").min(10).max(90),
@@ -116,12 +119,20 @@ const CreateBlogForm = () => {
     ["clean", "link", "image", "video"],
   ];
 
-
   const modules = { toolbar: { container } };
-  
-  const handleSubmit=({title,description,category,content,thumbnail})=>{
-       dispatch(createBlog({title,description,category,content,thumbnail}))
-  }
+
+  const handleSubmit = ({
+    title,
+    description,
+    category,
+    content,
+    thumbnail,
+    type,
+  }) => {
+    dispatch(
+      createBlog({ title, description, category, content, thumbnail, type })
+    );
+  };
 
   return (
     <>
@@ -148,6 +159,7 @@ const CreateBlogForm = () => {
                   <Field name="title" as={Input} />
                   <ErrorMessage component={TextError} name="title" />
                 </label>
+
                 <label className="block ">
                   <Label>Post Excerpt</Label>
 
@@ -157,7 +169,40 @@ const CreateBlogForm = () => {
                     Brief description for your article. URLs are hyperlinked.
                   </p>
                   <ErrorMessage component={TextError} name="description" />
+                </label>
+                <label className="block ">
+                  <Label>Type *</Label>
+                  <Field
+                    name="type"
+                    render={({ field }) => (
+                      <div className="flex flex-row space-x-2">
+                        <div className="flex p-2 items-center gap-2">
+                          <input
+                            {...field}
+                            id="free"
+                            value="free"
+                            checked={field.value === "free"}
+                            name="type"
+                            type="radio"
+                          />
+                          <label htmlFor="Free">Free</label>
+                        </div>
 
+                        <div className="flex p-2 items-center gap-2">
+                          <input
+                            {...field}
+                            id="premium"
+                            value="premium"
+                            name="type"
+                            checked={field.value === "premium"}
+                            type="radio"
+                          />
+                          <label htmlFor="premium">Premium</label>
+                        </div>
+                      </div>
+                    )}
+                  />
+                  <ErrorMessage component={TextError} name="title" />
                 </label>
                 <label className="block">
                   <Label>Category</Label>
@@ -169,16 +214,14 @@ const CreateBlogForm = () => {
                     className="basic-multi-select"
                     classNamePrefix="select"
                     // value={formik.values.categories}
-                    onChange={(value: any) =>{
+                    onChange={(value: any) => {
                       formik.setFieldValue("categories", [
                         { name: value.label },
-                      ])
-                      formik.setFieldValue('category',value.label)
-                    }
-                     
-                    }
+                      ]);
+                      formik.setFieldValue("category", value.label);
+                    }}
                   />
-                  <ErrorMessage  name='category' component={TextError}/>
+                  <ErrorMessage name="category" component={TextError} />
                 </label>
 
                 <div className="block md:col-span-2">
@@ -186,7 +229,9 @@ const CreateBlogForm = () => {
 
                   <div
                     className={`mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-neutral-300 dark:border-neutral-700 ${
-                      !formik.values.thumbnail ? "border-dashed" : "border-solid"
+                      !formik.values.thumbnail
+                        ? "border-dashed"
+                        : "border-solid"
                     } rounded-md`}
                   >
                     <div className="space-y-1 text-center">
@@ -231,7 +276,10 @@ const CreateBlogForm = () => {
                             className="sr-only"
                             // value={formik.values.featuredImage}
                             onChange={(e) => {
-                              formik.setFieldValue("thumbnail", e.target.files[0]);
+                              formik.setFieldValue(
+                                "thumbnail",
+                                e.target.files[0]
+                              );
                               formik.setFieldValue(
                                 "featuredImage",
                                 URL.createObjectURL(e.target.files[0])
@@ -244,7 +292,7 @@ const CreateBlogForm = () => {
                     </div>
                   </div>
                   {/* {formik.values.thumbnail && formik.values.thumbnail.name} */}
-                <ErrorMessage name='thumbnail' component={TextError}/>
+                  <ErrorMessage name="thumbnail" component={TextError} />
                 </div>
               </div>
               <div className="flex flex-col  gap-4 justify-center ">
@@ -264,10 +312,7 @@ const CreateBlogForm = () => {
                   <ErrorMessage name="content" component={TextError} />
                 </label>
                 <Field name="content">
-                  {({ field }) => (
-                    
-                    <ReactQuilCustom field={field}/>
-                  )}
+                  {({ field }) => <ReactQuilCustom field={field} />}
                 </Field>
               </div>
 

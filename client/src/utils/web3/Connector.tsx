@@ -59,7 +59,7 @@ import { publicProvider } from "wagmi/providers/public";
 
 
 export const { provider, chains } = configureChains(
-  [chain.ropsten],
+  [chain.mainnet],
   [
     publicProvider(),
   ]

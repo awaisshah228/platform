@@ -44,7 +44,7 @@ const SectionMagazine6: FC<SectionMagazine6Props> = ({
       desc,
       href,
       readingTime,
-      id,
+      _id,
     } = items.blogs[0];
     // console.log(posts[0].blogs[0])
     const subPosts = items.blogs.filter((_, i) => i > 0);
@@ -61,7 +61,7 @@ const SectionMagazine6: FC<SectionMagazine6Props> = ({
           <div className="group dark absolute md:w-1/2 lg:w-2/3 max-w-2xl flex flex-col justify-end p-5 lg:p-14">
             <div className="">
               <h2 className="nc-card-title text-2xl lg:text-3xl xl:text-4xl font-semibold text-white">
-                <Link to={`/blog/${id}`} className="line-clamp-2">
+                <Link to={`/blog/${_id}`} className="line-clamp-2">
                   {title}
                 </Link>
               </h2>

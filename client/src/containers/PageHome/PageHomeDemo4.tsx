@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import SectionVideos from "./SectionVideos";
 import SectionHero2 from "./SectionHero2";
 import becomAuthorImg from "../../images/BecomeAnAuthorImg.png";
@@ -20,6 +20,7 @@ import SectionMagazine6 from "./SectionMagazine6";
 import { useAppDispatch, useAppSelector } from "../../app/hook";
 import SectionGridLatestPosts from "./SectionGridLatestPost";
 import { getHomeBlogs } from "../../app/blogs/blogActions";
+import { getAPI } from "../../utils/fetchData";
 
 // DEMO POST FOR MAGAZINE SECTION
 
@@ -94,7 +95,8 @@ const PageHomeDemo4: React.FC = () => {
   const latestPost=useAppSelector(state=>state.blogs.latestBlogs)
   const homePost=useAppSelector(state=>state.blogs.homeBlogs)
   const categories=useAppSelector(state=>state.category)
-  console.log(homePost)
+  const [hero, sethero] = useState(null)
+  // console.log(homePost)
   const MAGAZINE1_TABS = categories.map(item=> item.name);
   const dispatch= useAppDispatch()
 
@@ -113,10 +115,19 @@ const PageHomeDemo4: React.FC = () => {
     };
   }, [categories]);
 
+  const getHero=async()=>{
+       const hero=await getAPI('blog/heroPost')
+
+       console.log(hero.data)
+       sethero(hero.data)
+  }
+
   useEffect(()=>{
     dispatch(getHomeBlogs())
+    getHero()
 
   },[])
+  
 
   return (
     <div className="nc-PageHomeDemo4 relative">
@@ -130,13 +141,11 @@ const PageHomeDemo4: React.FC = () => {
       {/* ======== ALL SECTIONS ======== */}
       <div className="relative">
         <SectionHero2
-          href={`/blog/`}
+          href={`/blog/${hero?._id}`}
           youtubeID="qTsXfGVjm1w"
-          rightImg="https://images.pexels.com/photos/4666750/pexels-photo-4666750.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-          heading="The hidden world of whale culture"
-          subHeading="From singing competitions to food preferences, scientists are
-          learning whales have cultural differences once thought to be unique
-          to humans."
+          rightImg={hero?.thumbnail??""}
+          heading={hero?.title}
+          subHeading={hero?.description }
         />
         <div className="relative overflow-hidden">
           {/* ======== BG GLASS ======== */}

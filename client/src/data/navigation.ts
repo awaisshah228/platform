@@ -433,14 +433,14 @@ export const NAVIGATION_SHORT_DEMO: NavItemType[] = [
   },
   {
     id: ncNanoId(),
-    href: "#",
-    name: "Discover",
+    href: "/about",
+    name: "About",
     // type: "dropdown",
     // children: templateChilds,
   },
   {
     id: ncNanoId(),
-    href: "/about",
-    name: "How it works",
+    href: "/contact",
+    name: "Contact Us",
   },
 ];
