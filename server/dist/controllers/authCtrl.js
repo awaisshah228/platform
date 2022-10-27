@@ -13,17 +13,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const userModel_1 = require("../models/userModel");
+const nonceModel_1 = require("../models/nonceModel");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const ethHelper_1 = require("../utils/ethHelper");
 const generateToken_1 = require("../utils/generateToken");
 const sendMail_1 = __importDefault(require("../utils/sendMail"));
 const errors_1 = require("../errors");
 const valid_1 = require("../utils/valid");
 const sendSMS_1 = require("../utils/sendSMS");
+// import { verifyMessage } from 'ethers/lib/utils'
 const google_auth_library_1 = require("google-auth-library");
 // import fetch from "node-fetch";
 const axios_1 = __importDefault(require("axios"));
 const custom_errors_1 = require("../errors/custom-errors");
+const ethHelper_2 = require("../utils/ethHelper");
 const client = new google_auth_library_1.OAuth2Client(`${process.env.MAIL_CLIENT_ID}`);
 const CLIENT_URL = `${process.env.BASE_URL}`;
 const authCtrl = {
@@ -206,6 +210,43 @@ const authCtrl = {
             };
             registerUser(user, res);
         }
+    }),
+    createNonce: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        const nonce = (0, ethHelper_1.generateNonce)();
+        const { address } = req.body;
+        const reqSign = nonceModel_1.Nonce.build({ nonce, address });
+        yield reqSign.save();
+        const msg = (0, ethHelper_2.getArbitraryCode)(address, nonce);
+        return res.json(Object.assign(Object.assign({}, reqSign._doc), { msg }));
+    }),
+    metamaskLogin: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        const { nonce, signature } = req.body;
+        const signingRequst = yield nonceModel_1.Nonce.findOne({ nonce
+        });
+        if (!signingRequst) {
+            throw new errors_1.BadRequestError('invalid signing request');
+        }
+        const address = signingRequst.address;
+        const validSignature = (0, ethHelper_1.isValidMessageHash)(signature, address, nonce);
+        if (!validSignature) {
+            throw new errors_1.BadRequestError('invalid signing request');
+        }
+        const user = yield userModel_1.User.findOne({ address });
+        const password = address + "your facebook secrect password";
+        if (user) {
+            loginUser(user, password, res, "metamask");
+        }
+        else {
+            const user = {
+                name: address.substring(0, 5),
+                address: address,
+                password: password,
+                type: "metamask",
+                account: `${address}@blogfore.com`
+            };
+            registerUser(user, res);
+        }
+        // return res.json({msg: "done"})
     }),
     forgotPassword: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const { account } = req.body;

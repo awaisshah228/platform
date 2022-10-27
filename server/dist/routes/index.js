@@ -11,6 +11,7 @@ const authRouter_1 = __importDefault(require("./authRouter"));
 const userRouter_1 = __importDefault(require("./userRouter"));
 const categoryRouter_1 = __importDefault(require("./categoryRouter"));
 const blogRouter_1 = __importDefault(require("./blogRouter"));
+const imageRouter_1 = __importDefault(require("./imageRouter"));
 const options = {
     definition: {
         openapi: '3.0.0',
@@ -35,4 +36,5 @@ api.use('/auth', authRouter_1.default);
 api.use('/user', userRouter_1.default);
 api.use('/category', categoryRouter_1.default);
 api.use('/blog', blogRouter_1.default);
+api.use('/image', imageRouter_1.default);
 exports.default = api;

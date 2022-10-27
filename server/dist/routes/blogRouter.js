@@ -15,12 +15,23 @@ router.post('/', require_auth_1.requireAuth, upload_file_1.default.single('thumb
     (0, express_validator_1.body)("content").notEmpty().withMessage("You must provide conent").isLength({ min: 500 }).withMessage("Provide content more than 500"),
     (0, express_validator_1.body)("category").notEmpty().withMessage("You must provide category")
 ], validate_request_1.validateRequest, blogCtrl_1.default.createBlog);
-// router.get('/home/blogs', blogCtrl.getHomeBlogs)
-// router.get('/blogs/category/:id', blogCtrl.getBlogsByCategory)
-// router.get('/blogs/user/:id', blogCtrl.getBlogsByUser)
-// router.route('/blog/:id')
-//   .get(blogCtrl.getBlog)
-//   .put(auth, blogCtrl.updateBlog)
-//   .delete(auth, blogCtrl.deleteBlog)
-// router.get('/search/blogs', blogCtrl.searchBlogs)
+router.get('/trending', blogCtrl_1.default.getTrendingBlogs);
+router.get('/latest', blogCtrl_1.default.getLatestBlogs);
+router.get('/home', blogCtrl_1.default.getHomeBlogs);
+router.get('/category/:id', blogCtrl_1.default.getBlogsByCategory);
+router.get('/user/:id', blogCtrl_1.default.getBlogsByUser);
+router.get('/search', blogCtrl_1.default.searchBlogs);
+router.patch('/:id/like', require_auth_1.requireAuth, blogCtrl_1.default.likeBlog);
+router.patch('/:id/unlike', require_auth_1.requireAuth, blogCtrl_1.default.unLikeBlog);
+router.patch('/saveBlog/:id', require_auth_1.requireAuth, blogCtrl_1.default.saveBlog);
+router.patch('/unSaveBlog/:id', require_auth_1.requireAuth, blogCtrl_1.default.unSaveBlog);
+router.get('/savePosts', require_auth_1.requireAuth, blogCtrl_1.default.getSaveBlogs);
+router.get('/heroPost', blogCtrl_1.default.getFeatureBlog);
+router.route('/:id')
+    .get(blogCtrl_1.default.getBlog)
+    .put(require_auth_1.requireAuth, upload_file_1.default.single('thumbnail'), [(0, express_validator_1.body)("title").notEmpty().withMessage("You must supply a name").isLength({ min: 10, max: 50 }).withMessage("Provide title between 10 to 50 chracter"),
+    (0, express_validator_1.body)("content").notEmpty().withMessage("You must provide conent").isLength({ min: 500 }).withMessage("Provide content more than 500"),
+    (0, express_validator_1.body)("category").notEmpty().withMessage("You must provide category id")
+], validate_request_1.validateRequest, blogCtrl_1.default.updateBlog)
+    .delete(require_auth_1.requireAuth, blogCtrl_1.default.deleteBlog);
 exports.default = router;

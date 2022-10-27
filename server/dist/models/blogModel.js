@@ -30,7 +30,21 @@ const blogSchema = new mongoose_1.default.Schema({
         type: String,
         require: true,
     },
+    likes: [{ type: mongoose_1.default.Types.ObjectId, ref: 'user' }],
+    views: {
+        type: Number,
+        default: 0
+    },
     category: { type: mongoose_1.default.Types.ObjectId, ref: "Category" },
+    type: {
+        type: String,
+        enum: ['free', 'premium'],
+        default: 'free'
+    },
+    registered: {
+        type: Boolean,
+        default: false
+    }
 }, {
     timestamps: true,
     toJSON: {

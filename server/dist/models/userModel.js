@@ -48,7 +48,9 @@ const userSchema = new mongoose_1.default.Schema({
         type: Boolean,
         default: false
     },
+    address: String,
     rf_token: { type: String, select: false },
+    saved: [{ type: mongoose_1.default.Types.ObjectId, ref: 'Blog' }]
 }, {
     timestamps: true,
     toJSON: {
