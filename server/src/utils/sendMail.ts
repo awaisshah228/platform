@@ -60,4 +60,5 @@ const sendEmail = async (to: string, url: string, txt: string) => {
   }
 };
 
+
 export default sendEmail;

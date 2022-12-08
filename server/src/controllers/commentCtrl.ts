@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import {Comment} from '../models/commentModel'
 import { IReqAuth } from '../utils/interface'
 import mongoose from 'mongoose'
+import { BadRequestError } from './../errors/bad-request-error';
 
 
 const Pagination = (req: IReqAuth) => {
@@ -14,10 +15,9 @@ const Pagination = (req: IReqAuth) => {
 
 const commentCtrl = {
   createComment: async (req: IReqAuth, res: Response) => {
-    if(!req.user)
-      return res.status(400).json({msg: "invalid Authentication."})
+   
 
-    try {
+   
       const { 
         content,
         blog_id,
@@ -25,7 +25,7 @@ const commentCtrl = {
       } = req.body
 
       const newComment = new Comment({ 
-        user: req.user._id,
+        user: req.user?.id,
         content,
         blog_id,
         blog_user_id
@@ -34,15 +34,12 @@ const commentCtrl = {
       await newComment.save()
 
       return res.json(newComment)
-      
-    } catch (err: any) {
-      return res.status(500).json({msg: err.message})
-    }
+   
   },
   getComments: async (req: Request, res: Response) => {
     const { limit, skip } = Pagination(req)
 
-    try {
+  
       const data = await Comment.aggregate([
         {
           $facet: {
@@ -133,15 +130,11 @@ const commentCtrl = {
 
       return res.json({ comments, total })
       
-    } catch (err: any) {
-      return res.status(500).json({msg: err.message})
-    }
   },
   replyComment: async (req: IReqAuth, res: Response) => {
-    if(!req.user)
-      return res.status(400).json({msg: "invalid Authentication."})
+  
 
-    try {
+    
       const { 
         content,
         blog_id,
@@ -152,7 +145,7 @@ const commentCtrl = {
 
 
       const newComment = new Comment({ 
-        user: req.user._id,
+        user: req.user?.id,
         content,
         blog_id,
         blog_user_id,
@@ -168,46 +161,36 @@ const commentCtrl = {
 
       return res.json(newComment)
       
-    } catch (err: any) {
-      return res.status(500).json({msg: err.message})
-    }
   },
   updateComment: async (req: IReqAuth, res: Response) => {
-    if(!req.user)
-      return res.status(400).json({msg: "invalid Authentication."})
-
-    try {
+    
       const { content } = req.body
 
       const comment = await Comment.findOneAndUpdate({
-        _id: req.params.id, user: req.user.id
+        _id: req.params.id, user: req.user?.id
       }, { content })
 
       if(!comment)
-        return res.status(400).json({msg: "Comment does not exits."})
+      throw new BadRequestError("Comment does not exits.")
 
       return res.json({msg: "Update Success!"})
       
-    } catch (err: any) {
-      return res.status(500).json({msg: err.message})
-    }
+   
   },
   deleteComment: async (req: IReqAuth, res: Response) => {
-    if(!req.user)
-      return res.status(400).json({msg: "invalid Authentication."})
+   
 
-    try {
 
       const comment = await Comment.findOneAndDelete({
         _id: req.params.id, 
         $or: [
-          { user: req.user._id },
-          { blog_user_id: req.user._id}
+          { user: req.user?._id },
+          { blog_user_id: req.user?._id}
         ]
       })
 
       if(!comment)
-        return res.status(400).json({msg: "Comment does not exits."})
+       throw new BadRequestError("Comment does not exits.")
 
       if(comment.comment_root){
         // update replyCM
@@ -221,9 +204,7 @@ const commentCtrl = {
 
       return res.json({msg: "Delete Success!"})
       
-    } catch (err: any) {
-      return res.status(500).json({msg: err.message})
-    }
+  
   }
 }
 

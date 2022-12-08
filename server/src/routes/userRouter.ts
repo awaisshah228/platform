@@ -32,6 +32,7 @@ router.patch("/reset_password", requireAuth,[ body("password")
 .isLength({ min: 4, max: 20 })
 .withMessage("Password must be between 4 and 20 characters"),],validateRequest, userCtrl.resetPassword);
 
+router.get("/", userCtrl.getUsers);
 router.get("/:id", userCtrl.getUser);
 
 export default router;

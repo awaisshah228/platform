@@ -74,6 +74,11 @@ const userCtrl = {
     }
     res.json(user);
   },
+  getUsers: async (req: Request, res: Response) => {
+    const user = await User.find({}).sort('createdAt');
+   
+    res.json(user);
+  },
 };
 
 export default userCtrl;

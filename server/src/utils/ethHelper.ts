@@ -38,3 +38,15 @@ const generateNonce=(): string=> {
 export {generateNonce,getArbitraryCode,isValidMessageHash}
 
 
+// const startBlock = xx;
+// const endBlock = xx;
+// const allEvents = [];
+
+// for(let i = startBlock; i < endBlock; i += 5000) {
+//   const _startBlock = i;
+//   const _endBlock = Math.min(endBlock, i + 4999);
+//   const events = await BNBTokenContract.queryFilter(filter, _startBlock, _endBlock);
+//   allEvents = [...allEvents, ...events]
+// }
+
+
