@@ -1,15 +1,66 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import ButtonCircle from "../Button/ButtonCircle";
 import rightImg from "../../images/SVG-subcribe2.png";
 import NcImage from "../NcImage/NcImage";
 import Badge from "../Badge/Badge";
 import Input from "../Input/Input";
+import { postAPI } from './../../utils/fetchData';
+import { toast } from "react-toastify";
 
 export interface SectionSubscribe2Props {
   className?: string;
 }
 
 const SectionSubscribe2: FC<SectionSubscribe2Props> = ({ className = "" }) => {
+
+  const [email, setemail] = useState('')
+
+
+  const signUp=async(e)=>{
+    e.preventDefault();
+
+    try {
+      const res= await postAPI('subscribe-news',{email})
+
+      if (res.data.status==400) {
+        toast.error("Already Subscribed/Something went wrong", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+      else{
+        toast("You are subscribed", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
+      }
+      console.log(res);
+    } catch (error) {
+
+      if (error.response && error.response.data.errors) {
+        toast.error("Already Subscribed/Something went wrong", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    }
+
+  }
   return (
     <div
       className={`nc-SectionSubscribe2 relative flex flex-col lg:flex-row items-center ${className}`}
@@ -35,12 +86,16 @@ const SectionSubscribe2: FC<SectionSubscribe2Props> = ({ className = "" }) => {
             </span>
           </li>
         </ul>
-        <form className="mt-10 relative max-w-sm">
+        <form className="mt-10 relative max-w-sm" onSubmit={signUp}>
           <Input
             required
             aria-required
             placeholder="Enter your email"
             type="email"
+            value={email}
+            onChange={(e)=>{
+              setemail(e.target.value)
+            }}
           />
           <ButtonCircle
             type="submit"

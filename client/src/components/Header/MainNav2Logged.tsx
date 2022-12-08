@@ -27,7 +27,7 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
             <div className="hidden sm:block h-6 border-l border-neutral-300 dark:border-neutral-6000"></div>
             <div className="flex">
               <DarkModeContainer />
-              <NotifyDropdown />
+              {/* <NotifyDropdown /> */}
             </div>
             <div></div>
             <ButtonPrimary href={"/create-blog"} sizeClass="px-4 py-2 sm:px-5">

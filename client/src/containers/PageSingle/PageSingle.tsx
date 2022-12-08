@@ -4,7 +4,7 @@ import NcImage from "../../components/NcImage/NcImage";
 import { SINGLE } from "../../data/single";
 import SingleContent from "./SingleContent";
 import { CommentType } from "../../components/CommentCard/CommentCard";
-import { useAppDispatch } from "../../app/hook";
+import { useAppDispatch, useAppSelector } from "../../app/hook";
 // import { changeCurrentPage } from "app/pages/pages";
 import SingleHeader from "./SingleHeader";
 import SingleRelatedPosts from "./SingleRelatedPosts";
@@ -20,6 +20,7 @@ export interface SinglePageType extends PostDataType {
 }
 
 const PageSingle: FC<PageSingleProps> = ({ className = "" }) => {
+  const { auth } = useAppSelector((state) => state)
   const dispatch = useAppDispatch();
 
  
@@ -46,7 +47,8 @@ const PageSingle: FC<PageSingleProps> = ({ className = "" }) => {
 
         {/* SINGLE MAIN CONTENT */}
         <div className="container">
-          <SingleContent data={SINGLE} />
+          {/* <SingleContent data={SINGLE} /> */}
+          
         </div>
 
         {/* RELATED POSTS */}

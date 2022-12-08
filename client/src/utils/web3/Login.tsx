@@ -62,7 +62,7 @@ const Login = ({address}) => {
 
     },[sig,nonce])
   return (
-    <div>{address}</div>
+    <div>Login with MetaMask</div>
   )
 }
 

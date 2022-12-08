@@ -7,6 +7,12 @@ import SingleCommentLists from "./SingleCommentLists";
 import SingleContentDemo from "./SingleContentDemo";
 import { useLocation } from "react-router";
 import SingleAuthorV2 from "./SingleAuthorV2";
+import { Link, useParams } from "react-router-dom";
+import { useAppSelector } from "../../app/hook";
+import Input from "../../components/Editor/Input";
+import { createComment } from './../../app/comments/commentAction';
+import { useAppDispatch } from './../../app/hook';
+
 
 export interface SingleContentProps {
   data: any;
@@ -15,8 +21,34 @@ export interface SingleContentProps {
 const SingleContent: FC<SingleContentProps> = ({ data }) => {
   const { tags, author, commentCount, comments } = data;
   const commentRef = useRef<HTMLDivElement>(null);
+  const auth=useAppSelector(state=>state.auth)
+  const dispatch= useAppDispatch()
   //
   const location = useLocation();
+  const {slug}=useParams()
+
+
+  const handleComment=(body)=>{
+    if(!auth.user || !auth.access_token) return;
+
+    const comment = {
+      content: body,
+      user: auth.user,
+      blog_id: data.id,
+      blog_user_id: data.user.id,
+      createdAt: new Date().toISOString()
+    }
+    console.log(comment)
+    dispatch(
+      createComment(comment)
+    );
+
+    // setShowComments([data, ...showComments])
+    // dispatch(createComment(data, auth.access_token))
+
+    // console.log(body)
+
+  }
 
   useEffect(() => {
     //  SCROLL TO COMMENT AREA
@@ -64,9 +96,18 @@ const SingleContent: FC<SingleContentProps> = ({ data }) => {
         ref={commentRef}
         className="max-w-screen-md mx-auto pt-5"
       >
-        {/* <h3 className="text-xl font-semibold text-neutral-800 dark:text-neutral-200">
+        <h3 className="text-xl font-semibold text-neutral-800 dark:text-neutral-200">
           Responses ({commentCount})
-        </h3> */}
+        </h3>
+
+
+        {
+        auth.access_token
+        ? <Input callback={handleComment} />
+        : <h5>
+          Please <Link to={`/login?blog/${slug}`}>login</Link> to comment.
+        </h5>
+      }
         {/* <SingleCommentForm
           onClickSubmit={(id) => console.log(id)}
           onClickCancel={(id) => console.log(id)}

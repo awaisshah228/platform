@@ -21,7 +21,7 @@ export interface PageLoginProps {
   // [x: string]: any
 }
 
-const loginSocials = [
+export const loginSocials = [
   {
     name: "Continue with MetaMask",
     href: "#",

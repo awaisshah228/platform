@@ -32,7 +32,7 @@ instance.interceptors.response.use(
   async (err) => {
     const originalConfig = err.config;
 
-    if (originalConfig?.url !== "/auth/login" && err.response) {
+    if (originalConfig?.url !== "/auth/login" && err.response) { // check if user is trying to login
       // Access Token was expired
       if (err.response.status === 401 && !originalConfig._retry) {
         originalConfig._retry = true;
@@ -41,11 +41,10 @@ instance.interceptors.response.use(
           const rs = await instance.get("/auth/refresh_token");
 
           const { access_token } = rs.data;
-          TokenService.updateLocalAccessToken(access_token);
+          TokenService.updateLocalAccessToken(access_token);  // updating access token in local storage
 
           return instance(originalConfig);
         } catch (error) {
-          console.log(error.response)
           TokenService.removeUser()
           if (error.response && error.response.data.errors) {
             console.log(error.response.data.errors);

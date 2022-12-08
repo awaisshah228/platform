@@ -15,19 +15,22 @@ export interface PageContactProps {
 const info = [
   {
     title: "🗺 ADDRESS",
-    desc: "Photo booth tattooed prism, portland taiyaki hoodie neutra typewriter",
+    desc: "NUST H-12, Islamabad Pakistan ",
   },
   {
     title: "💌 EMAIL",
-    desc: "nc.example@example.com",
+    desc: "m.awaisshah228@gmail.com",
   },
   {
     title: "☎ PHONE",
-    desc: "000-123-456-7890",
+    desc: "03078494092",
   },
 ];
 
 const PageContact: FC<PageContactProps> = ({ className = "" }) => {
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+  }
   return (
     <div className={`nc-PageContact ${className}`} data-nc-id="PageContact">
       <Helmet>
@@ -38,7 +41,7 @@ const PageContact: FC<PageContactProps> = ({ className = "" }) => {
         headingEmoji=""
         heading="Contact us"
       >
-        <div className="grid gap-8 lg:grid-cols-2">
+        <div className="grid gap-8 lg:grid-cols-2 ">
           <div className="max-w-sm space-y-6">
             {info.map((item, index) => (
               <div key={index}>
@@ -58,8 +61,9 @@ const PageContact: FC<PageContactProps> = ({ className = "" }) => {
             </div>
           </div>
           <div className="border border-neutral-100 dark:border-neutral-700 lg:hidden"></div>
-          <div>
-            <form className="grid grid-cols-1 gap-6" action="#" method="post">
+          {/* <div></div> */}
+          <div className="">
+            {/* <form className="grid grid-cols-1 gap-6" action="#" method="post">
               <label className="block">
                 <Label>Full name</Label>
 
@@ -80,7 +84,9 @@ const PageContact: FC<PageContactProps> = ({ className = "" }) => {
                 <Textarea className="mt-1" rows={6} />
               </label>
               <ButtonPrimary type="submit">Send Message</ButtonPrimary>
-            </form>
+            </form> */}
+            <iframe src="https://us21.list-manage.com/contact-form?u=f90aad52087ff2b746523220e&form_id=e07affcbc1643624fd665d965d5066d1" className="md:hidden block"  height='950' ></iframe>
+            <iframe width="560" height="850" src="https://us21.list-manage.com/contact-form?u=f90aad52087ff2b746523220e&form_id=e07affcbc1643624fd665d965d5066d1" title="YouTube video player" className="hidden md:block" ></iframe>
           </div>
         </div>
       </LayoutPage>

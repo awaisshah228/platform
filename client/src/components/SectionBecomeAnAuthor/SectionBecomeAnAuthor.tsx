@@ -2,6 +2,8 @@ import React, { FC } from "react";
 import NcImage from "../NcImage/NcImage";
 import rightImgDemo from "../../images/BecomeAnAuthorImg.png";
 import ButtonPrimary from "../Button/ButtonPrimary";
+import { Link } from "react-router-dom";
+import { useAppSelector } from "../../app/hook";
 
 export interface SectionBecomeAnAuthorProps {
   className?: string;
@@ -12,6 +14,7 @@ const SectionBecomeAnAuthor: FC<SectionBecomeAnAuthorProps> = ({
   className = "",
   rightImg = rightImgDemo,
 }) => {
+  const auth= useAppSelector(state=>state.auth)
   return (
     <div
       className={`nc-SectionBecomeAnAuthor relative flex flex-col lg:flex-row items-center  ${className}`}
@@ -29,7 +32,10 @@ const SectionBecomeAnAuthor: FC<SectionBecomeAnAuthorProps> = ({
           and share new perspectives on just about any topic. Everyone’s
           welcome.
         </span>
+        <Link to={auth?.access_token?'/create-blog':'/signup'}>
         <ButtonPrimary className="mt-8">Become an author</ButtonPrimary>
+        </Link>
+        
       </div>
       <div className="flex-grow">
         <NcImage src={rightImg} />

@@ -2,7 +2,7 @@ import React, { FC, useEffect, useMemo } from "react";
 import Heading from "../Heading/Heading";
 import Glide from "@glidejs/glide";
 import { PostDataType } from "../../data/types";
-import CardAuthorBox2 from "../CardAuthorBox2/CardAuthorBox2";
+import CardAuthorBox2 from "../CardAuthorBox2/CardAuthorBox2V2";
 import NextPrev from "..//NextPrev/NextPrev";
 import ncNanoId from "../../utils/ncNanoId";
 
@@ -10,7 +10,7 @@ export interface SectionSliderNewAuthorsProps {
   className?: string;
   heading: string;
   subHeading: string;
-  authors: PostDataType["author"][];
+  authors: any;
   uniqueSliderClass: string;
 }
 

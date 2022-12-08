@@ -96,6 +96,7 @@ const PageHomeDemo4: React.FC = () => {
   const homePost=useAppSelector(state=>state.blogs.homeBlogs)
   const categories=useAppSelector(state=>state.category)
   const [hero, sethero] = useState(null)
+  const [authors, setauthors] = useState(null)
   // console.log(homePost)
   const MAGAZINE1_TABS = categories.map(item=> item.name);
   const dispatch= useAppDispatch()
@@ -121,10 +122,17 @@ const PageHomeDemo4: React.FC = () => {
        console.log(hero.data)
        sethero(hero.data)
   }
+  const getAuthors=async()=>{
+       const authors=await getAPI('user/')
+
+      //  console.log(authors.data)
+       setauthors(authors.data)
+  }
 
   useEffect(()=>{
     dispatch(getHomeBlogs())
     getHero()
+    getAuthors()
 
   },[])
   
@@ -183,7 +191,7 @@ const PageHomeDemo4: React.FC = () => {
               <SectionSliderNewAuthors
                 heading="Newest authors"
                 subHeading="Say hello to future creator potentials"
-                authors={DEMO_AUTHORS.filter((_, i) => i < 10)}
+                authors={authors??[]}
                 uniqueSliderClass="PageHomeDemo4"
               />
             </div>

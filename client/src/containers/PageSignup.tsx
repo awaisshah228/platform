@@ -10,28 +10,14 @@ import NcLink from "../components/NcLink/NcLink";
 import { Helmet} from 'react-helmet-async';
 
 import RegistrationForm from './../components/Form/RegistrationForm';
+import MetaMaskLoginForm from "../components/Oauth/MetaMaskLoginForm";
+import { loginSocials } from "./PageLogin";
 
 export interface PageSignUpProps {
   className?: string;
 }
 
-const loginSocials = [
-  {
-    name: "Continue with Facebook",
-    href: "#",
-    icon: facebookSvg,
-  },
-  {
-    name: "Continue with Google",
-    href: "#",
-    icon: googleSvg,
-  },
-  {
-    name: "Continue with Mobile",
-    href: "#",
-    icon: mobSvg,
-  },
-];
+
 
 const PageSignUp: FC<PageSignUpProps> = ({ className = "" }) => {
   return (
@@ -46,7 +32,7 @@ const PageSignUp: FC<PageSignUpProps> = ({ className = "" }) => {
       >
         <div className="max-w-md mx-auto space-y-6">
           <div className="grid gap-3">
-            {loginSocials.map((item, index) => (
+            {/* {loginSocials.map((item, index) => (
               <a
                 key={index}
                 href={item.href}
@@ -61,6 +47,15 @@ const PageSignUp: FC<PageSignUpProps> = ({ className = "" }) => {
                   {item.name}
                 </h3>
               </a>
+            ))} */}
+
+{loginSocials.map((item, index) => (
+            
+            // <GoogleLoginForm item={item}  />
+            <item.component item={item} key={index}/>
+            
+
+             
             ))}
           </div>
           {/* OR */}
